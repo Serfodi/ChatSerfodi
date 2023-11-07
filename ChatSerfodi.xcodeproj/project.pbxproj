@@ -9,21 +9,31 @@
 /* Begin PBXBuildFile section */
 		17731EA12AE3E406006B1511 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17731EA02AE3E406006B1511 /* AppDelegate.swift */; };
 		17731EA32AE3E406006B1511 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17731EA22AE3E406006B1511 /* SceneDelegate.swift */; };
-		17731EA52AE3E406006B1511 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17731EA42AE3E406006B1511 /* ViewController.swift */; };
-		17731EA82AE3E406006B1511 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 17731EA62AE3E406006B1511 /* Main.storyboard */; };
+		17731EA52AE3E406006B1511 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17731EA42AE3E406006B1511 /* AuthViewController.swift */; };
 		17731EAA2AE3E40C006B1511 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 17731EA92AE3E40C006B1511 /* Assets.xcassets */; };
 		17731EAD2AE3E40C006B1511 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 17731EAB2AE3E40C006B1511 /* LaunchScreen.storyboard */; };
+		17731EB52AE3E9BD006B1511 /* UIButton + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17731EB42AE3E9BD006B1511 /* UIButton + Extension.swift */; };
+		17731EB72AE3EC77006B1511 /* UIFount + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17731EB62AE3EC77006B1511 /* UIFount + Extension.swift */; };
+		17731EB92AE3FAD3006B1511 /* UIColor + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17731EB82AE3FAD3006B1511 /* UIColor + Extension.swift */; };
+		17731EBB2AE3FC8C006B1511 /* Label + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17731EBA2AE3FC8C006B1511 /* Label + Extension.swift */; };
+		17731EBF2AED47BA006B1511 /* ButtonFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17731EBE2AED47BA006B1511 /* ButtonFormView.swift */; };
+		17731EC12AED4C02006B1511 /* StackView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17731EC02AED4C02006B1511 /* StackView + Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		17731E9D2AE3E406006B1511 /* ChatSerfodi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatSerfodi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		17731EA02AE3E406006B1511 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		17731EA22AE3E406006B1511 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		17731EA42AE3E406006B1511 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		17731EA72AE3E406006B1511 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		17731EA42AE3E406006B1511 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		17731EA92AE3E40C006B1511 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		17731EAC2AE3E40C006B1511 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		17731EAE2AE3E40C006B1511 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		17731EB42AE3E9BD006B1511 /* UIButton + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton + Extension.swift"; sourceTree = "<group>"; };
+		17731EB62AE3EC77006B1511 /* UIFount + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFount + Extension.swift"; sourceTree = "<group>"; };
+		17731EB82AE3FAD3006B1511 /* UIColor + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor + Extension.swift"; sourceTree = "<group>"; };
+		17731EBA2AE3FC8C006B1511 /* Label + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Label + Extension.swift"; sourceTree = "<group>"; };
+		17731EBE2AED47BA006B1511 /* ButtonFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonFormView.swift; sourceTree = "<group>"; };
+		17731EC02AED4C02006B1511 /* StackView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackView + Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,13 +68,34 @@
 			children = (
 				17731EA02AE3E406006B1511 /* AppDelegate.swift */,
 				17731EA22AE3E406006B1511 /* SceneDelegate.swift */,
-				17731EA42AE3E406006B1511 /* ViewController.swift */,
-				17731EA62AE3E406006B1511 /* Main.storyboard */,
+				17731EA42AE3E406006B1511 /* AuthViewController.swift */,
+				17731EBE2AED47BA006B1511 /* ButtonFormView.swift */,
+				17731EBD2AED46F6006B1511 /* Extension */,
 				17731EA92AE3E40C006B1511 /* Assets.xcassets */,
 				17731EAB2AE3E40C006B1511 /* LaunchScreen.storyboard */,
 				17731EAE2AE3E40C006B1511 /* Info.plist */,
 			);
 			path = ChatSerfodi;
+			sourceTree = "<group>";
+		};
+		17731EBC2AED46EA006B1511 /*  UIkit */ = {
+			isa = PBXGroup;
+			children = (
+				17731EB42AE3E9BD006B1511 /* UIButton + Extension.swift */,
+				17731EB62AE3EC77006B1511 /* UIFount + Extension.swift */,
+				17731EB82AE3FAD3006B1511 /* UIColor + Extension.swift */,
+				17731EBA2AE3FC8C006B1511 /* Label + Extension.swift */,
+				17731EC02AED4C02006B1511 /* StackView + Extension.swift */,
+			);
+			path = " UIkit";
+			sourceTree = "<group>";
+		};
+		17731EBD2AED46F6006B1511 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				17731EBC2AED46EA006B1511 /*  UIkit */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -127,7 +158,6 @@
 			files = (
 				17731EAD2AE3E40C006B1511 /* LaunchScreen.storyboard in Resources */,
 				17731EAA2AE3E40C006B1511 /* Assets.xcassets in Resources */,
-				17731EA82AE3E406006B1511 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,23 +168,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				17731EA52AE3E406006B1511 /* ViewController.swift in Sources */,
+				17731EC12AED4C02006B1511 /* StackView + Extension.swift in Sources */,
+				17731EA52AE3E406006B1511 /* AuthViewController.swift in Sources */,
 				17731EA12AE3E406006B1511 /* AppDelegate.swift in Sources */,
+				17731EBF2AED47BA006B1511 /* ButtonFormView.swift in Sources */,
+				17731EBB2AE3FC8C006B1511 /* Label + Extension.swift in Sources */,
 				17731EA32AE3E406006B1511 /* SceneDelegate.swift in Sources */,
+				17731EB92AE3FAD3006B1511 /* UIColor + Extension.swift in Sources */,
+				17731EB52AE3E9BD006B1511 /* UIButton + Extension.swift in Sources */,
+				17731EB72AE3EC77006B1511 /* UIFount + Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		17731EA62AE3E406006B1511 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				17731EA72AE3E406006B1511 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		17731EAB2AE3E40C006B1511 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -292,9 +320,10 @@
 				INFOPLIST_FILE = ChatSerfodi/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIRequiresFullScreen = NO;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -320,9 +349,10 @@
 				INFOPLIST_FILE = ChatSerfodi/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIRequiresFullScreen = NO;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
