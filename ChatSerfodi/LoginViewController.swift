@@ -36,6 +36,8 @@ class LoginViewController: UIViewController {
 
         view.backgroundColor = .white
 
+        googleButton.customizeGoogleButton()
+        
         setUpConstraints()
     }
     
@@ -102,9 +104,6 @@ extension LoginViewController {
     }
     
 }
-
-
-
 
 
 
