@@ -18,6 +18,8 @@
 		17731EBB2AE3FC8C006B1511 /* Label + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17731EBA2AE3FC8C006B1511 /* Label + Extension.swift */; };
 		17731EBF2AED47BA006B1511 /* ButtonFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17731EBE2AED47BA006B1511 /* ButtonFormView.swift */; };
 		17731EC12AED4C02006B1511 /* StackView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17731EC02AED4C02006B1511 /* StackView + Extension.swift */; };
+		17B2FB842AFBB3EE00EECA01 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B2FB832AFBB3EE00EECA01 /* SignUpViewController.swift */; };
+		17B2FB862AFBB73200EECA01 /* OneLineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B2FB852AFBB73200EECA01 /* OneLineTextField.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +36,8 @@
 		17731EBA2AE3FC8C006B1511 /* Label + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Label + Extension.swift"; sourceTree = "<group>"; };
 		17731EBE2AED47BA006B1511 /* ButtonFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonFormView.swift; sourceTree = "<group>"; };
 		17731EC02AED4C02006B1511 /* StackView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackView + Extension.swift"; sourceTree = "<group>"; };
+		17B2FB832AFBB3EE00EECA01 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		17B2FB852AFBB73200EECA01 /* OneLineTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneLineTextField.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,7 +73,7 @@
 				17731EA02AE3E406006B1511 /* AppDelegate.swift */,
 				17731EA22AE3E406006B1511 /* SceneDelegate.swift */,
 				17731EA42AE3E406006B1511 /* AuthViewController.swift */,
-				17731EBE2AED47BA006B1511 /* ButtonFormView.swift */,
+				17B2FB832AFBB3EE00EECA01 /* SignUpViewController.swift */,
 				17731EBD2AED46F6006B1511 /* Extension */,
 				17731EA92AE3E40C006B1511 /* Assets.xcassets */,
 				17731EAB2AE3E40C006B1511 /* LaunchScreen.storyboard */,
@@ -86,6 +90,7 @@
 				17731EB82AE3FAD3006B1511 /* UIColor + Extension.swift */,
 				17731EBA2AE3FC8C006B1511 /* Label + Extension.swift */,
 				17731EC02AED4C02006B1511 /* StackView + Extension.swift */,
+				17B2FB852AFBB73200EECA01 /* OneLineTextField.swift */,
 			);
 			path = " UIkit";
 			sourceTree = "<group>";
@@ -93,6 +98,7 @@
 		17731EBD2AED46F6006B1511 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				17731EBE2AED47BA006B1511 /* ButtonFormView.swift */,
 				17731EBC2AED46EA006B1511 /*  UIkit */,
 			);
 			path = Extension;
@@ -172,7 +178,9 @@
 				17731EA52AE3E406006B1511 /* AuthViewController.swift in Sources */,
 				17731EA12AE3E406006B1511 /* AppDelegate.swift in Sources */,
 				17731EBF2AED47BA006B1511 /* ButtonFormView.swift in Sources */,
+				17B2FB842AFBB3EE00EECA01 /* SignUpViewController.swift in Sources */,
 				17731EBB2AE3FC8C006B1511 /* Label + Extension.swift in Sources */,
+				17B2FB862AFBB73200EECA01 /* OneLineTextField.swift in Sources */,
 				17731EA32AE3E406006B1511 /* SceneDelegate.swift in Sources */,
 				17731EB92AE3FAD3006B1511 /* UIColor + Extension.swift in Sources */,
 				17731EB52AE3E9BD006B1511 /* UIButton + Extension.swift in Sources */,

@@ -13,8 +13,8 @@ extension UIButton {
     convenience init(title: String,
                      titleColor: UIColor,
                      backgroundColor: UIColor,
-                     fount: UIFont? = .avinir20(),
-                     isShodow: Bool,
+                     fount: UIFont? = .avenir20(),
+                     isShodow: Bool = false,
                      cornorRadius: CGFloat = 4) {
         self.init(type: .system)
         
