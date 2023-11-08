@@ -1,5 +1,5 @@
 //
-//  SignUpViewController.swift
+//  LoginViewController.swift
 //  ChatSerfodi
 //
 //  Created by Сергей Насыбуллин on 08.11.2023.
@@ -7,21 +7,23 @@
 
 import UIKit
 
-class SignUpViewController: UIViewController {
+class LoginViewController: UIViewController {
 
-    let welcomeLabel = UILabel(text: "Good to see you!", fount: .avenir26())
+    let welcomeLabel = UILabel(text: "Welcome back", fount: .avenir26())
+    let loginWithLabel = UILabel(text: "Login with")
+    let orLabel = UILabel(text: "or")
+    let passwordLabel = UILabel(text: "Password")
+    let needAnAccountLabel = UILabel(text: "Need an account?")
     let emailLabel = UILabel(text: "Email")
-    let passwodrLabel = UILabel(text: "Password")
-    let confirmPasswordLabel = UILabel(text: "Confirm password")
-    let alreadyOnboardLabel = UILabel(text: "Alrady onboard?")
     
+    
+    let googleButton = UIButton(title: "Google", titleColor: .black, backgroundColor: .white, isShodow: true)
     let emailTextField = OneLineTextField(foun: .avenir20())
     let passwordTextField = OneLineTextField(foun: .avenir20())
-    let confirmPasswordTextField = OneLineTextField(foun: .avenir20())
     
-    let signUpButton = UIButton(title: "Sign Up", titleColor: .white, backgroundColor: .buttonDark(), cornorRadius: 4)
+    let loginButton = UIButton(title: "Login", titleColor: .white, backgroundColor: .buttonDark())
     
-    let loginButton: UIButton = {
+    let signInButton: UIButton = {
         let loginButton = UIButton()
         loginButton.setTitle("Login", for: .normal)
         loginButton.setTitleColor(.bottonRed(), for: .normal)
@@ -29,53 +31,56 @@ class SignUpViewController: UIViewController {
         return loginButton
     }()
     
-    
-    
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
         view.backgroundColor = .white
-        
+
         setUpConstraints()
     }
     
 
-
 }
-
-
 
 // MARK: Set Up Constraints
 
-extension SignUpViewController {
+extension LoginViewController {
     
     private func setUpConstraints() {
-        let emailStackView = UIStackView(arrangedSubviews: [emailLabel, emailTextField], axis: .vertical, spacing: 0)
-        let passwordStackView = UIStackView(arrangedSubviews: [passwodrLabel, passwordTextField], axis: .vertical, spacing: 0)
-        let confirmPasswordStackView = UIStackView(arrangedSubviews: [confirmPasswordLabel, confirmPasswordTextField], axis: .vertical, spacing: 0)
         
-        signUpButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        let loginWithView = ButtonFormView(label: loginWithLabel, button: googleButton)
+        let emailStackView = UIStackView(arrangedSubviews: [
+            emailLabel,
+            emailTextField
+        ], axis: .vertical, spacing: 0)
+        let passwordStackView = UIStackView(arrangedSubviews: [
+            passwordLabel,
+            passwordTextField
+        ], axis: .vertical, spacing: 0)
+        
+        loginButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
         
         let stackView = UIStackView(arrangedSubviews: [
+            loginWithView,
+            orLabel,
             emailStackView,
             passwordStackView,
-            confirmPasswordStackView,
-            signUpButton
+            loginButton
         ], axis: .vertical, spacing: 40)
         
-        loginButton.contentHorizontalAlignment = .leading
-        let bottomStakVeiw = UIStackView(arrangedSubviews: [alreadyOnboardLabel, loginButton], axis: .horizontal, spacing: 5)
-        bottomStakVeiw.alignment = .firstBaseline
+        signInButton.contentHorizontalAlignment = .leading
+        let bottomStackView = UIStackView(arrangedSubviews: [
+            needAnAccountLabel, signInButton
+        ], axis: .horizontal, spacing: 5)
+        bottomStackView.alignment = .firstBaseline
         
         welcomeLabel.translatesAutoresizingMaskIntoConstraints = false
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        bottomStakVeiw.translatesAutoresizingMaskIntoConstraints = false
+        bottomStackView.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(welcomeLabel)
         view.addSubview(stackView)
-        view.addSubview(bottomStakVeiw)
+        view.addSubview(bottomStackView)
         
         NSLayoutConstraint.activate([
             welcomeLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 60),
@@ -83,20 +88,22 @@ extension SignUpViewController {
         ])
         
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: 100),
+            stackView.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: 40),
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40)
         ])
         
         NSLayoutConstraint.activate([
-            bottomStakVeiw.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 60),
-            bottomStakVeiw.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
-            bottomStakVeiw.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40)
+            bottomStackView.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 15),
+            bottomStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
+            bottomStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40)
         ])
         
     }
     
 }
+
+
 
 
 
@@ -105,7 +112,7 @@ extension SignUpViewController {
 
 import SwiftUI
 
-struct SignUpProvider: PreviewProvider {
+struct LoginProvider: PreviewProvider {
     
     static var previews: some View {
         ContainerView().edgesIgnoringSafeArea(.all)
@@ -113,7 +120,7 @@ struct SignUpProvider: PreviewProvider {
     
     struct ContainerView: UIViewControllerRepresentable {
         
-        let viewController = SignUpViewController()
+        let viewController = LoginViewController()
         
         func makeUIViewController(context: Context) -> some UIViewController {
             viewController
