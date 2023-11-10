@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		17040E682AFE7ED9002238B0 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17040E672AFE7ED9002238B0 /* Bundle.swift */; };
+		17040E6B2AFE80E9002238B0 /* activChat.json in Resources */ = {isa = PBXBuildFile; fileRef = 17040E6A2AFE80E9002238B0 /* activChat.json */; };
+		17040E6D2AFE8492002238B0 /* waitingChat.json in Resources */ = {isa = PBXBuildFile; fileRef = 17040E6C2AFE8492002238B0 /* waitingChat.json */; };
 		17731EA12AE3E406006B1511 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17731EA02AE3E406006B1511 /* AppDelegate.swift */; };
 		17731EA32AE3E406006B1511 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17731EA22AE3E406006B1511 /* SceneDelegate.swift */; };
 		17731EA52AE3E406006B1511 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17731EA42AE3E406006B1511 /* AuthViewController.swift */; };
@@ -24,9 +27,15 @@
 		17B2FB8A2AFBCC6B00EECA01 /* SetupProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B2FB892AFBCC6B00EECA01 /* SetupProfileViewController.swift */; };
 		17B2FB8C2AFBD06C00EECA01 /* AddPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B2FB8B2AFBD06C00EECA01 /* AddPhotoView.swift */; };
 		17B2FB8E2AFBDB7A00EECA01 /* SegmentedControl + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B2FB8D2AFBDB7A00EECA01 /* SegmentedControl + Extension.swift */; };
+		17ED2C422AFE558700251BAF /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17ED2C412AFE558700251BAF /* ListViewController.swift */; };
+		17ED2C462AFE5A6F00251BAF /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17ED2C452AFE5A6F00251BAF /* MainTabBarController.swift */; };
+		17ED2C482AFE5AD800251BAF /* PeopleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17ED2C472AFE5AD800251BAF /* PeopleViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		17040E672AFE7ED9002238B0 /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
+		17040E6A2AFE80E9002238B0 /* activChat.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = activChat.json; path = ../../../../../../Desktop/activChat.json; sourceTree = "<group>"; };
+		17040E6C2AFE8492002238B0 /* waitingChat.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = waitingChat.json; path = ../../../../../../Desktop/waitingChat.json; sourceTree = "<group>"; };
 		17731E9D2AE3E406006B1511 /* ChatSerfodi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatSerfodi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		17731EA02AE3E406006B1511 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		17731EA22AE3E406006B1511 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -46,6 +55,9 @@
 		17B2FB892AFBCC6B00EECA01 /* SetupProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupProfileViewController.swift; sourceTree = "<group>"; };
 		17B2FB8B2AFBD06C00EECA01 /* AddPhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPhotoView.swift; sourceTree = "<group>"; };
 		17B2FB8D2AFBDB7A00EECA01 /* SegmentedControl + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SegmentedControl + Extension.swift"; sourceTree = "<group>"; };
+		17ED2C412AFE558700251BAF /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
+		17ED2C452AFE5A6F00251BAF /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
+		17ED2C472AFE5AD800251BAF /* PeopleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,10 +92,7 @@
 			children = (
 				17731EA02AE3E406006B1511 /* AppDelegate.swift */,
 				17731EA22AE3E406006B1511 /* SceneDelegate.swift */,
-				17731EA42AE3E406006B1511 /* AuthViewController.swift */,
-				17B2FB832AFBB3EE00EECA01 /* SignUpViewController.swift */,
-				17B2FB872AFBC33E00EECA01 /* LoginViewController.swift */,
-				17B2FB892AFBCC6B00EECA01 /* SetupProfileViewController.swift */,
+				17ED2C442AFE5A3E00251BAF /* Controllers */,
 				17731EBD2AED46F6006B1511 /* Extension */,
 				17731EA92AE3E40C006B1511 /* Assets.xcassets */,
 				17731EAB2AE3E40C006B1511 /* LaunchScreen.storyboard */,
@@ -103,6 +112,8 @@
 				17B2FB852AFBB73200EECA01 /* OneLineTextField.swift */,
 				17B2FB8B2AFBD06C00EECA01 /* AddPhotoView.swift */,
 				17B2FB8D2AFBDB7A00EECA01 /* SegmentedControl + Extension.swift */,
+				17040E6A2AFE80E9002238B0 /* activChat.json */,
+				17040E6C2AFE8492002238B0 /* waitingChat.json */,
 			);
 			path = " UIkit";
 			sourceTree = "<group>";
@@ -111,9 +122,32 @@
 			isa = PBXGroup;
 			children = (
 				17731EBE2AED47BA006B1511 /* ButtonFormView.swift */,
+				17040E672AFE7ED9002238B0 /* Bundle.swift */,
 				17731EBC2AED46EA006B1511 /*  UIkit */,
 			);
 			path = Extension;
+			sourceTree = "<group>";
+		};
+		17ED2C432AFE59DD00251BAF /* SignIn&Auth */ = {
+			isa = PBXGroup;
+			children = (
+				17731EA42AE3E406006B1511 /* AuthViewController.swift */,
+				17B2FB832AFBB3EE00EECA01 /* SignUpViewController.swift */,
+				17B2FB872AFBC33E00EECA01 /* LoginViewController.swift */,
+				17B2FB892AFBCC6B00EECA01 /* SetupProfileViewController.swift */,
+			);
+			path = "SignIn&Auth";
+			sourceTree = "<group>";
+		};
+		17ED2C442AFE5A3E00251BAF /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				17ED2C452AFE5A6F00251BAF /* MainTabBarController.swift */,
+				17ED2C432AFE59DD00251BAF /* SignIn&Auth */,
+				17ED2C412AFE558700251BAF /* ListViewController.swift */,
+				17ED2C472AFE5AD800251BAF /* PeopleViewController.swift */,
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -176,6 +210,8 @@
 			files = (
 				17731EAD2AE3E40C006B1511 /* LaunchScreen.storyboard in Resources */,
 				17731EAA2AE3E40C006B1511 /* Assets.xcassets in Resources */,
+				17040E6B2AFE80E9002238B0 /* activChat.json in Resources */,
+				17040E6D2AFE8492002238B0 /* waitingChat.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -189,8 +225,10 @@
 				17B2FB882AFBC33E00EECA01 /* LoginViewController.swift in Sources */,
 				17731EC12AED4C02006B1511 /* StackView + Extension.swift in Sources */,
 				17731EA52AE3E406006B1511 /* AuthViewController.swift in Sources */,
+				17040E682AFE7ED9002238B0 /* Bundle.swift in Sources */,
 				17731EA12AE3E406006B1511 /* AppDelegate.swift in Sources */,
 				17731EBF2AED47BA006B1511 /* ButtonFormView.swift in Sources */,
+				17ED2C482AFE5AD800251BAF /* PeopleViewController.swift in Sources */,
 				17B2FB842AFBB3EE00EECA01 /* SignUpViewController.swift in Sources */,
 				17731EBB2AE3FC8C006B1511 /* Label + Extension.swift in Sources */,
 				17B2FB862AFBB73200EECA01 /* OneLineTextField.swift in Sources */,
@@ -200,7 +238,9 @@
 				17731EB92AE3FAD3006B1511 /* UIColor + Extension.swift in Sources */,
 				17731EB52AE3E9BD006B1511 /* UIButton + Extension.swift in Sources */,
 				17B2FB8E2AFBDB7A00EECA01 /* SegmentedControl + Extension.swift in Sources */,
+				17ED2C422AFE558700251BAF /* ListViewController.swift in Sources */,
 				17731EB72AE3EC77006B1511 /* UIFount + Extension.swift in Sources */,
+				17ED2C462AFE5A6F00251BAF /* MainTabBarController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -14,7 +14,7 @@ extension UIColor {
     }
     
     static func mainWhite() -> UIColor {
-        .white
+        UIColor(white: 0.95, alpha: 1)
     }
     
     static func buttonDark() -> UIColor {
