@@ -26,14 +26,22 @@ struct SChat: Hashable, Decodable {
 
 class ListViewController: UIViewController {
 
-    let activChat = Bundle.main.decode([SChat].self, from: "activChat.json")
+    let activChat = Bundle.main.decode([SChat].self, from: "activeChats.json")
     let waitingChat = Bundle.main.decode([SChat].self, from: "waitingChat.json")
     
     var collectionView: UICollectionView!
     
     enum Section: Int, CaseIterable {
-        case waitingChat
-        case activeChat
+        case waitingChat, activeChat
+        
+        func description() -> String {
+            switch self {
+            case .waitingChat:
+                return "Waiting chat"
+            case .activeChat:
+                return "Active chat"
+            }
+        }
     }
     
     var dataSourse: UICollectionViewDiffableDataSource<Section, SChat>?
@@ -62,27 +70,48 @@ class ListViewController: UIViewController {
         collectionView.backgroundColor = .mainWhite()
         view.addSubview(collectionView)
         
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cellid")
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cellid2")
+        collectionView.register(SectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SectionHeader.reuseId)
         
-//        collectionView.delegate = self
-//        collectionView.dataSource = self
+        collectionView.register(ActiveChatCell.self, forCellWithReuseIdentifier: ActiveChatCell.reuseId)
+        collectionView.register(WaitingChatCell.self, forCellWithReuseIdentifier: WaitingChatCell.reuseId)
+        
+    }
+}
+
+
+// MARK:  Data sourse
+
+extension ListViewController {
+    
+    private func configure<T: SelfConfiguringCell>(cellType: T.Type, with value: SChat, for indexPatch: IndexPath) -> T {
+        guard let cell = collectionView .dequeueReusableCell(withReuseIdentifier: cellType.reuseId, for: indexPatch) as? T else { fatalError("Unable to dequeue \(cellType)") }
+        cell.configure(with: value)
+        return cell
     }
     
     private func createDataSourse() {
+        
         dataSourse = UICollectionViewDiffableDataSource<Section, SChat>(collectionView: collectionView, cellProvider: { (collectionView, indexPath, chat) -> UICollectionViewCell? in
             guard let section = Section(rawValue: indexPath.section) else { fatalError("Unknow section kind") }
             switch section {
             case .activeChat:
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellid", for: indexPath)
-                cell.backgroundColor = .systemBlue
-                return cell
+                return self.configure(cellType: ActiveChatCell.self, with: chat, for: indexPath)
             case .waitingChat:
-                    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellid2", for: indexPath)
-                cell.backgroundColor = .systemGray
-                    return cell
+                return self.configure(cellType: WaitingChatCell.self, with: chat, for: indexPath)
             }
         })
+        
+        
+        dataSourse?.supplementaryViewProvider = { (collectionView, kind, indexPath) in
+            
+            guard let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SectionHeader.reuseId, for: indexPath) as? SectionHeader else { fatalError("Can not create new section") }
+            
+            guard let section = Section(rawValue: indexPath.section) else { fatalError("Unknown section kind") }
+            
+            sectionHeader.configure(text: section.description(), fount: .laoSangamMN20(), textColor: UIColor(white: 0.6, alpha: 1))
+            
+            return sectionHeader
+        }
     }
     
     private func reloadData() {
@@ -96,8 +125,8 @@ class ListViewController: UIViewController {
 }
 
 
+// MARK: - UISearchBarDelegate
 
-// MARK: UISearchBarDelegate
 extension ListViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -106,23 +135,30 @@ extension ListViewController: UISearchBarDelegate {
 }
 
 
+// MARK: - Create
+
 extension ListViewController {
     
     private func createActivChats() -> NSCollectionLayoutSection? {
+        // cells
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
-        let grupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(84))
+        let grupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(78))
         let group = NSCollectionLayoutGroup.vertical(layoutSize: grupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets.init(top: 16, leading: 20, bottom: 0, trailing: 20)
         section.interGroupSpacing = 8
+        
+        // header
+        section.boundarySupplementaryItems = [createSectionHeader()]
+        
         return section
     }
     
     private func createWatinigChats() -> NSCollectionLayoutSection? {
-        
+        // cells
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
@@ -133,8 +169,19 @@ extension ListViewController {
         section.orthogonalScrollingBehavior = .continuous
         section.interGroupSpacing = 16
         section.contentInsets = NSDirectionalEdgeInsets.init(top: 16, leading: 20, bottom: 0, trailing: 0)
+        
+        // header
+        section.boundarySupplementaryItems = [createSectionHeader()]
+        
         return section
     }
+    
+    private func createSectionHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
+        let sectionHeaderSeize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(1))
+        let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: sectionHeaderSeize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+        return sectionHeader
+    }
+    
     
     private func createCompositionalLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { (sectionIdex, layoutEnviroment) in
@@ -148,39 +195,17 @@ extension ListViewController {
                 return self.createWatinigChats()
             }
         }
+        
+        let config = UICollectionViewCompositionalLayoutConfiguration()
+        config.interSectionSpacing = 20
+        layout.configuration = config
+        
         return layout
     }
 }
 
 
-
-/*
- // MARK: UICollectionViewDelegate, UICollectionViewDataSource
- extension ListViewController: UICollectionViewDelegate, UICollectionViewDataSource {
- 
- func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
- return 5
- }
- 
- func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
- let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellid", for: indexPath)
- cell.backgroundColor = .red
- return cell
- }
- }
- 
- extension ListViewController: UICollectionViewDelegateFlowLayout {
- 
- func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
- CGSize(width: 50, height: 50)
- }
- 
- }
- */
-
-
-
-// MARK: SwiftUI
+// MARK: - SwiftUI
 
 import SwiftUI
 
