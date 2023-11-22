@@ -28,6 +28,11 @@
 		17ED2C422AFE558700251BAF /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17ED2C412AFE558700251BAF /* ListViewController.swift */; };
 		17ED2C462AFE5A6F00251BAF /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17ED2C452AFE5A6F00251BAF /* MainTabBarController.swift */; };
 		17ED2C482AFE5AD800251BAF /* PeopleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17ED2C472AFE5AD800251BAF /* PeopleViewController.swift */; };
+		B019751B2B0E1481005D4321 /* user.json in Resources */ = {isa = PBXBuildFile; fileRef = B019751A2B0E1481005D4321 /* user.json */; };
+		B019751D2B0E152B005D4321 /* SUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B019751C2B0E152B005D4321 /* SUser.swift */; };
+		B019751F2B0E1551005D4321 /* SChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = B019751E2B0E1551005D4321 /* SChat.swift */; };
+		B01975222B0E27A0005D4321 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01975212B0E27A0005D4321 /* UserCell.swift */; };
+		B01975242B0E2979005D4321 /* UIViewController + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01975232B0E2979005D4321 /* UIViewController + Extension.swift */; };
 		B0F8E58E2B07A51900C2B00D /* ActiveChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F8E58D2B07A51900C2B00D /* ActiveChatCell.swift */; };
 		B0F8E5902B07ACA800C2B00D /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F8E58F2B07ACA800C2B00D /* GradientView.swift */; };
 		B0F8E5932B07BC8A00C2B00D /* WaitingChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F8E5922B07BC8A00C2B00D /* WaitingChatCell.swift */; };
@@ -61,6 +66,11 @@
 		17ED2C412AFE558700251BAF /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		17ED2C452AFE5A6F00251BAF /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		17ED2C472AFE5AD800251BAF /* PeopleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleViewController.swift; sourceTree = "<group>"; };
+		B019751A2B0E1481005D4321 /* user.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = user.json; sourceTree = "<group>"; };
+		B019751C2B0E152B005D4321 /* SUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SUser.swift; sourceTree = "<group>"; };
+		B019751E2B0E1551005D4321 /* SChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SChat.swift; sourceTree = "<group>"; };
+		B01975212B0E27A0005D4321 /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
+		B01975232B0E2979005D4321 /* UIViewController + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController + Extension.swift"; sourceTree = "<group>"; };
 		B0F8E58D2B07A51900C2B00D /* ActiveChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveChatCell.swift; sourceTree = "<group>"; };
 		B0F8E58F2B07ACA800C2B00D /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		B0F8E5922B07BC8A00C2B00D /* WaitingChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingChatCell.swift; sourceTree = "<group>"; };
@@ -107,6 +117,7 @@
 				17731EBD2AED46F6006B1511 /* Extension */,
 				B0F8E5982B07C20000C2B00D /* activeChats.json */,
 				B0F8E5972B07C20000C2B00D /* waitingChat.json */,
+				B019751A2B0E1481005D4321 /* user.json */,
 				17731EA92AE3E40C006B1511 /* Assets.xcassets */,
 				17731EAB2AE3E40C006B1511 /* LaunchScreen.storyboard */,
 				17731EAE2AE3E40C006B1511 /* Info.plist */,
@@ -126,6 +137,7 @@
 				17B2FB8B2AFBD06C00EECA01 /* AddPhotoView.swift */,
 				17B2FB8D2AFBDB7A00EECA01 /* SegmentedControl + Extension.swift */,
 				B0F8E58F2B07ACA800C2B00D /* GradientView.swift */,
+				B01975232B0E2979005D4321 /* UIViewController + Extension.swift */,
 			);
 			path = " UIkit";
 			sourceTree = "<group>";
@@ -159,9 +171,19 @@
 				17ED2C432AFE59DD00251BAF /* SignIn&Auth */,
 				17ED2C412AFE558700251BAF /* ListViewController.swift */,
 				17ED2C472AFE5AD800251BAF /* PeopleViewController.swift */,
+				B01975202B0E15B1005D4321 /* Model */,
 				B0F8E5912B07BC5C00C2B00D /* Cell */,
 			);
 			path = Controllers;
+			sourceTree = "<group>";
+		};
+		B01975202B0E15B1005D4321 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				B019751C2B0E152B005D4321 /* SUser.swift */,
+				B019751E2B0E1551005D4321 /* SChat.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		B0F8E5912B07BC5C00C2B00D /* Cell */ = {
@@ -169,6 +191,7 @@
 			children = (
 				B0F8E58D2B07A51900C2B00D /* ActiveChatCell.swift */,
 				B0F8E5922B07BC8A00C2B00D /* WaitingChatCell.swift */,
+				B01975212B0E27A0005D4321 /* UserCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -243,6 +266,7 @@
 				17731EAD2AE3E40C006B1511 /* LaunchScreen.storyboard in Resources */,
 				17731EAA2AE3E40C006B1511 /* Assets.xcassets in Resources */,
 				B0F8E59A2B07C20000C2B00D /* activeChats.json in Resources */,
+				B019751B2B0E1481005D4321 /* user.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,12 +282,15 @@
 				17731EA52AE3E406006B1511 /* AuthViewController.swift in Sources */,
 				B0F8E58E2B07A51900C2B00D /* ActiveChatCell.swift in Sources */,
 				17040E682AFE7ED9002238B0 /* Bundle.swift in Sources */,
+				B01975222B0E27A0005D4321 /* UserCell.swift in Sources */,
 				17731EA12AE3E406006B1511 /* AppDelegate.swift in Sources */,
 				17731EBF2AED47BA006B1511 /* ButtonFormView.swift in Sources */,
 				17ED2C482AFE5AD800251BAF /* PeopleViewController.swift in Sources */,
 				17B2FB842AFBB3EE00EECA01 /* SignUpViewController.swift in Sources */,
+				B01975242B0E2979005D4321 /* UIViewController + Extension.swift in Sources */,
 				17731EBB2AE3FC8C006B1511 /* Label + Extension.swift in Sources */,
 				17B2FB862AFBB73200EECA01 /* OneLineTextField.swift in Sources */,
+				B019751F2B0E1551005D4321 /* SChat.swift in Sources */,
 				B0F8E5952B07BD6C00C2B00D /* SelfConfiguringCell.swift in Sources */,
 				B0F8E5902B07ACA800C2B00D /* GradientView.swift in Sources */,
 				17B2FB8A2AFBCC6B00EECA01 /* SetupProfileViewController.swift in Sources */,
@@ -276,6 +303,7 @@
 				B0F8E59C2B07C6CF00C2B00D /* SectionHeader.swift in Sources */,
 				17ED2C422AFE558700251BAF /* ListViewController.swift in Sources */,
 				17731EB72AE3EC77006B1511 /* UIFount + Extension.swift in Sources */,
+				B019751D2B0E152B005D4321 /* SUser.swift in Sources */,
 				17ED2C462AFE5A6F00251BAF /* MainTabBarController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -423,7 +451,7 @@
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -452,7 +480,7 @@
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

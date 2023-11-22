@@ -20,8 +20,8 @@ class MainTabBarController: UITabBarController {
         let messageImage = UIImage(systemName: "message", withConfiguration: boldConfig)!
         
         viewControllers = [
-            generateNavigationViewController(rootViewController: listViewController, titile: "", image: peopleImage),
-            generateNavigationViewController(rootViewController: peopleViewController, titile: "", image: messageImage)
+            generateNavigationViewController(rootViewController: peopleViewController, titile: "", image: messageImage),
+            generateNavigationViewController(rootViewController: listViewController, titile: "", image: peopleImage)
         ]
     }
  

@@ -10,6 +10,7 @@ import UIKit
 
 class ActiveChatCell: UICollectionViewCell, SelfConfiguringCell {
     
+    
     static var reuseId: String = "ActiveChatCell"
     
     let frendImageView = UIImageView()
@@ -30,7 +31,8 @@ class ActiveChatCell: UICollectionViewCell, SelfConfiguringCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(with value: SChat) {
+    func configure<U>(with value: U) where U : Hashable {
+        guard let value: SChat = value as? SChat else { return }
         frendImageView.image = UIImage(named: value.userImageString)
         frindName.text = value.userName
         lastMassege.text = value.lastMessage
