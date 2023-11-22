@@ -20,4 +20,11 @@ struct SUser: Hashable, Decodable {
     static func == (lhs: SUser, rhs: SUser) -> Bool {
         lhs.id == rhs.id
     }
+    
+    func contains(filtr: String?) -> Bool {
+        guard let filtr = filtr else { return true }
+        if filtr.isEmpty { return true }
+        let lowercasedFiltr = filtr.lowercased()
+        return userName.lowercased().contains(lowercasedFiltr)
+    }
 }
