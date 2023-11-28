@@ -36,6 +36,7 @@
 		B01975262B0E8CE8005D4321 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01975252B0E8CE7005D4321 /* ProfileViewController.swift */; };
 		B01975282B0E9B46005D4321 /* InsertableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01975272B0E9B46005D4321 /* InsertableTextField.swift */; };
 		B019752A2B0E9F96005D4321 /* UIView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01975292B0E9F96005D4321 /* UIView + Extension.swift */; };
+		B019752C2B164766005D4321 /* ChatRequestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B019752B2B164766005D4321 /* ChatRequestViewController.swift */; };
 		B0F8E58E2B07A51900C2B00D /* ActiveChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F8E58D2B07A51900C2B00D /* ActiveChatCell.swift */; };
 		B0F8E5902B07ACA800C2B00D /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F8E58F2B07ACA800C2B00D /* GradientView.swift */; };
 		B0F8E5932B07BC8A00C2B00D /* WaitingChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F8E5922B07BC8A00C2B00D /* WaitingChatCell.swift */; };
@@ -77,6 +78,7 @@
 		B01975252B0E8CE7005D4321 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		B01975272B0E9B46005D4321 /* InsertableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsertableTextField.swift; sourceTree = "<group>"; };
 		B01975292B0E9F96005D4321 /* UIView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView + Extension.swift"; sourceTree = "<group>"; };
+		B019752B2B164766005D4321 /* ChatRequestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRequestViewController.swift; sourceTree = "<group>"; };
 		B0F8E58D2B07A51900C2B00D /* ActiveChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveChatCell.swift; sourceTree = "<group>"; };
 		B0F8E58F2B07ACA800C2B00D /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		B0F8E5922B07BC8A00C2B00D /* WaitingChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingChatCell.swift; sourceTree = "<group>"; };
@@ -118,6 +120,7 @@
 			children = (
 				17731EA02AE3E406006B1511 /* AppDelegate.swift */,
 				17731EA22AE3E406006B1511 /* SceneDelegate.swift */,
+				B01975202B0E15B1005D4321 /* Model */,
 				17ED2C442AFE5A3E00251BAF /* Controllers */,
 				B0F8E5962B07BD8B00C2B00D /* Protocol */,
 				17731EBD2AED46F6006B1511 /* Extension */,
@@ -175,13 +178,13 @@
 		17ED2C442AFE5A3E00251BAF /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				17ED2C452AFE5A6F00251BAF /* MainTabBarController.swift */,
 				17ED2C432AFE59DD00251BAF /* SignIn&Auth */,
+				17ED2C452AFE5A6F00251BAF /* MainTabBarController.swift */,
 				17ED2C412AFE558700251BAF /* ListViewController.swift */,
 				17ED2C472AFE5AD800251BAF /* PeopleViewController.swift */,
-				B01975202B0E15B1005D4321 /* Model */,
 				B0F8E5912B07BC5C00C2B00D /* Cell */,
 				B01975252B0E8CE7005D4321 /* ProfileViewController.swift */,
+				B019752B2B164766005D4321 /* ChatRequestViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -288,6 +291,7 @@
 			files = (
 				17B2FB882AFBC33E00EECA01 /* LoginViewController.swift in Sources */,
 				17731EC12AED4C02006B1511 /* StackView + Extension.swift in Sources */,
+				B019752C2B164766005D4321 /* ChatRequestViewController.swift in Sources */,
 				17731EA52AE3E406006B1511 /* AuthViewController.swift in Sources */,
 				B0F8E58E2B07A51900C2B00D /* ActiveChatCell.swift in Sources */,
 				B01975282B0E9B46005D4321 /* InsertableTextField.swift in Sources */,
