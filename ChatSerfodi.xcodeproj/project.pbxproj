@@ -28,6 +28,7 @@
 		17ED2C422AFE558700251BAF /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17ED2C412AFE558700251BAF /* ListViewController.swift */; };
 		17ED2C462AFE5A6F00251BAF /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17ED2C452AFE5A6F00251BAF /* MainTabBarController.swift */; };
 		17ED2C482AFE5AD800251BAF /* PeopleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17ED2C472AFE5AD800251BAF /* PeopleViewController.swift */; };
+		89C4246A67FBB35A9CA0B21E /* Pods_ChatSerfodi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1A57D28972B22005E0AA782 /* Pods_ChatSerfodi.framework */; };
 		B019751B2B0E1481005D4321 /* user.json in Resources */ = {isa = PBXBuildFile; fileRef = B019751A2B0E1481005D4321 /* user.json */; };
 		B019751D2B0E152B005D4321 /* SUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B019751C2B0E152B005D4321 /* SUser.swift */; };
 		B019751F2B0E1551005D4321 /* SChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = B019751E2B0E1551005D4321 /* SChat.swift */; };
@@ -37,6 +38,7 @@
 		B01975282B0E9B46005D4321 /* InsertableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01975272B0E9B46005D4321 /* InsertableTextField.swift */; };
 		B019752A2B0E9F96005D4321 /* UIView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01975292B0E9F96005D4321 /* UIView + Extension.swift */; };
 		B019752C2B164766005D4321 /* ChatRequestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B019752B2B164766005D4321 /* ChatRequestViewController.swift */; };
+		B019752E2B16503B005D4321 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B019752D2B16503B005D4321 /* GoogleService-Info.plist */; };
 		B0F8E58E2B07A51900C2B00D /* ActiveChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F8E58D2B07A51900C2B00D /* ActiveChatCell.swift */; };
 		B0F8E5902B07ACA800C2B00D /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F8E58F2B07ACA800C2B00D /* GradientView.swift */; };
 		B0F8E5932B07BC8A00C2B00D /* WaitingChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F8E5922B07BC8A00C2B00D /* WaitingChatCell.swift */; };
@@ -70,6 +72,9 @@
 		17ED2C412AFE558700251BAF /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		17ED2C452AFE5A6F00251BAF /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		17ED2C472AFE5AD800251BAF /* PeopleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleViewController.swift; sourceTree = "<group>"; };
+		2BD248DA56C9F2CBDA3669BE /* Pods-ChatSerfodi.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatSerfodi.release.xcconfig"; path = "Target Support Files/Pods-ChatSerfodi/Pods-ChatSerfodi.release.xcconfig"; sourceTree = "<group>"; };
+		506A49DF8C383A021951F50D /* Pods-ChatSerfodi.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatSerfodi.debug.xcconfig"; path = "Target Support Files/Pods-ChatSerfodi/Pods-ChatSerfodi.debug.xcconfig"; sourceTree = "<group>"; };
+		A1A57D28972B22005E0AA782 /* Pods_ChatSerfodi.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChatSerfodi.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B019751A2B0E1481005D4321 /* user.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = user.json; sourceTree = "<group>"; };
 		B019751C2B0E152B005D4321 /* SUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SUser.swift; sourceTree = "<group>"; };
 		B019751E2B0E1551005D4321 /* SChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SChat.swift; sourceTree = "<group>"; };
@@ -79,6 +84,7 @@
 		B01975272B0E9B46005D4321 /* InsertableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsertableTextField.swift; sourceTree = "<group>"; };
 		B01975292B0E9F96005D4321 /* UIView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView + Extension.swift"; sourceTree = "<group>"; };
 		B019752B2B164766005D4321 /* ChatRequestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRequestViewController.swift; sourceTree = "<group>"; };
+		B019752D2B16503B005D4321 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B0F8E58D2B07A51900C2B00D /* ActiveChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveChatCell.swift; sourceTree = "<group>"; };
 		B0F8E58F2B07ACA800C2B00D /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		B0F8E5922B07BC8A00C2B00D /* WaitingChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingChatCell.swift; sourceTree = "<group>"; };
@@ -93,6 +99,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89C4246A67FBB35A9CA0B21E /* Pods_ChatSerfodi.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -104,6 +111,8 @@
 			children = (
 				17731E9F2AE3E406006B1511 /* ChatSerfodi */,
 				17731E9E2AE3E406006B1511 /* Products */,
+				D90E558EBA491BB8D08D2D30 /* Pods */,
+				CD8068D53F4AB53A295FBB9D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -130,6 +139,7 @@
 				17731EA92AE3E40C006B1511 /* Assets.xcassets */,
 				17731EAB2AE3E40C006B1511 /* LaunchScreen.storyboard */,
 				17731EAE2AE3E40C006B1511 /* Info.plist */,
+				B019752D2B16503B005D4321 /* GoogleService-Info.plist */,
 			);
 			path = ChatSerfodi;
 			sourceTree = "<group>";
@@ -216,6 +226,24 @@
 			path = Protocol;
 			sourceTree = "<group>";
 		};
+		CD8068D53F4AB53A295FBB9D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A1A57D28972B22005E0AA782 /* Pods_ChatSerfodi.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D90E558EBA491BB8D08D2D30 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				506A49DF8C383A021951F50D /* Pods-ChatSerfodi.debug.xcconfig */,
+				2BD248DA56C9F2CBDA3669BE /* Pods-ChatSerfodi.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -223,9 +251,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 17731EB12AE3E40C006B1511 /* Build configuration list for PBXNativeTarget "ChatSerfodi" */;
 			buildPhases = (
+				EFC6661999359309B3110BDE /* [CP] Check Pods Manifest.lock */,
 				17731E992AE3E406006B1511 /* Sources */,
 				17731E9A2AE3E406006B1511 /* Frameworks */,
 				17731E9B2AE3E406006B1511 /* Resources */,
+				B635152680BBEBBCC4FFDF4D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -279,10 +309,53 @@
 				17731EAA2AE3E40C006B1511 /* Assets.xcassets in Resources */,
 				B0F8E59A2B07C20000C2B00D /* activeChats.json in Resources */,
 				B019751B2B0E1481005D4321 /* user.json in Resources */,
+				B019752E2B16503B005D4321 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		B635152680BBEBBCC4FFDF4D /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ChatSerfodi/Pods-ChatSerfodi-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ChatSerfodi/Pods-ChatSerfodi-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ChatSerfodi/Pods-ChatSerfodi-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EFC6661999359309B3110BDE /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ChatSerfodi-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		17731E992AE3E406006B1511 /* Sources */ = {
@@ -454,6 +527,7 @@
 		};
 		17731EB22AE3E40C006B1511 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 506A49DF8C383A021951F50D /* Pods-ChatSerfodi.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -483,6 +557,7 @@
 		};
 		17731EB32AE3E40C006B1511 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2BD248DA56C9F2CBDA3669BE /* Pods-ChatSerfodi.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
