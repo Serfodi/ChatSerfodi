@@ -29,19 +29,39 @@ class SignUpViewController: UIViewController {
         return loginButton
     }()
     
+    weak var delegate: AuthNavigatingDelegate?
     
     
-
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        
         view.backgroundColor = .white
-        
         setUpConstraints()
+        signUpButton.addTarget(self, action: #selector(signUpTapped), for: .touchUpInside)
+        loginButton.addTarget(self, action: #selector(loginTapped), for: .touchUpInside)
     }
     
-
+    
+    @objc private func signUpTapped() {
+        AuthService.shared.register(email: emailTextField.text, password: passwordTextField.text, confirmPassword:  confirmPasswordTextField.text) { result in
+            switch result {
+            case .success(let user):
+                self.showAlert(with: "Успешно", and: "Вы зарегестрированны!") {
+                    self.present(SetupProfileViewController(), animated: true)
+                }
+                
+            case .failure(let error):
+                self.showAlert(with: "Ошибка!", and: error.localizedDescription)
+            }
+        }
+    }
+ 
+    @objc private func loginTapped() {
+        self.dismiss(animated: true) {
+            self.delegate?.toLoginVC()
+        }
+    }
+    
+    
 
 }
 
@@ -93,11 +113,8 @@ extension SignUpViewController {
             bottomStakVeiw.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
             bottomStakVeiw.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40)
         ])
-        
     }
-    
 }
-
 
 
 
@@ -120,7 +137,7 @@ struct SignUpProvider: PreviewProvider {
         }
         
         func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {}
-        
     }
-    
 }
+
+

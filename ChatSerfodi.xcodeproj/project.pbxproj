@@ -39,6 +39,10 @@
 		B019752A2B0E9F96005D4321 /* UIView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01975292B0E9F96005D4321 /* UIView + Extension.swift */; };
 		B019752C2B164766005D4321 /* ChatRequestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B019752B2B164766005D4321 /* ChatRequestViewController.swift */; };
 		B019752E2B16503B005D4321 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B019752D2B16503B005D4321 /* GoogleService-Info.plist */; };
+		B06BA8F12B1C96D400120FB5 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06BA8F02B1C96D400120FB5 /* AuthService.swift */; };
+		B06BA8F32B1CA01D00120FB5 /* Validators.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06BA8F22B1CA01D00120FB5 /* Validators.swift */; };
+		B06BA8F52B1CA5A900120FB5 /* AuthError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06BA8F42B1CA5A900120FB5 /* AuthError.swift */; };
+		B06BA8F82B1CAF7100120FB5 /* AuthNavigatingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06BA8F72B1CAF7100120FB5 /* AuthNavigatingDelegate.swift */; };
 		B0F8E58E2B07A51900C2B00D /* ActiveChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F8E58D2B07A51900C2B00D /* ActiveChatCell.swift */; };
 		B0F8E5902B07ACA800C2B00D /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F8E58F2B07ACA800C2B00D /* GradientView.swift */; };
 		B0F8E5932B07BC8A00C2B00D /* WaitingChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F8E5922B07BC8A00C2B00D /* WaitingChatCell.swift */; };
@@ -85,6 +89,10 @@
 		B01975292B0E9F96005D4321 /* UIView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView + Extension.swift"; sourceTree = "<group>"; };
 		B019752B2B164766005D4321 /* ChatRequestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRequestViewController.swift; sourceTree = "<group>"; };
 		B019752D2B16503B005D4321 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		B06BA8F02B1C96D400120FB5 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		B06BA8F22B1CA01D00120FB5 /* Validators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Validators.swift; sourceTree = "<group>"; };
+		B06BA8F42B1CA5A900120FB5 /* AuthError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthError.swift; sourceTree = "<group>"; };
+		B06BA8F72B1CAF7100120FB5 /* AuthNavigatingDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthNavigatingDelegate.swift; sourceTree = "<group>"; };
 		B0F8E58D2B07A51900C2B00D /* ActiveChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveChatCell.swift; sourceTree = "<group>"; };
 		B0F8E58F2B07ACA800C2B00D /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		B0F8E5922B07BC8A00C2B00D /* WaitingChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingChatCell.swift; sourceTree = "<group>"; };
@@ -129,10 +137,11 @@
 			children = (
 				17731EA02AE3E406006B1511 /* AppDelegate.swift */,
 				17731EA22AE3E406006B1511 /* SceneDelegate.swift */,
-				B01975202B0E15B1005D4321 /* Model */,
+				B06BA8EF2B1C96AC00120FB5 /* Services */,
 				17ED2C442AFE5A3E00251BAF /* Controllers */,
 				B0F8E5962B07BD8B00C2B00D /* Protocol */,
 				17731EBD2AED46F6006B1511 /* Extension */,
+				B06BA8F62B1CA89300120FB5 /* Helpers */,
 				B0F8E5982B07C20000C2B00D /* activeChats.json */,
 				B0F8E5972B07C20000C2B00D /* waitingChat.json */,
 				B019751A2B0E1481005D4321 /* user.json */,
@@ -208,6 +217,24 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		B06BA8EF2B1C96AC00120FB5 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				B01975202B0E15B1005D4321 /* Model */,
+				B06BA8F02B1C96D400120FB5 /* AuthService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		B06BA8F62B1CA89300120FB5 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				B06BA8F22B1CA01D00120FB5 /* Validators.swift */,
+				B06BA8F42B1CA5A900120FB5 /* AuthError.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		B0F8E5912B07BC5C00C2B00D /* Cell */ = {
 			isa = PBXGroup;
 			children = (
@@ -222,6 +249,7 @@
 			isa = PBXGroup;
 			children = (
 				B0F8E5942B07BD6C00C2B00D /* SelfConfiguringCell.swift */,
+				B06BA8F72B1CAF7100120FB5 /* AuthNavigatingDelegate.swift */,
 			);
 			path = Protocol;
 			sourceTree = "<group>";
@@ -240,7 +268,6 @@
 				506A49DF8C383A021951F50D /* Pods-ChatSerfodi.debug.xcconfig */,
 				2BD248DA56C9F2CBDA3669BE /* Pods-ChatSerfodi.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -370,6 +397,7 @@
 				B01975282B0E9B46005D4321 /* InsertableTextField.swift in Sources */,
 				17040E682AFE7ED9002238B0 /* Bundle.swift in Sources */,
 				B01975222B0E27A0005D4321 /* UserCell.swift in Sources */,
+				B06BA8F82B1CAF7100120FB5 /* AuthNavigatingDelegate.swift in Sources */,
 				17731EA12AE3E406006B1511 /* AppDelegate.swift in Sources */,
 				17731EBF2AED47BA006B1511 /* ButtonFormView.swift in Sources */,
 				17ED2C482AFE5AD800251BAF /* PeopleViewController.swift in Sources */,
@@ -388,12 +416,15 @@
 				B0F8E5932B07BC8A00C2B00D /* WaitingChatCell.swift in Sources */,
 				17731EB92AE3FAD3006B1511 /* UIColor + Extension.swift in Sources */,
 				17731EB52AE3E9BD006B1511 /* UIButton + Extension.swift in Sources */,
+				B06BA8F32B1CA01D00120FB5 /* Validators.swift in Sources */,
 				17B2FB8E2AFBDB7A00EECA01 /* SegmentedControl + Extension.swift in Sources */,
+				B06BA8F12B1C96D400120FB5 /* AuthService.swift in Sources */,
 				B0F8E59C2B07C6CF00C2B00D /* SectionHeader.swift in Sources */,
 				17ED2C422AFE558700251BAF /* ListViewController.swift in Sources */,
 				17731EB72AE3EC77006B1511 /* UIFount + Extension.swift in Sources */,
 				B019751D2B0E152B005D4321 /* SUser.swift in Sources */,
 				17ED2C462AFE5A6F00251BAF /* MainTabBarController.swift in Sources */,
+				B06BA8F52B1CA5A900120FB5 /* AuthError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
