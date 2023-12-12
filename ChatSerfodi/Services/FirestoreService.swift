@@ -20,23 +20,34 @@ class FirestoreService {
     }
     
     /// Сохранения данных в бд
-    func saveProfileWith(id: String, email: String, username: String?, avatarImageString: String?, description: String?, sex: String, completion: @escaping (Result<SUser, Error>) -> Void) {
-        
+    func saveProfileWith(id: String, email: String, username: String?, avatarImage: UIImage?, description: String?, sex: String, completion: @escaping (Result<SUser, Error>) -> Void) {
         guard Validators.ifFilled(username: username, description: description, sex: sex) else {
             completion(.failure(UserError.notFilled))
             return
         }
-        
-        let suser = SUser(username: username!, email: email, avatarStringURL: "Not exist", description: description!, sex: sex, id: id)
-        
-        self.usersRef.document(suser.id).setData(suser.representation) { (error) in
-            if let error = error {
-                completion(.failure(error))
-            } else {
-                completion(.success(suser))
-            }
+        guard avatarImage != UIImage(systemName: "person.circle") else {
+            completion(.failure(UserError.photoNotExist))
+            return
         }
-    }
+        
+        var suser = SUser(username: username!, email: email, avatarStringURL: "Not exist", description: description!, sex: sex, id: id)
+        
+        StorageService.shared.upload(photo: avatarImage!) { result in
+            switch result {
+            case .success(let url):
+                suser.avatarStringURL = url.absoluteString
+                self.usersRef.document(suser.id).setData(suser.representation) { (error) in
+                    if let error = error {
+                        completion(.failure(error))
+                    } else {
+                        completion(.success(suser))
+                    }
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        } // StorageService
+    } // saveProfileWith
     
     
     func getUserData(user: User, completion: @escaping (Result<SUser, Error>) -> Void) {

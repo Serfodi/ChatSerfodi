@@ -46,6 +46,8 @@
 		B06BA8FA2B1CB4AA00120FB5 /* FirestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06BA8F92B1CB4AA00120FB5 /* FirestoreService.swift */; };
 		B06BA8FC2B1CB9F000120FB5 /* UserError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06BA8FB2B1CB9F000120FB5 /* UserError.swift */; };
 		B09186452B29088800965DC1 /* UIApplication + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09186442B29088800965DC1 /* UIApplication + Extension.swift */; };
+		B09186472B29173600965DC1 /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09186462B29173600965DC1 /* StorageService.swift */; };
+		B09186492B291A9100965DC1 /* UIImage + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09186482B291A9100965DC1 /* UIImage + Extension.swift */; };
 		B0F8E58E2B07A51900C2B00D /* ActiveChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F8E58D2B07A51900C2B00D /* ActiveChatCell.swift */; };
 		B0F8E5902B07ACA800C2B00D /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F8E58F2B07ACA800C2B00D /* GradientView.swift */; };
 		B0F8E5932B07BC8A00C2B00D /* WaitingChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F8E5922B07BC8A00C2B00D /* WaitingChatCell.swift */; };
@@ -99,6 +101,8 @@
 		B06BA8F92B1CB4AA00120FB5 /* FirestoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreService.swift; sourceTree = "<group>"; };
 		B06BA8FB2B1CB9F000120FB5 /* UserError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserError.swift; sourceTree = "<group>"; };
 		B09186442B29088800965DC1 /* UIApplication + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication + Extension.swift"; sourceTree = "<group>"; };
+		B09186462B29173600965DC1 /* StorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageService.swift; sourceTree = "<group>"; };
+		B09186482B291A9100965DC1 /* UIImage + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage + Extension.swift"; sourceTree = "<group>"; };
 		B0F8E58D2B07A51900C2B00D /* ActiveChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveChatCell.swift; sourceTree = "<group>"; };
 		B0F8E58F2B07ACA800C2B00D /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		B0F8E5922B07BC8A00C2B00D /* WaitingChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingChatCell.swift; sourceTree = "<group>"; };
@@ -173,6 +177,7 @@
 				B0F8E58F2B07ACA800C2B00D /* GradientView.swift */,
 				B01975232B0E2979005D4321 /* UIViewController + Extension.swift */,
 				B01975292B0E9F96005D4321 /* UIView + Extension.swift */,
+				B09186482B291A9100965DC1 /* UIImage + Extension.swift */,
 				B09186442B29088800965DC1 /* UIApplication + Extension.swift */,
 			);
 			path = " UIkit";
@@ -230,6 +235,7 @@
 				B01975202B0E15B1005D4321 /* Model */,
 				B06BA8F02B1C96D400120FB5 /* AuthService.swift */,
 				B06BA8F92B1CB4AA00120FB5 /* FirestoreService.swift */,
+				B09186462B29173600965DC1 /* StorageService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -403,6 +409,7 @@
 				17731EC12AED4C02006B1511 /* StackView + Extension.swift in Sources */,
 				B06BA8FC2B1CB9F000120FB5 /* UserError.swift in Sources */,
 				B019752C2B164766005D4321 /* ChatRequestViewController.swift in Sources */,
+				B09186472B29173600965DC1 /* StorageService.swift in Sources */,
 				17731EA52AE3E406006B1511 /* AuthViewController.swift in Sources */,
 				B0F8E58E2B07A51900C2B00D /* ActiveChatCell.swift in Sources */,
 				B01975282B0E9B46005D4321 /* InsertableTextField.swift in Sources */,
@@ -429,6 +436,7 @@
 				17731EB52AE3E9BD006B1511 /* UIButton + Extension.swift in Sources */,
 				B06BA8F32B1CA01D00120FB5 /* Validators.swift in Sources */,
 				17B2FB8E2AFBDB7A00EECA01 /* SegmentedControl + Extension.swift in Sources */,
+				B09186492B291A9100965DC1 /* UIImage + Extension.swift in Sources */,
 				B09186452B29088800965DC1 /* UIApplication + Extension.swift in Sources */,
 				B06BA8F12B1C96D400120FB5 /* AuthService.swift in Sources */,
 				B0F8E59C2B07C6CF00C2B00D /* SectionHeader.swift in Sources */,

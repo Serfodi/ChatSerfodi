@@ -31,15 +31,15 @@ class MainTabBarController: UITabBarController {
         let messageImage = UIImage(systemName: "message", withConfiguration: boldConfig)!
         
         viewControllers = [
-            generateNavigationViewController(rootViewController: listViewController, titile: "", image: peopleImage),
-            generateNavigationViewController(rootViewController: peopleViewController, titile: "", image: messageImage)
+            generateNavigationViewController(rootViewController: listViewController, title: "", image: peopleImage),
+            generateNavigationViewController(rootViewController: peopleViewController, title: "", image: messageImage)
         ]
     }
  
     
-    private func generateNavigationViewController(rootViewController: UIViewController, titile: String, image: UIImage) -> UIViewController {
+    private func generateNavigationViewController(rootViewController: UIViewController, title: String, image: UIImage) -> UIViewController {
         let navigationVC = UINavigationController(rootViewController: rootViewController)
-        navigationVC.tabBarItem.title = titile
+        navigationVC.tabBarItem.title = title
         navigationVC.tabBarItem.image = image
         return navigationVC
     }
