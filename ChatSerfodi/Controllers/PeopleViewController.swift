@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class PeopleViewController: UIViewController {
     
@@ -26,6 +27,20 @@ class PeopleViewController: UIViewController {
     
     var dataSourse: UICollectionViewDiffableDataSource<Section, SUser>!
     
+    
+    private let currentUser: SUser
+    
+    init(currentUser: SUser) {
+        self.currentUser = currentUser
+        super.init(nibName: nil, bundle: nil)
+        title = currentUser.username
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -36,8 +51,23 @@ class PeopleViewController: UIViewController {
         createDataSourse()
         reloadData()
         
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Log out", style: .plain, target: self, action: #selector(signOut))
     }
     
+    
+    @objc private func signOut() {
+        let ac = UIAlertController(title: nil, message: "Вы хотите выйти?", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "Отмена", style: .cancel))
+        ac.addAction(UIAlertAction(title: "Выйти", style: .destructive, handler: { _ in
+            do {
+                try Auth.auth().signOut()
+                UIApplication.shared.firstKeyWindow?.rootViewController = AuthViewController()
+            } catch {
+                print("Error signing out: \(error.localizedDescription)")
+            }
+        }))
+        present(ac, animated: true)
+    }
     
     private func setupSearchBar() {
         navigationController?.navigationBar.barTintColor = .mainWhite()
@@ -169,7 +199,7 @@ struct PeopleVCProvider: PreviewProvider {
     
     struct ContainerView: UIViewControllerRepresentable {
         
-        let viewController = MainTabBarController()
+        let viewController = MainTabBarController(currentUser: SUser(username: "", email: "", avatarStringURL: "", description: "", sex: "", id: ""))
         
         func makeUIViewController(context: Context) -> some MainTabBarController {
             viewController

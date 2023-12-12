@@ -46,7 +46,7 @@ class SignUpViewController: UIViewController {
             switch result {
             case .success(let user):
                 self.showAlert(with: "Успешно", and: "Вы зарегестрированны!") {
-                    self.present(SetupProfileViewController(), animated: true)
+                    self.present(SetupProfileViewController(currentUser: user), animated: true)
                 }
                 
             case .failure(let error):
@@ -98,18 +98,18 @@ extension SignUpViewController {
         view.addSubview(bottomStakVeiw)
         
         NSLayoutConstraint.activate([
-            welcomeLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 60),
+            welcomeLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 40),
             welcomeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
         
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: 100),
+            stackView.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: 80),
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40)
         ])
         
         NSLayoutConstraint.activate([
-            bottomStakVeiw.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 60),
+            bottomStakVeiw.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 30),
             bottomStakVeiw.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
             bottomStakVeiw.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40)
         ])

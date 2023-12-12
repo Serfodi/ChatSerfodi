@@ -28,7 +28,7 @@ class LoginViewController: UIViewController {
     
     let signUpButton: UIButton = {
         let loginButton = UIButton()
-        loginButton.setTitle("Login", for: .normal)
+        loginButton.setTitle("Sign up", for: .normal)
         loginButton.setTitleColor(.bottonRed(), for: .normal)
         loginButton.titleLabel?.font = .avenir20()
         return loginButton
@@ -51,7 +51,18 @@ class LoginViewController: UIViewController {
         AuthService.shared.login(email: emailTextField.text, password: passwordTextField.text) { result in
             switch result {
             case .success(let user):
-                self.showAlert(with: "Успешно", and: "Вы авторизованы! ")
+                self.showAlert(with: "Успешно", and: "Вы авторизованы! ") {
+                    FirestoreService.shared.getUserData(user: user) { result in
+                        switch result {
+                        case .success(let suser):
+                            let mainTabBar = MainTabBarController(currentUser: suser)
+                            mainTabBar.modalPresentationStyle = .fullScreen
+                            self.present(mainTabBar, animated: true)
+                        case .failure(let error):
+                            self.present(SetupProfileViewController(currentUser: user), animated: true)
+                        }
+                    }
+                }
             case .failure(let error):
                 self.showAlert(with: "Ошибка!", and: error.localizedDescription)
             }
@@ -110,12 +121,12 @@ extension LoginViewController {
         view.addSubview(bottomStackView)
         
         NSLayoutConstraint.activate([
-            welcomeLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 60),
+            welcomeLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 40),
             welcomeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
         
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: 40),
+            stackView.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: 30),
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40)
         ])

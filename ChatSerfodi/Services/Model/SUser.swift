@@ -6,12 +6,59 @@
 //
 
 import UIKit
+import FirebaseFirestore
 
 struct SUser: Hashable, Decodable {
     
-    var userName: String
+    var username: String
+    var email: String
     var avatarStringURL: String
-    var id: Int
+    var description: String
+    var sex: String
+    var id: String
+    
+    
+    init(username: String, email: String, avatarStringURL: String, description: String, sex: String, id: String) {
+        self.username = username
+        self.email = email
+        self.avatarStringURL = avatarStringURL
+        self.description = description
+        self.sex = sex
+        self.id = id
+    }
+    
+    
+    init?(document: DocumentSnapshot) {
+        guard let data = document.data() else { return nil }
+        
+        guard
+            let username = data["username"] as? String,
+            let email = data["email"] as? String,
+            let avatarStringURL = data["avatarStringURL"] as? String,
+            let description = data["description"] as? String,
+            let sex = data["sex"] as? String,
+            let uid = data["uid"] as? String
+        else { return nil }
+        
+        self.username = username
+        self.email = email
+        self.avatarStringURL = avatarStringURL
+        self.description = description
+        self.sex = sex
+        self.id = uid
+        
+    }
+    
+    var representation: [String: Any] {
+        var rep = ["username": username]
+        rep["email"] = email
+        rep["avatarStringURL"] = avatarStringURL
+        rep["description"] = description
+        rep["sex"] = sex
+        rep["email"] = email
+        rep["uid"] = id
+        return rep
+    }
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
@@ -25,6 +72,9 @@ struct SUser: Hashable, Decodable {
         guard let filtr = filtr else { return true }
         if filtr.isEmpty { return true }
         let lowercasedFiltr = filtr.lowercased()
-        return userName.lowercased().contains(lowercasedFiltr)
+        return username.lowercased().contains(lowercasedFiltr)
     }
+    
+    
+    
 }
