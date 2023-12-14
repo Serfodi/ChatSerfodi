@@ -17,4 +17,8 @@ extension UIApplication {
         return keyWindow
     }
     
+    var getTopVC: UIViewController {
+        (firstKeyWindow?.rootViewController)!
+    }
+    
 }

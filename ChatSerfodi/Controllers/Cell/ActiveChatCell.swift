@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+import SDWebImage
 
 class ActiveChatCell: UICollectionViewCell, SelfConfiguringCell {
     
@@ -33,9 +33,9 @@ class ActiveChatCell: UICollectionViewCell, SelfConfiguringCell {
     
     func configure<U>(with value: U) where U : Hashable {
         guard let value: SChat = value as? SChat else { return }
-        frendImageView.image = UIImage(named: value.userImageString)
-        frindName.text = value.userName
+        frindName.text = value.friendUsername
         lastMassege.text = value.lastMessage
+        frendImageView.sd_setImage(with: URL(string: value.friendUserImageString))
     }
     
 }

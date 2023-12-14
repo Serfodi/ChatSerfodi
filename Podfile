@@ -9,5 +9,8 @@ target 'ChatSerfodi' do
 
   pod 'FirebaseAnalytics'
   pod 'FirebaseAuth'
+  pod 'FirebaseFirestore'
+  pod 'FirebaseStorage'
+  pod 'SDWebImage', '~> 5.0'
 
 end
