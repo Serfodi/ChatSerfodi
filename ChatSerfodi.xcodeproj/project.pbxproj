@@ -50,6 +50,8 @@
 		B091864B2B29B05200965DC1 /* ListenerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091864A2B29B05200965DC1 /* ListenerService.swift */; };
 		B091864F2B2A502E00965DC1 /* SMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091864E2B2A502E00965DC1 /* SMessage.swift */; };
 		B09186512B2A641900965DC1 /* WaitingChatsNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09186502B2A641900965DC1 /* WaitingChatsNavigation.swift */; };
+		B09186542B2B3F4900965DC1 /* MessageKit in Frameworks */ = {isa = PBXBuildFile; productRef = B09186532B2B3F4900965DC1 /* MessageKit */; };
+		B09186562B2B3FC100965DC1 /* ChatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09186552B2B3FC100965DC1 /* ChatsViewController.swift */; };
 		B0F8E58E2B07A51900C2B00D /* ActiveChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F8E58D2B07A51900C2B00D /* ActiveChatCell.swift */; };
 		B0F8E5902B07ACA800C2B00D /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F8E58F2B07ACA800C2B00D /* GradientView.swift */; };
 		B0F8E5932B07BC8A00C2B00D /* WaitingChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F8E5922B07BC8A00C2B00D /* WaitingChatCell.swift */; };
@@ -105,6 +107,7 @@
 		B091864A2B29B05200965DC1 /* ListenerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListenerService.swift; sourceTree = "<group>"; };
 		B091864E2B2A502E00965DC1 /* SMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMessage.swift; sourceTree = "<group>"; };
 		B09186502B2A641900965DC1 /* WaitingChatsNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingChatsNavigation.swift; sourceTree = "<group>"; };
+		B09186552B2B3FC100965DC1 /* ChatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsViewController.swift; sourceTree = "<group>"; };
 		B0F8E58D2B07A51900C2B00D /* ActiveChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveChatCell.swift; sourceTree = "<group>"; };
 		B0F8E58F2B07ACA800C2B00D /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		B0F8E5922B07BC8A00C2B00D /* WaitingChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingChatCell.swift; sourceTree = "<group>"; };
@@ -118,6 +121,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				89C4246A67FBB35A9CA0B21E /* Pods_ChatSerfodi.framework in Frameworks */,
+				B09186542B2B3F4900965DC1 /* MessageKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -213,6 +217,7 @@
 				B0F8E5912B07BC5C00C2B00D /* Cell */,
 				B01975252B0E8CE7005D4321 /* ProfileViewController.swift */,
 				B019752B2B164766005D4321 /* ChatRequestViewController.swift */,
+				B09186552B2B3FC100965DC1 /* ChatsViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -304,6 +309,9 @@
 			dependencies = (
 			);
 			name = ChatSerfodi;
+			packageProductDependencies = (
+				B09186532B2B3F4900965DC1 /* MessageKit */,
+			);
 			productName = ChatSerfodi;
 			productReference = 17731E9D2AE3E406006B1511 /* ChatSerfodi.app */;
 			productType = "com.apple.product-type.application";
@@ -332,6 +340,9 @@
 				Base,
 			);
 			mainGroup = 17731E942AE3E406006B1511;
+			packageReferences = (
+				B09186522B2B3F4900965DC1 /* XCRemoteSwiftPackageReference "MessageKit" */,
+			);
 			productRefGroup = 17731E9E2AE3E406006B1511 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -408,6 +419,7 @@
 				B019752C2B164766005D4321 /* ChatRequestViewController.swift in Sources */,
 				B091864B2B29B05200965DC1 /* ListenerService.swift in Sources */,
 				B09186472B29173600965DC1 /* StorageService.swift in Sources */,
+				B09186562B2B3FC100965DC1 /* ChatsViewController.swift in Sources */,
 				17731EA52AE3E406006B1511 /* AuthViewController.swift in Sources */,
 				B0F8E58E2B07A51900C2B00D /* ActiveChatCell.swift in Sources */,
 				B09186512B2A641900965DC1 /* WaitingChatsNavigation.swift in Sources */,
@@ -658,6 +670,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B09186522B2B3F4900965DC1 /* XCRemoteSwiftPackageReference "MessageKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MessageKit/MessageKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B09186532B2B3F4900965DC1 /* MessageKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B09186522B2B3F4900965DC1 /* XCRemoteSwiftPackageReference "MessageKit" */;
+			productName = MessageKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 17731E952AE3E406006B1511 /* Project object */;
 }

@@ -79,15 +79,11 @@ class ListViewController: UIViewController {
             }
         })
     }
-
-    
-    
     
     deinit {
         waitingChatsListener?.remove()
         activityChatObserve?.remove()
     }
-    
     
     private func setupSearchBar() {
         navigationController?.navigationBar.barTintColor = .mainWhite()
@@ -116,25 +112,7 @@ class ListViewController: UIViewController {
 
 
 
-// MARK: UICollectionViewDelegate
-
-extension ListViewController: UICollectionViewDelegate {
-    
-    func collectionView(_ tableView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let chat = self.dataSource?.itemIdentifier(for: indexPath) else { return }
-        guard let section = Section(rawValue: indexPath.section) else { return }
-        switch section {
-        case .waitingChat:
-            let chatRequestVC = ChatRequestViewController(chat: chat)
-            chatRequestVC.delegate = self
-            self.present(chatRequestVC, animated: true)
-        case .activeChat:
-            print(#function)
-        }
-    }
-    
-}
-
+// MARK: WaitingChatsNavigation
 
 extension ListViewController: WaitingChatsNavigation {
     
@@ -163,9 +141,35 @@ extension ListViewController: WaitingChatsNavigation {
 
 
 
+// MARK: - UICollectionViewDelegate
+
+extension ListViewController: UICollectionViewDelegate {
+    
+    func collectionView(_ tableView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let chat = self.dataSource?.itemIdentifier(for: indexPath) else { return }
+        guard let section = Section(rawValue: indexPath.section) else { return }
+        switch section {
+        case .waitingChat:
+            let chatRequestVC = ChatRequestViewController(chat: chat)
+            chatRequestVC.delegate = self
+            self.present(chatRequestVC, animated: true)
+        case .activeChat:
+            let chatVC = ChatsViewController(user: currentUser, chat: chat)
+            chatVC.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(chatVC, animated: true)
+        }
+    }
+    
+}
 
 
-// MARK:  Data sourse
+
+
+
+
+
+
+// MARK:  Data source
 
 extension ListViewController {
     

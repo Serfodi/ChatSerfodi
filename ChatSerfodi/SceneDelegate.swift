@@ -18,8 +18,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
-        window?.rootViewController = AuthViewController()
-        
         
         if let user = Auth.auth().currentUser {
             FirestoreService.shared.getUserData(user: user) { result in
@@ -35,7 +33,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         } else {
             self.window?.rootViewController = AuthViewController()
         }
-        
         
         window?.makeKeyAndVisible() 
     }
