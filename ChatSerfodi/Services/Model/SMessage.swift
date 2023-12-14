@@ -10,7 +10,7 @@ import FirebaseFirestore
 import MessageKit
 
 
-struct SMessage: Hashable, MessageType  {
+struct SMessage: Hashable, MessageType, Comparable  {
     
     var sender: MessageKit.SenderType
     let content: String
@@ -56,6 +56,10 @@ struct SMessage: Hashable, MessageType  {
     
     static func == (lhs: SMessage, rhs: SMessage) -> Bool {
         lhs.messageId == rhs.messageId
+    }
+    
+    static func < (lhs: SMessage, rhs: SMessage) -> Bool {
+        lhs.sentDate < rhs.sentDate
     }
     
     func hash(into hasher: inout Hasher) {

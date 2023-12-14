@@ -62,10 +62,7 @@ class ListenerService {
                 return
             }
             querySnapshot.documentChanges.forEach { (diff) in
-                guard let chat = SChat(document: diff.document) else {
-                    fatalError()
-                    return
-                }
+                guard let chat = SChat(document: diff.document) else { return }
                 switch diff.type {
                 case .added:
                     guard !chats.contains(chat) else { return }
@@ -109,6 +106,31 @@ class ListenerService {
             completion(.success(chats))
         }
         return chatsListener
+    }
+    
+    
+    // Наблюдатель для сообщений
+    
+    func messagesObserve(chat: SChat, completion: @escaping (Result<SMessage, Error>) -> Void) -> ListenerRegistration? {
+        let ref = userRef.document(currentUserId).collection("activeChats").document(chat.friendId).collection("messages")
+        let messagesListener = ref.addSnapshotListener { (querySnapshot, error) in
+            guard let snapshot = querySnapshot else {
+                completion(.failure(error!))
+                return
+            }
+            snapshot.documentChanges.forEach { diff in
+                guard let message = SMessage(document: diff.document) else { return }
+                switch diff.type {
+                case .added:
+                    completion(.success(message))
+                case .modified:
+                    break
+                case .removed:
+                    break
+                }
+            }
+        }
+        return messagesListener
     }
     
     

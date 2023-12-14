@@ -52,6 +52,7 @@
 		B09186512B2A641900965DC1 /* WaitingChatsNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09186502B2A641900965DC1 /* WaitingChatsNavigation.swift */; };
 		B09186542B2B3F4900965DC1 /* MessageKit in Frameworks */ = {isa = PBXBuildFile; productRef = B09186532B2B3F4900965DC1 /* MessageKit */; };
 		B09186562B2B3FC100965DC1 /* ChatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09186552B2B3FC100965DC1 /* ChatsViewController.swift */; };
+		B09186582B2B7D6C00965DC1 /* UIScrolIView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09186572B2B7D6C00965DC1 /* UIScrolIView + Extension.swift */; };
 		B0F8E58E2B07A51900C2B00D /* ActiveChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F8E58D2B07A51900C2B00D /* ActiveChatCell.swift */; };
 		B0F8E5902B07ACA800C2B00D /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F8E58F2B07ACA800C2B00D /* GradientView.swift */; };
 		B0F8E5932B07BC8A00C2B00D /* WaitingChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F8E5922B07BC8A00C2B00D /* WaitingChatCell.swift */; };
@@ -108,6 +109,7 @@
 		B091864E2B2A502E00965DC1 /* SMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMessage.swift; sourceTree = "<group>"; };
 		B09186502B2A641900965DC1 /* WaitingChatsNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingChatsNavigation.swift; sourceTree = "<group>"; };
 		B09186552B2B3FC100965DC1 /* ChatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsViewController.swift; sourceTree = "<group>"; };
+		B09186572B2B7D6C00965DC1 /* UIScrolIView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrolIView + Extension.swift"; sourceTree = "<group>"; };
 		B0F8E58D2B07A51900C2B00D /* ActiveChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveChatCell.swift; sourceTree = "<group>"; };
 		B0F8E58F2B07ACA800C2B00D /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		B0F8E5922B07BC8A00C2B00D /* WaitingChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingChatCell.swift; sourceTree = "<group>"; };
@@ -180,6 +182,7 @@
 				B01975292B0E9F96005D4321 /* UIView + Extension.swift */,
 				B09186482B291A9100965DC1 /* UIImage + Extension.swift */,
 				B09186442B29088800965DC1 /* UIApplication + Extension.swift */,
+				B09186572B2B7D6C00965DC1 /* UIScrolIView + Extension.swift */,
 			);
 			path = " UIkit";
 			sourceTree = "<group>";
@@ -456,6 +459,7 @@
 				17731EB72AE3EC77006B1511 /* UIFount + Extension.swift in Sources */,
 				B019751D2B0E152B005D4321 /* SUser.swift in Sources */,
 				17ED2C462AFE5A6F00251BAF /* MainTabBarController.swift in Sources */,
+				B09186582B2B7D6C00965DC1 /* UIScrolIView + Extension.swift in Sources */,
 				B06BA8F52B1CA5A900120FB5 /* AuthError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

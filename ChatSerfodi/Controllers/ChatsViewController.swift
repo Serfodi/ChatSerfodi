@@ -7,10 +7,13 @@
 
 import UIKit
 import MessageKit
+import InputBarAccessoryView
+import FirebaseFirestore
 
 class ChatsViewController: MessagesViewController {
     
     private var messages = [SMessage]()
+    private var messageListener: ListenerRegistration?
     
     private let user: SUser
     private let chat: SChat
@@ -31,7 +34,27 @@ class ChatsViewController: MessagesViewController {
         super.viewDidLoad()
         configureMessageInputBar()
         
+        messagesCollectionView.backgroundColor = .mainWhite()
+        
+        messageInputBar.delegate = self
+        messagesCollectionView.messagesDataSource = self
+        messagesCollectionView.messagesLayoutDelegate = self
+        messagesCollectionView.messagesDisplayDelegate = self
+        
         self.tabBarController?.tabBar.isHidden = true
+        
+        messageListener = ListenerService.shared.messagesObserve(chat: chat) { result in
+            switch result {
+            case .success(let message):
+                self.insertNewMessage(message: message)
+            case .failure(let error):
+                self.showAlert(with: "Ошибка!", and: error.localizedDescription)
+            }
+        }
+    }
+    
+    deinit {
+        messageListener?.remove()
     }
     
     func configureMessageInputBar() {
@@ -71,10 +94,26 @@ class ChatsViewController: MessagesViewController {
 //        messageInputBar.middleContentViewPadding.right =
     }
     
+    private func insertNewMessage(message: SMessage) {
+        guard !messages.contains(message) else { return }
+        messages.append(message)
+        messages.sort()
+        
+        let isLastMessage = messages.firstIndex(of: message) == (messages.count - 1)
+        let shouldScrollToBottom = messagesCollectionView.isAtBottom && isLastMessage
+        
+        messagesCollectionView.reloadData()
+        
+        if shouldScrollToBottom {
+            DispatchQueue.main.async {
+                self.messagesCollectionView.scrollToLastItem(at: .bottom, animated: true)
+            }
+        }
+    }
 }
 
 
-// MARK: MessagesDataSource
+// MARK: - MessagesDataSource
 
 struct Sender: SenderType {
     var senderId: String
@@ -97,6 +136,62 @@ extension ChatsViewController: MessagesDataSource {
     
     func numberOfSections(in messagesCollectionView: MessageKit.MessagesCollectionView) -> Int {
         return 1
+    }
+    
+    func cellTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+        NSAttributedString(string: MessageKitDateFormatter.shared.string(from: message.sentDate), attributes: [
+                            NSAttributedString.Key.font: UIFont.boldSystemFont (ofSize: 10),
+                           NSAttributedString.Key.foregroundColor: UIColor.darkGray])
+    }
+    
+}
+
+// MARK: - MessagesLayoutDelegate
+
+extension ChatsViewController: MessagesLayoutDelegate {
+    
+    func footerViewSize(for section: Int, in messagesCollectionView: MessagesCollectionView) -> CGSize {
+        CGSize(width: 0, height: 8)
+    }
+}
+
+extension ChatsViewController: MessagesDisplayDelegate {
+    
+    func backgroundColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
+        isFromCurrentSender(message: message) ? .white : .purple
+    }
+    
+    func textColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
+        isFromCurrentSender(message: message) ? .black : .white
+    }
+    
+    func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+        avatarView.isHidden = true
+    }
+    
+    func avatarSize(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGSize? {
+        .zero
+    }
+    
+    func messageStyle(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
+        .bubble
+    }
+    
+}
+
+extension ChatsViewController: InputBarAccessoryViewDelegate {
+    
+    func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
+        let message = SMessage(user: user, content: text)
+        FirestoreService.shared.sendMessage(chat: chat, message: message) { result in
+            switch result {
+            case .success():
+                self.messagesCollectionView.scrollToLastItem(at: .bottom, animated: true)
+            case .failure(let error):
+                self.showAlert(with: "Ошибка!", and: "Ошибка: \(error.localizedDescription)")
+            }
+        }
+        inputBar.inputTextView.text = ""
     }
     
 }
