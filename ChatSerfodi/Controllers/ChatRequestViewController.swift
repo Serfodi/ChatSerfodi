@@ -9,13 +9,20 @@ import UIKit
 
 class ChatRequestViewController: UIViewController {
     
-    let containerView = UIView()
-    let imageView = UIImageView(image: UIImage(named: "human1"))
-    let nameLabel = UILabel(text: "Сергей", fount: .systemFont(ofSize: 20, weight: .light))
-    let aboutLabel = UILabel(text: "You have the opportunity to chat with the best man in the world!", fount: .systemFont(ofSize: 16, weight: .light))
+    let containerView: UIView = {
+        let view = UIView()
+        view.addBlur(blur: .init(style: .regular))
+        view.layer.cornerRadius = 20
+        view.clipsToBounds = true
+        return view
+    }()
     
-    let acceptButton = UIButton(title: "ACCEPT", titleColor: .white, backgroundColor: .black, fount: .laoSangamMN20(), isShodow: false, cornorRadius: 10)
-    let denyButton = UIButton(title: "Deny", titleColor: .red, backgroundColor: .mainWhite(), fount: .laoSangamMN20(), isShodow: false, cornorRadius: 10)
+    let imageView = UIImageView(image: UIImage(named: "human1"))
+    let nameLabel = UILabel(text: "Сергей", fount: FontAppearance.defaultBoldText)
+    let aboutLabel = UILabel(text: "У вас есть возможность пообщаться с самым лучшим человеком в мире!")
+    
+    let acceptButton = UIButton(title: "Принять", titleColor: ColorAppearance.white.color(), backgroundColor: ColorAppearance.black.color())
+    let denyButton = UIButton(title: "Отклонить", titleColor: .red, backgroundColor: ColorAppearance.white.color())
     
     private var chat: SChat
     
@@ -34,6 +41,9 @@ class ChatRequestViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.backgroundColor = ColorAppearance.white.color()
+        
         customizeElements()
         setupConstraints()
         
@@ -66,9 +76,6 @@ class ChatRequestViewController: UIViewController {
         denyButton.layer.borderColor = UIColor.red.cgColor
         
         aboutLabel.numberOfLines = 0
-        
-        containerView.backgroundColor = .mainWhite()
-        containerView.layer.cornerRadius = 30
     }
 }
 
@@ -93,18 +100,18 @@ extension ChatRequestViewController {
             imageView.topAnchor.constraint(equalTo: view.topAnchor),
             imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            imageView.bottomAnchor.constraint(equalTo: containerView.topAnchor, constant: 30)
+            imageView.bottomAnchor.constraint(equalTo: containerView.topAnchor, constant: 20)
         ])
         
         NSLayoutConstraint.activate([
             containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            containerView.heightAnchor.constraint(equalToConstant: 206)
+            containerView.heightAnchor.constraint(equalToConstant: 195)
         ])
         
         NSLayoutConstraint.activate([
-            nameLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 35),
+            nameLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 20),
             nameLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 24),
             nameLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -24)
         ])
@@ -119,7 +126,6 @@ extension ChatRequestViewController {
             buttonStackView.topAnchor.constraint(equalTo: aboutLabel.bottomAnchor, constant: 24),
             buttonStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 24),
             buttonStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -24),
-            buttonStackView.heightAnchor.constraint(equalToConstant:  56)
         ])
         
         

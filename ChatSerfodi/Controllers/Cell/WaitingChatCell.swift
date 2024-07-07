@@ -17,7 +17,7 @@ class WaitingChatCell: UICollectionViewCell, SelfConfiguringCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .yellow
-        self.layer.cornerRadius = 4
+        self.layer.cornerRadius = 20
         self.clipsToBounds = true
         setupConstraints()
     }

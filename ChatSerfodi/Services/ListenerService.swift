@@ -25,13 +25,11 @@ class ListenerService {
     
     func usersObserve(users: [SUser], completion: @escaping (Result<[SUser], Error>)-> Void) -> ListenerRegistration? {
         var users = users
-        
         let userListener = userRef.addSnapshotListener { (querySnapshot, error) in
             guard let querySnapshot = querySnapshot else {
                 completion(.failure(error!))
                 return
             }
-            
             querySnapshot.documentChanges.forEach { (diff) in
                 guard let user = SUser(document: diff.document) else { return }
                 switch diff.type {

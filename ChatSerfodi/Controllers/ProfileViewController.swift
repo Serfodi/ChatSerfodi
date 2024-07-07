@@ -10,11 +10,21 @@ import SDWebImage
 
 class ProfileViewController: UIViewController {
     
-    let containerView = UIView()
+    let containerView: UIView = {
+        let view = UIView()
+        view.addBlur(blur: .init(style: .regular))
+        view.layer.cornerRadius = 20
+        view.clipsToBounds = true
+        return view
+    }()
+    
     let imageView = UIImageView(image: UIImage(named: "human1"))
-    let nameLabel = UILabel(text: "Сергей", fount: .systemFont(ofSize: 20, weight: .light))
-    let aboutLabel = UILabel(text: "You have the opportunity to chat with the best man in the world!", fount: .systemFont(ofSize: 16, weight: .light))
+    let nameLabel = UILabel(text: "Сергей", fount: FontAppearance.defaultBoldText)
+    let aboutLabel = UILabel(text: "You have the opportunity to chat with the best man in the world!")
+    
     let myTextField = InsertableTextField()
+    
+    var stackView: UIStackView!
     
     private let user: SUser
     
@@ -32,8 +42,10 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .mainWhite()
+        view.backgroundColor = ColorAppearance.white.color()
         setupConstraints()
+        configuration()
+        NotificationCenter.default.addObserver(self, selector: #selector(moveContentUp), name: UIResponder.keyboardWillShowNotification, object: nil)
     }
     
     @objc private func sendMessage() {
@@ -50,93 +62,74 @@ class ProfileViewController: UIViewController {
             }
         }
     }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if let _ = touches.first {
+            UIView.animate(withDuration: 0.3) {
+                self.view.frame.origin.y = 0
+                self.view.endEditing(true)
+            }
+        }
+        super.touchesBegan(touches, with: event)
+    }
+    
+    @objc func moveContentUp(notification: NSNotification) {
+        let userInfo = notification.userInfo
+        let keyboardFrame = userInfo![UIResponder.keyboardFrameEndUserInfoKey] as? CGRect
+        let keyboardHeight = keyboardFrame!.size.height
+//        let emptySpaceHeight = view.frame.size.height - stackView.frame.maxY
+//        let converdContentHeight = keyboardHeight - emptySpaceHeight
+        view.frame.origin.y = -keyboardHeight
+    }
 }
 
-extension ProfileViewController {
+private extension ProfileViewController {
     
-    private func setupConstraints() {
-        containerView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        aboutLabel.translatesAutoresizingMaskIntoConstraints = false
-        myTextField.translatesAutoresizingMaskIntoConstraints = false
-        
+    func configuration() {
+        aboutLabel.numberOfLines = 0
         if let button = myTextField.rightView as? UIButton  {
             button.addTarget(self, action:  #selector(sendMessage), for: .touchUpInside)
         }
+    }
+    
+    func setupConstraints() {
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        myTextField.translatesAutoresizingMaskIntoConstraints = false
         
-        aboutLabel.numberOfLines = 0
-        containerView.backgroundColor = .mainWhite()
-        containerView.layer.cornerRadius = 30
+        stackView = UIStackView(arrangedSubviews: [
+            nameLabel,
+            aboutLabel,
+            myTextField
+        ], axis: .vertical, spacing: 20)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(imageView)
         view.addSubview(containerView)
-        containerView.addSubview(nameLabel)
-        containerView.addSubview(aboutLabel)
-        containerView.addSubview(myTextField)
+        view.addSubview(stackView)
+        
+        myTextField.heightAnchor.constraint(equalToConstant: 42).isActive = true
+                
+        NSLayoutConstraint.activate([
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
+            stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -30)
+        ])
+        
+        NSLayoutConstraint.activate([
+            containerView.topAnchor.constraint(equalTo: stackView.topAnchor, constant: -20),
+            containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            containerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+        ])
         
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: view.topAnchor),
             imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            imageView.bottomAnchor.constraint(equalTo: containerView.topAnchor, constant: 30)
+            imageView.bottomAnchor.constraint(lessThanOrEqualTo: view.bottomAnchor, constant: -160)
         ])
         
-        NSLayoutConstraint.activate([
-            containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            containerView.heightAnchor.constraint(equalToConstant: 206)
-        ])
-        
-        NSLayoutConstraint.activate([
-            nameLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 35),
-            nameLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 24),
-            nameLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -24)
-        ])
-        
-        NSLayoutConstraint.activate([
-            aboutLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8),
-            aboutLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 24),
-            aboutLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -24)
-        ])
-        
-        NSLayoutConstraint.activate([
-            myTextField.topAnchor.constraint(equalTo: aboutLabel.bottomAnchor, constant: 8),
-            myTextField.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 24),
-            myTextField.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -24),
-            myTextField.heightAnchor.constraint(equalToConstant:  48)
-        ])
     }
     
-}
-
-
-
-
-
-
-
-
-// MARK: - SwiftUI
-
-
-import SwiftUI
-
-struct ProfileViewControllerProvider: PreviewProvider {
-    
-    static var previews: some View {
-        ContainerView().edgesIgnoringSafeArea(.all)
-    }
-    
-    struct ContainerView: UIViewControllerRepresentable {
-        
-        let viewController = ProfileViewController(user: SUser(username: "", email: "", avatarStringURL: "", description: "", sex: "", id: ""))
-        
-        func makeUIViewController(context: Context) -> some ProfileViewController {
-            viewController
-        }
-        
-        func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {}
-    }
 }

@@ -36,6 +36,7 @@ class ChatsViewController: MessagesViewController {
         
         messagesCollectionView.backgroundColor = .mainWhite()
         
+        
         messageInputBar.delegate = self
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
@@ -60,21 +61,21 @@ class ChatsViewController: MessagesViewController {
     func configureMessageInputBar() {
         messageInputBar.isTranslucent = true
         messageInputBar.separatorLine.isHidden = true
+        
         messageInputBar.backgroundView.backgroundColor = .mainWhite()
         messageInputBar.inputTextView.backgroundColor = .white
+        messageInputBar.inputTextView.placeholderTextColor = ColorAppearance.black.color().withAlphaComponent(0.5)
         
-        messageInputBar.inputTextView.placeholderTextColor = UIColor(red: 0.6, green: 0.6, blue: 0.6, alpha: 1)
-        messageInputBar.inputTextView.textContainerInset = UIEdgeInsets(top: 14, left: 30, bottom: 14, right: 36)
-        messageInputBar.inputTextView.placeholderLabelInsets = UIEdgeInsets(top: 14, left: 36, bottom: 14, right: 36)
+        messageInputBar.inputTextView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        messageInputBar.inputTextView.placeholderLabelInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         
-        messageInputBar.inputTextView.layer.borderColor = UIColor(red: 200 / 255, green: 200 / 255, blue: 200 / 255, alpha: 1).cgColor
-        messageInputBar.inputTextView.layer.borderWidth = 0.2
-        messageInputBar.inputTextView.layer.cornerRadius = 18.0
+        messageInputBar.inputTextView.layer.cornerRadius = 21
    
-        messageInputBar.inputTextView.tintColor = .mainWhite()
-        messageInputBar.inputTextView.backgroundColor = .mainWhite()
+        messageInputBar.inputTextView.layer.borderWidth = 0.3
+        messageInputBar.inputTextView.layer.borderColor = ColorAppearance.black.color().withAlphaComponent(0.5).cgColor
+        
         messageInputBar.inputTextView.layer.masksToBounds = true
-        messageInputBar.inputTextView.scrollIndicatorInsets = UIEdgeInsets(top: 14, left: 0, bottom: 14, right: 0)
+        messageInputBar.inputTextView.scrollIndicatorInsets = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
         
         messageInputBar.layer.shadowColor = UIColor.black.cgColor
         messageInputBar.layer.shadowRadius = 5
@@ -86,12 +87,21 @@ class ChatsViewController: MessagesViewController {
     
     
     func configureButton() {
-        messageInputBar.sendButton.image = UIImage(systemName: "paperplane.fill")
-        messageInputBar.setRightStackViewWidthConstant(to: 56, animated: false)
-        messageInputBar.sendButton.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 2, leading: 2, bottom: 6, trailing: 38)
-        messageInputBar.sendButton.setSize(CGSize(width: 48, height: 48), animated: false)
+        
+        messageInputBar.setRightStackViewWidthConstant(to: 42, animated: false)
+        messageInputBar.sendButton.setSize(CGSize(width: 40, height: 35), animated: false)
+//        messageInputBar.sendButton.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: -4, trailing: 0)
+        
+        messageInputBar.sendButton.contentMode = .scaleAspectFill
+        
+        messageInputBar.sendButton.backgroundColor = .blue
+        
+        let image =  UIImage(systemName: "arrow.up.message.fill", withConfiguration: UIImage.SymbolConfiguration(weight: .medium))
+        
+//        messageInputBar.sendButton.image = image
+//        messageInputBar.sendButton.setImage(image, for: .normal)
+        
         messageInputBar.sendButton.title = ""
-//        messageInputBar.middleContentViewPadding.right =
     }
     
     private func insertNewMessage(message: SMessage) {
@@ -109,6 +119,17 @@ class ChatsViewController: MessagesViewController {
                 self.messagesCollectionView.scrollToLastItem(at: .bottom, animated: true)
             }
         }
+    }
+    
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if let _ = touches.first {
+            UIView.animate(withDuration: 0.3) {
+                self.view.frame.origin.y = 0
+                self.view.endEditing(true)
+            }
+        }
+        super.touchesBegan(touches, with: event)
     }
 }
 
@@ -140,9 +161,11 @@ extension ChatsViewController: MessagesDataSource {
     
     func cellTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
         NSAttributedString(string: MessageKitDateFormatter.shared.string(from: message.sentDate), attributes: [
-                            NSAttributedString.Key.font: UIFont.boldSystemFont (ofSize: 10),
+            NSAttributedString.Key.font: FontAppearance.defaultText,
                            NSAttributedString.Key.foregroundColor: UIColor.darkGray])
     }
+    
+    
     
 }
 
@@ -151,18 +174,18 @@ extension ChatsViewController: MessagesDataSource {
 extension ChatsViewController: MessagesLayoutDelegate {
     
     func footerViewSize(for section: Int, in messagesCollectionView: MessagesCollectionView) -> CGSize {
-        CGSize(width: 0, height: 8)
+        CGSize(width: 0, height: 4)
     }
 }
 
 extension ChatsViewController: MessagesDisplayDelegate {
     
     func backgroundColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
-        isFromCurrentSender(message: message) ? .white : .purple
+        isFromCurrentSender(message: message) ? .white : ColorAppearance.blue.color()
     }
     
     func textColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
-        isFromCurrentSender(message: message) ? .black : .white
+        isFromCurrentSender(message: message) ? ColorAppearance.black.color() : .white
     }
     
     func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {

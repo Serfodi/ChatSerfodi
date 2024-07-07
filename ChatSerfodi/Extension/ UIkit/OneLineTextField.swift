@@ -10,16 +10,17 @@ import UIKit
 class OneLineTextField: UITextField {
 
     
-    convenience init (foun: UIFont? = .avenir20()) {
+    convenience init (font: UIFont? = FontAppearance.defaultText) {
         self.init()
         
-        self.font = foun
+        self.font = font
         self.borderStyle = .none
+        self.textColor = ColorAppearance.black.color()
         self.translatesAutoresizingMaskIntoConstraints = false
         
         var bottomView =  UIView()
         bottomView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: 0, height: 0))
-        bottomView.backgroundColor = .textFieldLightGray()
+        bottomView.backgroundColor = ColorAppearance.black.color()
         bottomView.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(bottomView)
         

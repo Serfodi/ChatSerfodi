@@ -12,5 +12,7 @@ target 'ChatSerfodi' do
   pod 'FirebaseFirestore'
   pod 'FirebaseStorage'
   pod 'SDWebImage', '~> 5.0'
+  pod 'lottie-ios'
+  pod 'GoogleSignIn'
 
 end

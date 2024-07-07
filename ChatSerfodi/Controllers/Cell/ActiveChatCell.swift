@@ -10,21 +10,32 @@ import SDWebImage
 
 class ActiveChatCell: UICollectionViewCell, SelfConfiguringCell {
     
-    
     static var reuseId: String = "ActiveChatCell"
     
-    let frendImageView = UIImageView()
-    let frindName = UILabel(text: "User name", fount:  .laoSangamMN20())
-    let lastMassege = UILabel(text: "How a you", fount:  .laoSangamMN18())
-    let gradientView = GradientView(from: .topTrailing, to: .bottomLeading , startColor: .purple, endColor: .blue)
+    let friendImageView = UIImageView()
+    let friendName = UILabel(text: "User name", fount:  FontAppearance.defaultBoldText)
+    let lastMassage = UILabel(text: "How a you", fount:  FontAppearance.secondDefault, color: ColorAppearance.black.color().withAlphaComponent(0.5))
+    var menuButton: MenuButton!
     
+    var chat: SChat!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        layer.cornerRadius = 20
         backgroundColor = .white
+        
+        setupConfiguration()
         setupConstraints()
-        self.layer.cornerRadius = 4
-        self.clipsToBounds = true
+        
+        
+        friendImageView.clipsToBounds = true
+        friendImageView.layer.cornerRadius = 30
+        friendImageView.contentMode = .scaleAspectFill
+        
+        self.layer.shadowColor = UIColor(white: 0.2, alpha: 0.5).cgColor
+        layer.shadowRadius = 4
+        layer.shadowOpacity = 0.3
+        layer.shadowOffset = CGSize(width: 0, height: 2)
     }
     
     required init?(coder: NSCoder) {
@@ -33,57 +44,95 @@ class ActiveChatCell: UICollectionViewCell, SelfConfiguringCell {
     
     func configure<U>(with value: U) where U : Hashable {
         guard let value: SChat = value as? SChat else { return }
-        frindName.text = value.friendUsername
-        lastMassege.text = value.lastMessage
-        frendImageView.sd_setImage(with: URL(string: value.friendUserImageString))
+        chat = value
+        friendName.text = value.friendUsername
+        lastMassage.text = value.lastMessage
+        friendImageView.sd_setImage(with: URL(string: value.friendUserImageString))
     }
-    
+        
 }
  
 
 // MARK: - Setup constraints
 
-extension ActiveChatCell {
+private extension ActiveChatCell {
     
-    private func setupConstraints() {
-        frendImageView.translatesAutoresizingMaskIntoConstraints = false
-        gradientView.translatesAutoresizingMaskIntoConstraints = false
-        frindName.translatesAutoresizingMaskIntoConstraints = false
-        lastMassege.translatesAutoresizingMaskIntoConstraints = false
+    func setupConfiguration() {
+        let action = UIAction(title: "Удалить", image: .init(systemName: "trash.fill"), attributes: .destructive) { action in
+            NotificationCenter.default.post(name: Notification.Name("DeleteChat"), object: nil, userInfo: ["Chat" : self.chat!])
+        }
+        menuButton = MenuButton(menuActions: [action])
+    }
+    
+    func setupConstraints() {
+        friendImageView.translatesAutoresizingMaskIntoConstraints = false
+        friendName.translatesAutoresizingMaskIntoConstraints = false
+        lastMassage.translatesAutoresizingMaskIntoConstraints = false
+        menuButton.translatesAutoresizingMaskIntoConstraints = false
         
-        frendImageView.backgroundColor = .red
-        gradientView.backgroundColor = .blue
+        friendImageView.backgroundColor = .red
         
-        addSubview(frendImageView)
-        addSubview(gradientView)
-        addSubview(lastMassege)
-        addSubview(frindName)
+        addSubview(friendImageView)
+        addSubview(lastMassage)
+        addSubview(friendName)
+        addSubview(menuButton)
         
         NSLayoutConstraint.activate([
-            frendImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            frendImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            frendImageView.heightAnchor.constraint(equalToConstant: 78),
-            frendImageView.widthAnchor.constraint(equalToConstant: 78)
+            friendImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 9),
+            friendImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+            friendImageView.heightAnchor.constraint(equalToConstant: 60),
+            friendImageView.widthAnchor.constraint(equalToConstant: 60)
         ])
         
         NSLayoutConstraint.activate([
-            gradientView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            gradientView.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            gradientView.heightAnchor.constraint(equalToConstant: 78),
-            gradientView.widthAnchor.constraint(equalToConstant: 8)
-        ])
-        
-        NSLayoutConstraint.activate([
-            frindName.topAnchor.constraint(equalTo: self.topAnchor, constant: 16),
-            frindName.leadingAnchor.constraint(equalTo: frendImageView.trailingAnchor, constant: 16),
-            frindName.trailingAnchor.constraint(equalTo: gradientView.leadingAnchor, constant: 16)
+            friendName.topAnchor.constraint(equalTo: self.topAnchor, constant: 10),
+            friendName.leadingAnchor.constraint(equalTo: friendImageView.trailingAnchor, constant: 16),
+            friendName.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16)
         ])
      
         NSLayoutConstraint.activate([
-            lastMassege.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -16),
-            lastMassege.leadingAnchor.constraint(equalTo: frendImageView.trailingAnchor, constant: 16),
-            lastMassege.trailingAnchor.constraint(equalTo: gradientView.leadingAnchor, constant: 16)
+            lastMassage.topAnchor.constraint(equalTo: self.friendName.bottomAnchor, constant: 2),
+            lastMassage.bottomAnchor.constraint(lessThanOrEqualTo: self.bottomAnchor),
+            lastMassage.leadingAnchor.constraint(equalTo: friendImageView.trailingAnchor, constant: 16),
+            lastMassage.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16)
         ])
+        
+        NSLayoutConstraint.activate([
+            menuButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -9),
+            menuButton.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+            menuButton.heightAnchor.constraint(equalToConstant: 60),
+            menuButton.widthAnchor.constraint(equalToConstant: 60)
+        ])
+    }
+    
+}
+
+final class MenuButton: UIButton {
+        
+    let generator = UIImpactFeedbackGenerator(style: .medium)
+    
+    init(menuActions: [UIAction]) {
+        super.init(frame: .zero)
+        setup(action: menuActions)
+        generator.prepare()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
+        generator.impactOccurred()
+        return true
+    }
+
+    private func setup(action: [UIAction]) {
+        let moreImage = UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(pointSize: 20))
+        menu = UIMenu(title: "", image: moreImage, identifier: nil, options: .destructive, children: action)
+        menu?.preferredElementSize = .large
+        setImage(moreImage, for: .normal)
+        tintColor = ColorAppearance.black.color()
+        showsMenuAsPrimaryAction = true
     }
     
 }

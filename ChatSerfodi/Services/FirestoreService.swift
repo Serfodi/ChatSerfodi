@@ -33,7 +33,13 @@ class FirestoreService {
     // MARK: Save Profile in Firebase
     
     /// Сохранения данных в бд
-    func saveProfileWith(id: String, email: String, username: String?, avatarImage: UIImage?, description: String?, sex: String, completion: @escaping (Result<SUser, Error>) -> Void) {
+    func saveProfileWith(id: String,
+                         email: String,
+                         username: String?,
+                         avatarImage: UIImage?,
+                         description: String?,
+                         sex: String,
+                         completion: @escaping (Result<SUser, Error>) -> Void) {
         guard Validators.ifFilled(username: username, description: description, sex: sex) else {
             completion(.failure(UserError.notFilled))
             return
@@ -59,9 +65,39 @@ class FirestoreService {
             case .failure(let error):
                 completion(.failure(error))
             }
-        } // StorageService
-    } // saveProfileWith
+        }
+    }
     
+    // MARK: Update Profile in Firebase
+    
+    func updateProfile(sUser: SUser,
+                       username: String,
+                       avatarImage: UIImage?,
+                       description: String,
+                       completion: @escaping (Result<SUser, Error>) -> Void) {
+        
+        guard Validators.ifFilled(username: username, description: description, sex: "sex") else {
+            completion(.failure(UserError.notFilled))
+            return
+        }
+        
+        StorageService.shared.upload(photo: avatarImage!) { result in
+            switch result {
+            case .success(let url):
+                self.usersRef.document(self.currentUser.id).updateData(["avatarStringURL": url.absoluteString, "username": username, "description": description]) { (error) in
+                    if let error = error {
+                        completion(.failure(error))
+                    } else {
+                        completion(.success(self.currentUser))
+                    }
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    // MARK: - Get User Data in Firebase
     
     func getUserData(user: User, completion: @escaping (Result<SUser, Error>) -> Void) {
         let docRef = usersRef.document(user.uid)
@@ -120,7 +156,7 @@ class FirestoreService {
     }
     
     
-    // MARK: delete Waiting Chat
+    // MARK: Delete Waiting Chat
     
     func deleteWaitingChat(chat: SChat, completion: @escaping (Result<Void, Error>) -> Void) {
         waitingChatsRef.document(chat.friendId).delete { error in
@@ -131,31 +167,8 @@ class FirestoreService {
             self.deleteMassages(chat: chat, completion: completion)
         }
     }
-    
-    func deleteMassages(chat: SChat, completion: @escaping (Result<Void, Error>) -> Void) {
-        let reference = waitingChatsRef.document(chat.friendId).collection("messages")
         
-        getWaitingChatMessages(chat: chat) { result in
-            switch result {
-            case .success(let messages):
-                for message in messages {
-                    guard let documentId = message.id else { return }
-                    let messageRef = reference.document(documentId)
-                    messageRef.delete { error in
-                        if let error = error {
-                            completion(.failure(error))
-                            return
-                        }
-                        completion(.success(Void()))
-                    }
-                }
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-    
-    
+ 
     // MARK: - Active Chats
     
     func changeToActive(chat: SChat, completion: @escaping (Result<Void, Error>) -> Void) {
@@ -202,6 +215,46 @@ class FirestoreService {
             }
         }
     }
+    
+    // MARK: Delete Active Chat
+    
+    func deleteActiveChat(chat: SChat, completion: @escaping (Result<Void, Error>) -> Void) {
+        activeChatsRef.document(chat.friendId).delete { error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            self.deleteMassages(chat: chat, completion: completion)
+        }
+    }
+    
+    
+    // MARK: - Delete All Massages Chat
+    
+    func deleteMassages(chat: SChat, completion: @escaping (Result<Void, Error>) -> Void) {
+        let reference = waitingChatsRef.document(chat.friendId).collection("messages")
+        
+        getWaitingChatMessages(chat: chat) { result in
+            switch result {
+            case .success(let messages):
+                for message in messages {
+                    guard let documentId = message.id else { return }
+                    let messageRef = reference.document(documentId)
+                    messageRef.delete { error in
+                        if let error = error {
+                            completion(.failure(error))
+                            return
+                        }
+                        completion(.success(Void()))
+                    }
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    // MARK: Send Message
     
     func sendMessage(chat: SChat, message: SMessage, completion: @escaping (Result<Void, Error>) -> Void) {
         let friendRef = usersRef.document(chat.friendId).collection("activeChats").document(currentUser.id)

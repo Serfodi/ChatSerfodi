@@ -9,21 +9,23 @@ import UIKit
 import FirebaseAuth
 
 class SetupProfileViewController: UIViewController {
-
     
-    let setupProfileLabel = UILabel(text: "Set up profile", fount: .avenir26())
-    let fullNameLabel = UILabel(text: "Full name")
-    let aboutMeLabel = UILabel(text: "About me")
-    let sexLabel = UILabel(text: "sex")
+    
+    let setupProfileLabel = UILabel(text: "Создания профиля", fount: FontAppearance.firstTitle)
+    let fullNameLabel = UILabel(text: "Имя")
+    let aboutMeLabel = UILabel(text: "Описание")
+    let sexLabel = UILabel(text: "Пол")
     
     let photoView = AddPhotoView()
     
-    let fullNameTextField = OneLineTextField(foun: .avenir20())
-    let aboutMeTextField = OneLineTextField(foun: .avenir20())
+    let fullNameTextField = OneLineTextField(font: FontAppearance.defaultText)
+    let aboutMeTextField = OneLineTextField(font: FontAppearance.defaultText)
     
-    let sexSegmentedControll = UISegmentedControl(first: "Male", second: "Femail")
+    let sexSegmentedControll = UISegmentedControl(first: "Муж", second: "Жен")
     
-    let goToChatButton = UIButton(title: "Go to chats!", titleColor: .white, backgroundColor: .buttonDark(), cornorRadius: 4)
+    let goToChatButton = UIButton(title: "Просмотреть чаты!", titleColor: ColorAppearance.white.color(), backgroundColor: ColorAppearance.black.color())
+    
+    var stackView: UIStackView!
     
     private let currentUser: User
     
@@ -39,14 +41,14 @@ class SetupProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        view.backgroundColor = .white
-        
+        view.backgroundColor = ColorAppearance.white.color()
         setupConstraints()
-        
         goToChatButton.addTarget(self, action: #selector(goToChatsButtonTapped), for: .touchUpInside)
         photoView.pluseButton.addTarget(self, action: #selector(plusButtonTapped), for: .touchUpInside)
+        NotificationCenter.default.addObserver(self, selector: #selector(moveContentUp), name: UIResponder.keyboardWillShowNotification, object: nil)
     }
+    
+    // MARK: Action
     
     @objc private func plusButtonTapped() {
         let imagePickerController = UIImagePickerController()
@@ -54,6 +56,7 @@ class SetupProfileViewController: UIViewController {
         imagePickerController.sourceType = .photoLibrary
         present(imagePickerController, animated: true)
     }
+    
     
     
     @objc private func goToChatsButtonTapped() {
@@ -76,6 +79,28 @@ class SetupProfileViewController: UIViewController {
                 }
             }
     }
+    
+    
+    // MARK: Touches
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if let _ = touches.first {
+            UIView.animate(withDuration: 0.3) {
+                self.view.frame.origin.y = 0
+                self.view.endEditing(true)
+            }
+        }
+        super.touchesBegan(touches, with: event)
+    }
+    
+    @objc func moveContentUp(notification: NSNotification) {
+        let userInfo = notification.userInfo
+        let keyboardFrame = userInfo![UIResponder.keyboardFrameEndUserInfoKey] as? CGRect
+        let keyboardHeight = keyboardFrame!.size.height
+        let emptySpaceHeight = view.frame.size.height - stackView.frame.maxY
+        let converdContentHeight = keyboardHeight - emptySpaceHeight
+        view.frame.origin.y = -converdContentHeight
+    }
 }
 
 
@@ -94,17 +119,16 @@ extension SetupProfileViewController: UIImagePickerControllerDelegate, UINavigat
 
 
 // MARK: SetupProfileViewController
-
-extension SetupProfileViewController {
+private extension SetupProfileViewController {
     
-    private func setupConstraints() {
+    func setupConstraints() {
         let fillNameStackView = UIStackView(arrangedSubviews: [fullNameLabel, fullNameTextField], axis: .vertical, spacing: 0)
         let aboutStackView = UIStackView(arrangedSubviews: [aboutMeLabel, aboutMeTextField], axis: .vertical, spacing: 0)
         let sexStackView = UIStackView(arrangedSubviews: [sexLabel, sexSegmentedControll], axis: .vertical, spacing: 5)
         
         goToChatButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
         
-        let stackView = UIStackView(arrangedSubviews: [
+        stackView = UIStackView(arrangedSubviews: [
             fillNameStackView,
             aboutStackView,
             sexStackView,
@@ -137,33 +161,4 @@ extension SetupProfileViewController {
         ])
         
     }
-    
 }
-
-
-
-
-// MARK: SwiftUI
-
-//import SwiftUI
-//
-//struct SetupProfileProvider: PreviewProvider {
-//
-//    static var previews: some View {
-//        ContainerView().edgesIgnoringSafeArea(.all)
-//    }
-//
-//    struct ContainerView: UIViewControllerRepresentable {
-//
-//        let viewController = SetupProfileViewController(currentUser: Auth.currentUser!)
-//
-//        func makeUIViewController(context: Context) -> some UIViewController {
-//            viewController
-//        }
-//
-//        func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {}
-//
-//    }
-//
-//}
-

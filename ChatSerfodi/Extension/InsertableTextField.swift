@@ -13,24 +13,21 @@ class InsertableTextField: UITextField {
         super.init(frame: frame)
         
         backgroundColor = .white
-        placeholder = "White something here ..."
-        font = UIFont.systemFont(ofSize: 14)
+        placeholder = "Напишите первое сообщение!"
+        font = FontAppearance.secondDefault
         clearButtonMode = .whileEditing
         borderStyle = .none
-        layer.cornerRadius = 18
+        layer.cornerRadius = 21
         layer.masksToBounds = true
         
-        let imageView = UIImageView(image: UIImage(systemName: "face.smiling")?.withTintColor(.lightGray, renderingMode: .alwaysOriginal))
-        leftView = imageView
-        leftView?.frame = CGRect(x: 0, y: 0, width: 19, height: 19)
-        leftViewMode = .always
+        layer.borderWidth = 0.3
+        layer.borderColor = ColorAppearance.black.color().withAlphaComponent(0.5).cgColor
         
         let button = UIButton(type: .system)
-        let image = UIImage(systemName: "paperplane.fill")?.withRenderingMode(.alwaysOriginal)
+        let image = UIImage(systemName: "arrow.up.message.fill")?.withRenderingMode(.alwaysOriginal)
         button.setImage(image, for: .normal)
-        button.applyGradients(cornerRadius: 10)
         rightView = button
-        rightView?.frame = CGRect(x: 0, y: 0, width: 19, height: 19)
+        rightView?.frame = CGRect(x: 0, y: 0, width: 40, height: 35)
         rightViewMode = .always
     }
     
@@ -39,22 +36,22 @@ class InsertableTextField: UITextField {
     }
     
     override func textRect(forBounds bounds: CGRect) -> CGRect {
-        bounds.insetBy(dx: 36, dy: 0)
+        bounds.insetBy(dx: 12, dy: 0)
     }
     
     override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
-        bounds.insetBy(dx: 36, dy: 0)
+        bounds.insetBy(dx: 12, dy: 0)
     }
     
     override func editingRect(forBounds bounds: CGRect) -> CGRect {
-        bounds.insetBy(dx: 36, dy: 0)
+        bounds.insetBy(dx: 12, dy: 0)
     }
     
-    override func leftViewRect(forBounds bounds: CGRect) -> CGRect {
-        var rect = super.leftViewRect(forBounds: bounds)
-        rect.origin.x += 12
-        return rect
-    }
+//    override func leftViewRect(forBounds bounds: CGRect) -> CGRect {
+//        var rect = super.leftViewRect(forBounds: bounds)
+//        rect.origin.x += 12
+//        return rect
+//    }
     
     override func rightViewRect(forBounds bounds: CGRect) -> CGRect {
         var rect = super.rightViewRect(forBounds: bounds)

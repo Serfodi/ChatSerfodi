@@ -9,11 +9,11 @@ import UIKit
 
 extension UILabel {
     
-    convenience init(text: String, fount: UIFont? = .avenir20()) {
+    convenience init(text: String, alignment: NSTextAlignment = .left,  fount: UIFont? = FontAppearance.defaultText, color: UIColor = ColorAppearance.black.color()) {
         self .init()
-        
         self.font = fount
         self.text = text
+        self.textColor = color
+        self.textAlignment = alignment
     }
-    
 }
