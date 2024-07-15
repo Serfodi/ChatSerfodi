@@ -14,8 +14,6 @@
 		17731EAA2AE3E40C006B1511 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 17731EA92AE3E40C006B1511 /* Assets.xcassets */; };
 		17731EAD2AE3E40C006B1511 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 17731EAB2AE3E40C006B1511 /* LaunchScreen.storyboard */; };
 		17731EB52AE3E9BD006B1511 /* UIButton + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17731EB42AE3E9BD006B1511 /* UIButton + Extension.swift */; };
-		17731EB72AE3EC77006B1511 /* UIFount + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17731EB62AE3EC77006B1511 /* UIFount + Extension.swift */; };
-		17731EB92AE3FAD3006B1511 /* UIColor + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17731EB82AE3FAD3006B1511 /* UIColor + Extension.swift */; };
 		17731EBB2AE3FC8C006B1511 /* Label + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17731EBA2AE3FC8C006B1511 /* Label + Extension.swift */; };
 		17731EBF2AED47BA006B1511 /* ButtonFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17731EBE2AED47BA006B1511 /* ButtonFormView.swift */; };
 		17731EC12AED4C02006B1511 /* StackView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17731EC02AED4C02006B1511 /* StackView + Extension.swift */; };
@@ -28,7 +26,7 @@
 		17ED2C422AFE558700251BAF /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17ED2C412AFE558700251BAF /* ListViewController.swift */; };
 		17ED2C462AFE5A6F00251BAF /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17ED2C452AFE5A6F00251BAF /* MainTabBarController.swift */; };
 		17ED2C482AFE5AD800251BAF /* PeopleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17ED2C472AFE5AD800251BAF /* PeopleViewController.swift */; };
-		97982BA5983E952186108796 /* Pods_ChatSerfodi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF8A57276FB8CFD94A46A935 /* Pods_ChatSerfodi.framework */; };
+		A81444FC1F4E80D6C2ECFDA2 /* Pods_ChatSerfodi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA93CD2064AB8105FF24E75A /* Pods_ChatSerfodi.framework */; };
 		B019751D2B0E152B005D4321 /* SUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B019751C2B0E152B005D4321 /* SUser.swift */; };
 		B019751F2B0E1551005D4321 /* SChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = B019751E2B0E1551005D4321 /* SChat.swift */; };
 		B01975222B0E27A0005D4321 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01975212B0E27A0005D4321 /* UserCell.swift */; };
@@ -64,13 +62,14 @@
 		B091864B2B29B05200965DC1 /* ListenerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091864A2B29B05200965DC1 /* ListenerService.swift */; };
 		B091864F2B2A502E00965DC1 /* SMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091864E2B2A502E00965DC1 /* SMessage.swift */; };
 		B09186512B2A641900965DC1 /* WaitingChatsNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09186502B2A641900965DC1 /* WaitingChatsNavigation.swift */; };
-		B09186542B2B3F4900965DC1 /* MessageKit in Frameworks */ = {isa = PBXBuildFile; productRef = B09186532B2B3F4900965DC1 /* MessageKit */; };
 		B09186562B2B3FC100965DC1 /* ChatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09186552B2B3FC100965DC1 /* ChatsViewController.swift */; };
 		B09186582B2B7D6C00965DC1 /* UIScrolIView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09186572B2B7D6C00965DC1 /* UIScrolIView + Extension.swift */; };
 		B0E207402C36E11E007346FE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B0E2073F2C36E11E007346FE /* GoogleService-Info.plist */; };
 		B0E207422C37060C007346FE /* ProfileSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E207412C37060C007346FE /* ProfileSettingViewController.swift */; };
-		B0E207442C38010D007346FE /* UINavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E207432C38010D007346FE /* UINavigationBar.swift */; };
+		B0E207442C38010D007346FE /* UINavigationBar + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E207432C38010D007346FE /* UINavigationBar + Extension.swift */; };
 		B0E207462C38C9FC007346FE /* search.json in Resources */ = {isa = PBXBuildFile; fileRef = B0E207452C38C9FC007346FE /* search.json */; };
+		B0F68E9F2C448EDE004DB75D /* LottieAnimationView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F68E9E2C448EDE004DB75D /* LottieAnimationView + Extension.swift */; };
+		B0F68EA42C455D0B004DB75D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B0F68EA62C455D0B004DB75D /* Localizable.strings */; };
 		B0F8E58E2B07A51900C2B00D /* ActiveChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F8E58D2B07A51900C2B00D /* ActiveChatCell.swift */; };
 		B0F8E5902B07ACA800C2B00D /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F8E58F2B07ACA800C2B00D /* GradientView.swift */; };
 		B0F8E5932B07BC8A00C2B00D /* WaitingChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F8E5922B07BC8A00C2B00D /* WaitingChatCell.swift */; };
@@ -79,7 +78,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		02D9143C425DAC0EA63A90B8 /* Pods-ChatSerfodi.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatSerfodi.release.xcconfig"; path = "Target Support Files/Pods-ChatSerfodi/Pods-ChatSerfodi.release.xcconfig"; sourceTree = "<group>"; };
 		17040E672AFE7ED9002238B0 /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
 		17731E9D2AE3E406006B1511 /* ChatSerfodi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatSerfodi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		17731EA02AE3E406006B1511 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -89,8 +87,6 @@
 		17731EAC2AE3E40C006B1511 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		17731EAE2AE3E40C006B1511 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		17731EB42AE3E9BD006B1511 /* UIButton + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton + Extension.swift"; sourceTree = "<group>"; };
-		17731EB62AE3EC77006B1511 /* UIFount + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFount + Extension.swift"; sourceTree = "<group>"; };
-		17731EB82AE3FAD3006B1511 /* UIColor + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor + Extension.swift"; sourceTree = "<group>"; };
 		17731EBA2AE3FC8C006B1511 /* Label + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Label + Extension.swift"; sourceTree = "<group>"; };
 		17731EBE2AED47BA006B1511 /* ButtonFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonFormView.swift; sourceTree = "<group>"; };
 		17731EC02AED4C02006B1511 /* StackView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackView + Extension.swift"; sourceTree = "<group>"; };
@@ -140,17 +136,23 @@
 		B09186502B2A641900965DC1 /* WaitingChatsNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingChatsNavigation.swift; sourceTree = "<group>"; };
 		B09186552B2B3FC100965DC1 /* ChatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsViewController.swift; sourceTree = "<group>"; };
 		B09186572B2B7D6C00965DC1 /* UIScrolIView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrolIView + Extension.swift"; sourceTree = "<group>"; };
-		B0E2073F2C36E11E007346FE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		B0E2073F2C36E11E007346FE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B0E207412C37060C007346FE /* ProfileSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingViewController.swift; sourceTree = "<group>"; };
-		B0E207432C38010D007346FE /* UINavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINavigationBar.swift; sourceTree = "<group>"; };
+		B0E207432C38010D007346FE /* UINavigationBar + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationBar + Extension.swift"; sourceTree = "<group>"; };
 		B0E207452C38C9FC007346FE /* search.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = search.json; sourceTree = "<group>"; };
+		B0F68E9E2C448EDE004DB75D /* LottieAnimationView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LottieAnimationView + Extension.swift"; sourceTree = "<group>"; };
+		B0F68EA12C455BBC004DB75D /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		B0F68EA52C455D0B004DB75D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		B0F68EA72C455D27004DB75D /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		B0F68EA92C456314004DB75D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		B0F8E58D2B07A51900C2B00D /* ActiveChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveChatCell.swift; sourceTree = "<group>"; };
 		B0F8E58F2B07ACA800C2B00D /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		B0F8E5922B07BC8A00C2B00D /* WaitingChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingChatCell.swift; sourceTree = "<group>"; };
 		B0F8E5942B07BD6C00C2B00D /* SelfConfiguringCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfConfiguringCell.swift; sourceTree = "<group>"; };
 		B0F8E59B2B07C6CF00C2B00D /* SectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeader.swift; sourceTree = "<group>"; };
-		D1BB599453B8A5FCF4F0D349 /* Pods-ChatSerfodi.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatSerfodi.debug.xcconfig"; path = "Target Support Files/Pods-ChatSerfodi/Pods-ChatSerfodi.debug.xcconfig"; sourceTree = "<group>"; };
-		DF8A57276FB8CFD94A46A935 /* Pods_ChatSerfodi.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChatSerfodi.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B81AC85BBDB7C5851256C091 /* Pods-ChatSerfodi.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatSerfodi.release.xcconfig"; path = "Target Support Files/Pods-ChatSerfodi/Pods-ChatSerfodi.release.xcconfig"; sourceTree = "<group>"; };
+		D7E62519D2A6848277156333 /* Pods-ChatSerfodi.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatSerfodi.debug.xcconfig"; path = "Target Support Files/Pods-ChatSerfodi/Pods-ChatSerfodi.debug.xcconfig"; sourceTree = "<group>"; };
+		FA93CD2064AB8105FF24E75A /* Pods_ChatSerfodi.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChatSerfodi.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,29 +160,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B09186542B2B3F4900965DC1 /* MessageKit in Frameworks */,
-				97982BA5983E952186108796 /* Pods_ChatSerfodi.framework in Frameworks */,
+				A81444FC1F4E80D6C2ECFDA2 /* Pods_ChatSerfodi.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		11E10F3C57D43A0F821CD53B /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				DF8A57276FB8CFD94A46A935 /* Pods_ChatSerfodi.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		17731E942AE3E406006B1511 = {
 			isa = PBXGroup;
 			children = (
 				17731E9F2AE3E406006B1511 /* ChatSerfodi */,
 				17731E9E2AE3E406006B1511 /* Products */,
 				D90E558EBA491BB8D08D2D30 /* Pods */,
-				11E10F3C57D43A0F821CD53B /* Frameworks */,
+				E07000414C9B6A07214E73F9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -199,6 +192,7 @@
 				17731EA22AE3E406006B1511 /* SceneDelegate.swift */,
 				B06BA8EF2B1C96AC00120FB5 /* Services */,
 				17ED2C442AFE5A3E00251BAF /* Controllers */,
+				B0F68EA62C455D0B004DB75D /* Localizable.strings */,
 				B0F8E5962B07BD8B00C2B00D /* Protocol */,
 				17731EBD2AED46F6006B1511 /* Extension */,
 				B06BA8F62B1CA89300120FB5 /* Helpers */,
@@ -215,21 +209,15 @@
 			isa = PBXGroup;
 			children = (
 				17731EB42AE3E9BD006B1511 /* UIButton + Extension.swift */,
-				17731EB62AE3EC77006B1511 /* UIFount + Extension.swift */,
-				17731EB82AE3FAD3006B1511 /* UIColor + Extension.swift */,
 				17731EBA2AE3FC8C006B1511 /* Label + Extension.swift */,
 				17731EC02AED4C02006B1511 /* StackView + Extension.swift */,
-				17B2FB852AFBB73200EECA01 /* OneLineTextField.swift */,
-				17B2FB8B2AFBD06C00EECA01 /* AddPhotoView.swift */,
+				B0E207432C38010D007346FE /* UINavigationBar + Extension.swift */,
 				17B2FB8D2AFBDB7A00EECA01 /* SegmentedControl + Extension.swift */,
-				B0F8E58F2B07ACA800C2B00D /* GradientView.swift */,
 				B01975232B0E2979005D4321 /* UIViewController + Extension.swift */,
 				B01975292B0E9F96005D4321 /* UIView + Extension.swift */,
 				B09186482B291A9100965DC1 /* UIImage + Extension.swift */,
 				B09186442B29088800965DC1 /* UIApplication + Extension.swift */,
 				B09186572B2B7D6C00965DC1 /* UIScrolIView + Extension.swift */,
-				B01C91AE2C35CEB1001D6ECD /* AnimationBirdView */,
-				B0E207432C38010D007346FE /* UINavigationBar.swift */,
 			);
 			path = " UIkit";
 			sourceTree = "<group>";
@@ -237,9 +225,14 @@
 		17731EBD2AED46F6006B1511 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				B0F68E9D2C448E8C004DB75D /* LottieExtension */,
 				17731EBE2AED47BA006B1511 /* ButtonFormView.swift */,
 				17040E672AFE7ED9002238B0 /* Bundle.swift */,
 				B01975272B0E9B46005D4321 /* InsertableTextField.swift */,
+				17B2FB852AFBB73200EECA01 /* OneLineTextField.swift */,
+				B0F8E58F2B07ACA800C2B00D /* GradientView.swift */,
+				17B2FB8B2AFBD06C00EECA01 /* AddPhotoView.swift */,
+				B01C91AE2C35CEB1001D6ECD /* AnimationBirdView */,
 				17731EBC2AED46EA006B1511 /*  UIkit */,
 			);
 			path = Extension;
@@ -252,7 +245,6 @@
 				17B2FB832AFBB3EE00EECA01 /* SignUpViewController.swift */,
 				17B2FB872AFBC33E00EECA01 /* LoginViewController.swift */,
 				17B2FB892AFBCC6B00EECA01 /* SetupProfileViewController.swift */,
-				B0F8E59B2B07C6CF00C2B00D /* SectionHeader.swift */,
 			);
 			path = "SignIn&Auth";
 			sourceTree = "<group>";
@@ -263,9 +255,8 @@
 				17ED2C432AFE59DD00251BAF /* SignIn&Auth */,
 				17ED2C452AFE5A6F00251BAF /* MainTabBarController.swift */,
 				17ED2C472AFE5AD800251BAF /* PeopleViewController.swift */,
-				17ED2C412AFE558700251BAF /* ListViewController.swift */,
+				B0F68EA02C4496AF004DB75D /* ListCollection */,
 				B0E207412C37060C007346FE /* ProfileSettingViewController.swift */,
-				B0F8E5912B07BC5C00C2B00D /* Cell */,
 				B01975252B0E8CE7005D4321 /* ProfileViewController.swift */,
 				B019752B2B164766005D4321 /* ChatRequestViewController.swift */,
 				B09186552B2B3FC100965DC1 /* ChatsViewController.swift */,
@@ -359,6 +350,24 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		B0F68E9D2C448E8C004DB75D /* LottieExtension */ = {
+			isa = PBXGroup;
+			children = (
+				B0F68E9E2C448EDE004DB75D /* LottieAnimationView + Extension.swift */,
+			);
+			path = LottieExtension;
+			sourceTree = "<group>";
+		};
+		B0F68EA02C4496AF004DB75D /* ListCollection */ = {
+			isa = PBXGroup;
+			children = (
+				17ED2C412AFE558700251BAF /* ListViewController.swift */,
+				B0F8E5912B07BC5C00C2B00D /* Cell */,
+				B0F8E59B2B07C6CF00C2B00D /* SectionHeader.swift */,
+			);
+			path = ListCollection;
+			sourceTree = "<group>";
+		};
 		B0F8E5912B07BC5C00C2B00D /* Cell */ = {
 			isa = PBXGroup;
 			children = (
@@ -382,10 +391,18 @@
 		D90E558EBA491BB8D08D2D30 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				D1BB599453B8A5FCF4F0D349 /* Pods-ChatSerfodi.debug.xcconfig */,
-				02D9143C425DAC0EA63A90B8 /* Pods-ChatSerfodi.release.xcconfig */,
+				D7E62519D2A6848277156333 /* Pods-ChatSerfodi.debug.xcconfig */,
+				B81AC85BBDB7C5851256C091 /* Pods-ChatSerfodi.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		E07000414C9B6A07214E73F9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FA93CD2064AB8105FF24E75A /* Pods_ChatSerfodi.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -395,11 +412,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 17731EB12AE3E40C006B1511 /* Build configuration list for PBXNativeTarget "ChatSerfodi" */;
 			buildPhases = (
-				24DD314EC30F3C7A310F012D /* [CP] Check Pods Manifest.lock */,
+				C7DD5F88F3B3305E0B44364B /* [CP] Check Pods Manifest.lock */,
 				17731E992AE3E406006B1511 /* Sources */,
 				17731E9A2AE3E406006B1511 /* Frameworks */,
 				17731E9B2AE3E406006B1511 /* Resources */,
-				8BC9B1022A93C8B353E20F24 /* [CP] Embed Pods Frameworks */,
+				49C32C69291E15E1E3B610E6 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -407,7 +424,6 @@
 			);
 			name = ChatSerfodi;
 			packageProductDependencies = (
-				B09186532B2B3F4900965DC1 /* MessageKit */,
 			);
 			productName = ChatSerfodi;
 			productReference = 17731E9D2AE3E406006B1511 /* ChatSerfodi.app */;
@@ -435,10 +451,10 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = 17731E942AE3E406006B1511;
 			packageReferences = (
-				B09186522B2B3F4900965DC1 /* XCRemoteSwiftPackageReference "MessageKit" */,
 			);
 			productRefGroup = 17731E9E2AE3E406006B1511 /* Products */;
 			projectDirPath = "";
@@ -463,6 +479,7 @@
 				17731EAA2AE3E40C006B1511 /* Assets.xcassets in Resources */,
 				B036EF612C36BE7D007F5E3B /* google.json in Resources */,
 				B01C91AA2C35C9F3001D6ECD /* SF-Pro-Rounded-Regular.otf in Resources */,
+				B0F68EA42C455D0B004DB75D /* Localizable.strings in Resources */,
 				B02D2F652C398C8100A8F25B /* SF-Pro-Rounded-Bold.otf in Resources */,
 				B0E207402C36E11E007346FE /* GoogleService-Info.plist in Resources */,
 				B01C91A12C358095001D6ECD /* Bird.json in Resources */,
@@ -472,7 +489,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		24DD314EC30F3C7A310F012D /* [CP] Check Pods Manifest.lock */ = {
+		49C32C69291E15E1E3B610E6 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ChatSerfodi/Pods-ChatSerfodi-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ChatSerfodi/Pods-ChatSerfodi-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ChatSerfodi/Pods-ChatSerfodi-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C7DD5F88F3B3305E0B44364B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -494,23 +528,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		8BC9B1022A93C8B353E20F24 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ChatSerfodi/Pods-ChatSerfodi-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ChatSerfodi/Pods-ChatSerfodi-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ChatSerfodi/Pods-ChatSerfodi-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -527,7 +544,7 @@
 				B09186472B29173600965DC1 /* StorageService.swift in Sources */,
 				B01C91B02C35D42D001D6ECD /* CGSize + Extension.swift in Sources */,
 				B09186562B2B3FC100965DC1 /* ChatsViewController.swift in Sources */,
-				B0E207442C38010D007346FE /* UINavigationBar.swift in Sources */,
+				B0E207442C38010D007346FE /* UINavigationBar + Extension.swift in Sources */,
 				17731EA52AE3E406006B1511 /* AuthViewController.swift in Sources */,
 				B0F8E58E2B07A51900C2B00D /* ActiveChatCell.swift in Sources */,
 				B09186512B2A641900965DC1 /* WaitingChatsNavigation.swift in Sources */,
@@ -538,6 +555,7 @@
 				17731EA12AE3E406006B1511 /* AppDelegate.swift in Sources */,
 				B01C91A72C35C13F001D6ECD /* SunView.swift in Sources */,
 				B01C91AD2C35CEAA001D6ECD /* BirdView.swift in Sources */,
+				B0F68E9F2C448EDE004DB75D /* LottieAnimationView + Extension.swift in Sources */,
 				17731EBF2AED47BA006B1511 /* ButtonFormView.swift in Sources */,
 				17ED2C482AFE5AD800251BAF /* PeopleViewController.swift in Sources */,
 				17B2FB842AFBB3EE00EECA01 /* SignUpViewController.swift in Sources */,
@@ -555,7 +573,6 @@
 				17B2FB8C2AFBD06C00EECA01 /* AddPhotoView.swift in Sources */,
 				17731EA32AE3E406006B1511 /* SceneDelegate.swift in Sources */,
 				B0F8E5932B07BC8A00C2B00D /* WaitingChatCell.swift in Sources */,
-				17731EB92AE3FAD3006B1511 /* UIColor + Extension.swift in Sources */,
 				17731EB52AE3E9BD006B1511 /* UIButton + Extension.swift in Sources */,
 				B06BA8F32B1CA01D00120FB5 /* Validators.swift in Sources */,
 				B091864F2B2A502E00965DC1 /* SMessage.swift in Sources */,
@@ -566,7 +583,6 @@
 				B06BA8F12B1C96D400120FB5 /* AuthService.swift in Sources */,
 				B0F8E59C2B07C6CF00C2B00D /* SectionHeader.swift in Sources */,
 				17ED2C422AFE558700251BAF /* ListViewController.swift in Sources */,
-				17731EB72AE3EC77006B1511 /* UIFount + Extension.swift in Sources */,
 				B01C91932C356C3A001D6ECD /* ColorAppearance.swift in Sources */,
 				B019751D2B0E152B005D4321 /* SUser.swift in Sources */,
 				17ED2C462AFE5A6F00251BAF /* MainTabBarController.swift in Sources */,
@@ -583,8 +599,19 @@
 			isa = PBXVariantGroup;
 			children = (
 				17731EAC2AE3E40C006B1511 /* Base */,
+				B0F68EA12C455BBC004DB75D /* ru */,
+				B0F68EA92C456314004DB75D /* en */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		B0F68EA62C455D0B004DB75D /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B0F68EA52C455D0B004DB75D /* en */,
+				B0F68EA72C455D27004DB75D /* ru */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -594,6 +621,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -640,7 +668,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -654,6 +682,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -694,7 +723,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -706,7 +735,7 @@
 		};
 		17731EB22AE3E40C006B1511 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D1BB599453B8A5FCF4F0D349 /* Pods-ChatSerfodi.debug.xcconfig */;
+			baseConfigurationReference = D7E62519D2A6848277156333 /* Pods-ChatSerfodi.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -720,24 +749,27 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = Serfodi.ChatSerfodi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
 		17731EB32AE3E40C006B1511 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 02D9143C425DAC0EA63A90B8 /* Pods-ChatSerfodi.release.xcconfig */;
+			baseConfigurationReference = B81AC85BBDB7C5851256C091 /* Pods-ChatSerfodi.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -751,18 +783,21 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = Serfodi.ChatSerfodi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -788,25 +823,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		B09186522B2B3F4900965DC1 /* XCRemoteSwiftPackageReference "MessageKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/MessageKit/MessageKit";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 4.0.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		B09186532B2B3F4900965DC1 /* MessageKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B09186522B2B3F4900965DC1 /* XCRemoteSwiftPackageReference "MessageKit" */;
-			productName = MessageKit;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 17731E952AE3E406006B1511 /* Project object */;
 }

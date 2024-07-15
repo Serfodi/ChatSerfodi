@@ -15,7 +15,6 @@ class AuthService {
     static let shared = AuthService()
     private let auth = Auth.auth()
     
-    
     func login(email: String?, password: String?, completion: @escaping (Result<User, Error>) -> Void)  {
         
         guard let email = email, let password = password else {

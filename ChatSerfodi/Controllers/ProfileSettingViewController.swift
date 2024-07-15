@@ -10,7 +10,6 @@ import FirebaseAuth
 
 class ProfileSettingViewController: UIViewController {
 
-    
     let containerView: UIView = {
         let view = UIView()
         view.addBlur(blur: .init(style: .regular))
@@ -19,8 +18,8 @@ class ProfileSettingViewController: UIViewController {
         return view
     }()
     
-    let fullNameLabel = UILabel(text: "Имя")
-    let aboutMeLabel = UILabel(text: "Описание")
+    let fullNameLabel = UILabel(text: "Name")
+    let aboutMeLabel = UILabel(text: "Description")
     
     let photoView: UIImageView = {
         let imageView = UIImageView()
@@ -34,14 +33,8 @@ class ProfileSettingViewController: UIViewController {
     
     var stackView: UIStackView!
     
-    let pickButton: UIButton = {
-        let loginButton = UIButton()
-        loginButton.setTitle("Выбрать другое фото", for: .normal)
-        loginButton.setTitleColor(ColorAppearance.black.color(), for: .normal)
-        loginButton.titleLabel?.font = FontAppearance.defaultBoldText
-        return loginButton
-    }()
-    
+    let pickButton = UIButton(title: "ChooseAnotherPhoto", titleColor: ColorAppearance.black.color(), fount: FontAppearance.defaultBoldText)
+        
     private let currentUser: SUser
     
     init(currentSUser: SUser) {
@@ -66,6 +59,7 @@ class ProfileSettingViewController: UIViewController {
     }
     
     @objc func plusButtonTapped() {
+        endEditing()
         let imagePickerController = UIImagePickerController()
         imagePickerController.delegate = self
         imagePickerController.sourceType = .photoLibrary
@@ -73,23 +67,25 @@ class ProfileSettingViewController: UIViewController {
     }
     
     @objc func saveProfile() {
+        endEditing()
         FirestoreService.shared.updateProfile(sUser: currentUser,
                                               username: fullNameTextField.text!,
                                               avatarImage: photoView.image,
                                               description: aboutMeTextField.text!) { result in
             switch result {
             case .success(_):
-                self.showAlert(with: "Успешно", and: "Изменения сохранены.")
+                self.showAlert(with: "Successfully", and: "TheChangesAreSaved")
             case .failure(let error):
-                self.showAlert(with: "Ошибка!", and: error.localizedDescription)
+                self.showAlert(with: "Error", and: error.localizedDescription)
             }
         }
     }
     
     @objc private func signOut() {
-        let ac = UIAlertController(title: nil, message: "Вы хотите выйти?", preferredStyle: .alert)
-        ac.addAction(UIAlertAction(title: "Отмена", style: .cancel))
-        ac.addAction(UIAlertAction(title: "Выйти", style: .destructive, handler: { _ in
+        endEditing()
+        let ac = UIAlertController(title: nil, message: NSLocalizedString("GetOut", comment: ""), preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel))
+        ac.addAction(UIAlertAction(title: NSLocalizedString("Exit", comment: ""), style: .destructive, handler: { _ in
             do {
                 try Auth.auth().signOut()
                 UIApplication.shared.firstKeyWindow?.rootViewController = AuthViewController()
@@ -104,11 +100,7 @@ class ProfileSettingViewController: UIViewController {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let _ = touches.first {
-            UIView.animate(withDuration: 0.3) {
-                self.view.frame.origin.y = 0
-                self.view.layoutIfNeeded()
-                self.view.endEditing(true)
-            }
+            self.endEditing()
         }
         super.touchesBegan(touches, with: event)
     }
@@ -124,6 +116,15 @@ class ProfileSettingViewController: UIViewController {
             self.view.layoutIfNeeded()
         }
     }
+    
+    func endEditing() {
+        UIView.animate(withDuration: 0.3) {
+            self.view.frame.origin.y = 0
+            self.view.layoutIfNeeded()
+            self.view.endEditing(true)
+        }
+    }
+    
 }
 
 
@@ -142,9 +143,9 @@ extension ProfileSettingViewController: UIImagePickerControllerDelegate, UINavig
 private extension ProfileSettingViewController {
     
     private func configNavigationBar() {
-        navigationItem.title = "Мой профиль"
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Выйти", style: .done, target: self, action: #selector(signOut))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Сохронить", style: .done, target: self, action: #selector(saveProfile))
+        navigationItem.title = NSLocalizedString("MyProfile", comment: "")
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Exit", comment: ""), style: .done, target: self, action: #selector(signOut))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Save", comment: ""), style: .done, target: self, action: #selector(saveProfile))
         navigationController?.navigationBar.addBGBlur()
         navigationController?.navigationBar.standardAppearance.titleTextAttributes = [.font: FontAppearance.buttonText, .foregroundColor: ColorAppearance.black.color()]
         navigationController?.navigationBar.scrollEdgeAppearance?.titleTextAttributes = [.font: FontAppearance.buttonText, .foregroundColor: ColorAppearance.black.color()]

@@ -10,28 +10,55 @@ import FirebaseFirestore
 import MessageKit
 
 
-struct SMessage: Hashable, MessageType, Comparable  {
+// MARK: ImageItem
+struct ImageItem: MediaItem {
+    var url: URL?
+    var image: UIImage?
+    var placeholderImage: UIImage
+    var size: CGSize
+}
+
+
+// MARK: - SMessage
+
+struct SMessage: MessageType  {
     
     var sender: MessageKit.SenderType
-    let content: String
     var sentDate: Date
     let id: String?
+    
+    let content: String
+    var image: UIImage?
+    var downloadURL: URL?
     
     var messageId: String {
         id ?? UUID().uuidString
     }
     
     var kind: MessageKit.MessageKind {
-        .text(content)
+        if let image = image {
+            let mediaItem = ImageItem(placeholderImage: image, size: image.size)
+            return .photo(mediaItem)
+        } else {
+            return .text(content)
+        }
     }
     
-    var representation: [String: Any] { [
+    var representation: [String: Any] {
+        var rep: [String : Any] = [
             "created": sentDate,
             "senderID": sender.senderId,
-            "senderName": sender.displayName,
-            "content": content
+            "senderName": sender.displayName
         ]
+        if let url = downloadURL {
+            rep["url"] = url.absoluteString
+        } else {
+            rep["content"] = content
+        }
+        return rep
     }
+    
+    // MARK: init
     
     init(user: SUser, content: String) {
         sender = Sender(senderId: user.id, displayName: user.username)
@@ -42,29 +69,55 @@ struct SMessage: Hashable, MessageType, Comparable  {
     
     init?(document: QueryDocumentSnapshot) {
         let data = document.data()
-        guard let content = data["content"] as? String,
-            let senderId = data["senderID"] as? String,
-            let senderUserName = data["senderName"] as? String,
-            let sentDate = data["created"] as? Timestamp
+        guard let senderId = data["senderID"] as? String,
+              let senderUserName = data["senderName"] as? String,
+              let sentDate = data["created"] as? Timestamp
         else { return nil }
         
-        self.content = content
         sender = Sender(senderId: senderId, displayName: senderUserName)
         self.sentDate = sentDate.dateValue()
         self.id = document.documentID
+        
+        if let content = data["content"] as? String {
+            self.content = content
+            downloadURL = nil
+        } else if let urlString = data["URL"] as? String, let url = URL(string: urlString) {
+            downloadURL = url
+            self.content = ""
+        } else {
+            return nil
+        }
     }
+    
+    init(user: SUser, image: UIImage) {
+        sender = Sender(senderId: user.id, displayName: user.username)
+        self.image = image
+        content = ""
+        sentDate = Date()
+        id = nil
+    }
+    
+    // Equality
     
     static func == (lhs: SMessage, rhs: SMessage) -> Bool {
         lhs.messageId == rhs.messageId
     }
     
-    static func < (lhs: SMessage, rhs: SMessage) -> Bool {
-        lhs.sentDate < rhs.sentDate
-    }
-    
+}
+
+// MARK: Hashable
+extension SMessage: Hashable {
+ 
     func hash(into hasher: inout Hasher) {
         hasher.combine(messageId)
     }
+}
+
+// MARK: Comparable
+extension SMessage: Comparable {
     
-    
+    /// Comparable for `sentDate`
+    static func < (lhs: SMessage, rhs: SMessage) -> Bool {
+        lhs.sentDate < rhs.sentDate
+    }
 }

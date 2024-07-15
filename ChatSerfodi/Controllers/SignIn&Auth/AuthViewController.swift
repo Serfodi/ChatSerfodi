@@ -10,21 +10,22 @@ import Lottie
 
 class AuthViewController: UIViewController {
     
-    let gradientView = GradientView(from: .topTrailing, to: .bottomLeading , startColor: ColorAppearance.white.color(), endColor: ColorAppearance.blue.color())
-
-    let logoLabel = UILabel(text: "Щебетарь", fount: FontAppearance.logoTitle, color: ColorAppearance.black.color())
-    let welcomLabel = UILabel(text: "Добро пожаловать!", fount: FontAppearance.firstTitle, color: ColorAppearance.black.color())
+    enum Padding {
+        static let first: CGFloat = 50
+        static let second: CGFloat = 25
+        static let fixedAnimationView: CGFloat = 35
+        static let top: CGFloat = 10
+    }
     
-    var birdView: LottieAnimationView! = {
-        let duckView = LottieAnimationView(name: "Bird")
-        duckView.loopMode = .loop
-        duckView.contentMode = .scaleAspectFill
-        return duckView
-    }()
+    let gradientView = GradientView(from: .topTrailing, to: .bottomLeading , startColor: ColorAppearance.white.color(), endColor: ColorAppearance.blue.color())
+    let logoLabel = UILabel(text: "Щебетарь", fount: FontAppearance.logoTitle, color: ColorAppearance.black.color())
+    let welcomeLabel = UILabel(text: "Welcome", fount: FontAppearance.firstTitle, color: ColorAppearance.black.color())
+    let signButton = UIButton(title: "Registration", titleColor: ColorAppearance.white.color(), backgroundColor: ColorAppearance.black.color())
+    let loginButton = UIButton(title: "Login", titleColor: ColorAppearance.black.color(), backgroundColor: ColorAppearance.white.color())
+    let birdView = LottieAnimationView(name: "Bird", contentMode: .scaleAspectFill)
     var sunView = SunView()
-        
-    let emailButton = UIButton(title: "Регистрация", titleColor: ColorAppearance.white.color(), backgroundColor: ColorAppearance.black.color(), cornorRadius: 27)
-    let loginButton = UIButton(title: "Вход", titleColor: ColorAppearance.black.color(), backgroundColor: ColorAppearance.white.color(), cornorRadius: 27)
+    
+    // MARK: ViewController
     
     let loginVC = LoginViewController()
     let signVC = SignUpViewController()
@@ -33,12 +34,12 @@ class AuthViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        view.backgroundColor = ColorAppearance.blue.color()
         view.addSubview(gradientView)
         setupConstraints()
         signVC.delegate = self
         loginVC.delegate = self
-        emailButton.addTarget(self, action: #selector(emailButtonTapped), for: .touchUpInside)
+        signButton.addTarget(self, action: #selector(emailButtonTapped), for: .touchUpInside)
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
     }
 
@@ -64,21 +65,22 @@ class AuthViewController: UIViewController {
     }
 }
 
+
 // MARK: AuthNavigatingDelegate
 extension AuthViewController: AuthNavigatingDelegate {
+    
     func toLoginVC() {
         present(loginVC, animated: true)
     }
-    
     func toSignUPVC() {
         present(signVC, animated: true)
     }
 }
 
-// MARK: Set Up Constraints
-extension AuthViewController {
-    
-    private func setupConstraints() {
+
+// MARK: Constraints
+private extension AuthViewController {
+    func setupConstraints() {
         self.view.addSubview(sunView)
         self.view.addSubview(logoLabel)
         self.view.addSubview(birdView)
@@ -88,30 +90,27 @@ extension AuthViewController {
         
         NSLayoutConstraint.activate([
             logoLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            logoLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 10)
+            logoLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: Padding.top)
         ])
         NSLayoutConstraint.activate([
-            birdView.topAnchor.constraint(equalTo: logoLabel.bottomAnchor, constant: -35),
+            birdView.topAnchor.constraint(equalTo: logoLabel.bottomAnchor, constant: -Padding.fixedAnimationView),
             birdView.leftAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leftAnchor),
-            birdView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 35),
+            birdView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: Padding.fixedAnimationView),
         ])
-        let aspectRatioConstraint = NSLayoutConstraint(item: birdView!, attribute: .width, relatedBy: .equal, toItem: birdView!, attribute: .height, multiplier: 1.0, constant: 0)
+        let aspectRatioConstraint = NSLayoutConstraint(item: birdView, attribute: .width, relatedBy: .equal, toItem: birdView, attribute: .height, multiplier: 1.0, constant: 0)
         birdView.addConstraint(aspectRatioConstraint)
-                
-        let stackView = UIStackView(arrangedSubviews: [welcomLabel, emailButton, loginButton], axis: .vertical, spacing: 25)
-        stackView.translatesAutoresizingMaskIntoConstraints = false
         
+        let stackView = UIStackView(arrangedSubviews: [welcomeLabel, signButton, loginButton], axis: .vertical, spacing: Padding.second)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(stackView)
         
-        welcomLabel.centerXAnchor.constraint(equalTo: stackView.centerXAnchor).isActive = true
-        welcomLabel.textAlignment = .center
-        emailButton.addConstraint(.init(item: emailButton, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 54))
-        loginButton.addConstraint(.init(item: loginButton, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 54))
+        welcomeLabel.centerXAnchor.constraint(equalTo: stackView.centerXAnchor).isActive = true
+        welcomeLabel.textAlignment = .center
         
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: birdView.bottomAnchor, constant: -25),
-            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50),
-            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50)
+            stackView.topAnchor.constraint(equalTo: birdView.bottomAnchor, constant: -Padding.second),
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Padding.first),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Padding.first)
         ])
     }
 }

@@ -1,0 +1,97 @@
+/* 
+  Localizable.strings
+  ChatSerfodi
+
+  Created by Сергей Насыбуллин on 15.07.2024.
+  
+*/
+
+// MARK: AuthViewController
+
+"Welcome" = "Добро пожаловать!";
+"Registration" = "Регистрация";
+"Login" = "Вход";
+
+// MARK: SignUpViewController
+
+"GoodToSeeYou" = "Рад Вас видеть!";
+"Password" = "Пароль";
+"PasswordConfirmation" = "Подтверждение пароля";
+"AlreadyRegistered" = "Уже зарегистрированы?";
+
+// MARK: Notification
+
+"Successfully" = "Успешно!";
+"Error" = "Ошибка!";
+
+"YouAreRegistered" = "Вы зарегистрированы!";
+"YouAreLoggedIn" = "Вы вошли!";
+
+"TheChangesAreSaved" = "Изменения сохранены.";
+"GetOut" = "Вы точно желаете выйти?";
+"Exit" = "Выход";
+
+"MessageFor" = "Сообщение для";
+"sent" = "отправлено.";
+
+// MARK: LoginViewController
+
+"WelcomeBack" = "Добро пожаловать назад!";
+"or" = "или";
+"DoYouNeedAnAccount" = "Вам нужен акаунт?";
+
+// MARK: SetupProfileViewController
+
+"CreatingProfile" = "Создания профиля";
+"Name" = "Имя";
+"Description" = "Описание";
+"Sex" = "Пол";
+"Man" = "Муж";
+"Wom" = "Жен";
+"GoChats" = "Вперед к чатам!";
+
+// MARK: MainTabBarController
+
+"People" = "Люди";
+"Chats" = "Чаты";
+"Profile" = "Профиль";
+
+// MARK: PeopleViewController
+
+"peopleNearby" = "человек рядом";
+
+// MARK: ListViewController
+
+"GoSearch" = "Поиск людей";
+"AcceptRequest" = "Прниять запрос!";
+"WaitingChat" = "Ожидающие чаты";
+"ActiveChat" = "Активные чаты";
+
+"Chat" = "Чат с";
+"wasDeleted" = "был удален.";
+"notWasDeleted" = "не был удален.";
+
+"EnjoyThe" = "Приятного общения с";
+"notCreated" = "не был создан";
+
+// MARK: Menu
+
+"Delete" = "Удалить";
+
+// MARK: ProfileSettingViewController
+
+"ChooseAnotherPhoto" = "Выбрать другое фото";
+"MyProfile" = "Мой профиль";
+"Save" = "Сохранить";
+
+// MARK: ChatRequestViewController
+
+"Accept" = "Принять";
+"Reject" = "Отклонить";
+
+// MARK: ChatsViewController
+
+"Message" = "Сообщение";
+"NotSent" = "Ваше сообщение не было отправлено.";
+
+"FirstMessage" = "Напишите первое сообщение!";

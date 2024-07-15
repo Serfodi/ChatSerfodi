@@ -58,7 +58,7 @@ class ActiveChatCell: UICollectionViewCell, SelfConfiguringCell {
 private extension ActiveChatCell {
     
     func setupConfiguration() {
-        let action = UIAction(title: "Удалить", image: .init(systemName: "trash.fill"), attributes: .destructive) { action in
+        let action = UIAction(title: NSLocalizedString("Delete", comment: ""), image: .init(systemName: "trash.fill"), attributes: .destructive) { action in
             NotificationCenter.default.post(name: Notification.Name("DeleteChat"), object: nil, userInfo: ["Chat" : self.chat!])
         }
         menuButton = MenuButton(menuActions: [action])
@@ -94,7 +94,7 @@ private extension ActiveChatCell {
             lastMassage.topAnchor.constraint(equalTo: self.friendName.bottomAnchor, constant: 2),
             lastMassage.bottomAnchor.constraint(lessThanOrEqualTo: self.bottomAnchor),
             lastMassage.leadingAnchor.constraint(equalTo: friendImageView.trailingAnchor, constant: 16),
-            lastMassage.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16)
+            lastMassage.trailingAnchor.constraint(equalTo: menuButton.leadingAnchor, constant: -16)
         ])
         
         NSLayoutConstraint.activate([

@@ -1,0 +1,98 @@
+/* 
+  Localizable.strings
+  ChatSerfodi
+
+  Created by Сергей Насыбуллин on 15.07.2024.
+  
+*/
+
+
+// MARK: AuthViewController
+
+"Welcome" = "Welcome!";
+"Registration" = "Registration";
+"Login" = "Login";
+
+// MARK: SignUpViewController
+
+"GoodToSeeYou" = "Good to see you!";
+"Password" = "Password";
+"PasswordConfirmation" = "Confirm password";
+"AlreadyRegistered" = "Already registered?";
+
+// MARK: Notification
+
+"Successfully" = "Successfully!";
+"Error" = "Error!";
+
+"YouAreRegistered" = "You are registered!";
+"YouAreLoggedIn" = "You are logged.";
+
+"TheChangesAreSaved" = "The changes are saved.";
+"GetOut" = "Do you want to get out?";
+"Exit" = "Exit";
+
+"MessageFor" = "A message for";
+"sent" = "sent.";
+
+// MARK: LoginViewController
+
+"WelcomeBack" = "Welcome back!";
+"or" = "or";
+"DoYouNeedAnAccount" = "Need account?";
+
+// MARK: SetupProfileViewController
+
+"CreatingProfile" = "Creating a profile";
+"Name" = "Name";
+"Description" = "Description";
+"Sex" = "Sex";
+"Man" = "Man";
+"Wom" = "Wom";
+"GoChats" = "Go to chats!";
+
+// MARK: MainTabBarController
+
+"People" = "People";
+"Chats" = "Chats";
+"Profile" = "Profile";
+
+// MARK: PeopleViewController
+
+"peopleNearby" = "people nearby";
+
+// MARK: ListViewController
+
+"GoSearch" = "Go to the search";
+"AcceptRequest" = "Accept the request!";
+"WaitingChat" = "Waiting chat";
+"ActiveChat" = "Active chat";
+
+"Chat" = "Chat";
+"wasDeleted" = "was deleted.";
+"notWasDeleted" = "was not deleted.";
+
+"EnjoyThe" = "Enjoy the";
+"notCreated" = "not created";
+
+// MARK: Menu
+
+"Delete" = "Delete";
+
+// MARK: ProfileSettingViewController
+
+"ChooseAnotherPhoto" = "Choose another photo";
+"MyProfile" = "My profile";
+"Save" = "Save";
+
+// MARK: ChatRequestViewController
+
+"Accept" = "Accept";
+"Reject" = "Reject";
+
+// MARK: ChatsViewController
+
+"Message" = "Message";
+"NotSent" = "Your message has not been sent.";
+
+"FirstMessage" = "Write the first message!";

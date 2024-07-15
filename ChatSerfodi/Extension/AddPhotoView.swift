@@ -12,11 +12,11 @@ class AddPhotoView: UIView {
     var circleImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(systemName: "person")
-        imageView.contentMode = .scaleAspectFill
+        imageView.image = UIImage(systemName: "person", withConfiguration: UIImage.SymbolConfiguration(pointSize: 60))
+        imageView.contentMode = .center
         imageView.clipsToBounds = true
-        imageView.tintColor = .buttonDark()
-        imageView.layer.borderColor = UIColor.buttonDark().cgColor
+        imageView.tintColor = ColorAppearance.black.color()
+        imageView.layer.borderColor = ColorAppearance.black.color().cgColor
         imageView.layer.borderWidth = 4
         return imageView
     }()
@@ -25,7 +25,7 @@ class AddPhotoView: UIView {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(systemName: "plus.circle.fill"), for: .normal)
-        button.tintColor = .buttonDark()
+        button.tintColor = ColorAppearance.black.color()
         return button
     }()
     
@@ -74,3 +74,5 @@ class AddPhotoView: UIView {
     }
     
 }
+
+

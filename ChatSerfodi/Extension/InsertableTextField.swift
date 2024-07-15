@@ -13,7 +13,7 @@ class InsertableTextField: UITextField {
         super.init(frame: frame)
         
         backgroundColor = .white
-        placeholder = "Напишите первое сообщение!"
+        placeholder = NSLocalizedString("FirstMessage", comment: "")
         font = FontAppearance.secondDefault
         clearButtonMode = .whileEditing
         borderStyle = .none
@@ -26,6 +26,7 @@ class InsertableTextField: UITextField {
         let button = UIButton(type: .system)
         let image = UIImage(systemName: "arrow.up.message.fill")?.withRenderingMode(.alwaysOriginal)
         button.setImage(image, for: .normal)
+        button.tintColor = ColorAppearance.blue.color()
         rightView = button
         rightView?.frame = CGRect(x: 0, y: 0, width: 40, height: 35)
         rightViewMode = .always
@@ -52,6 +53,9 @@ class InsertableTextField: UITextField {
 //        rect.origin.x += 12
 //        return rect
 //    }
+    
+    
+    // MARK: FIX
     
     override func rightViewRect(forBounds bounds: CGRect) -> CGRect {
         var rect = super.rightViewRect(forBounds: bounds)

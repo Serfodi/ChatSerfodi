@@ -18,11 +18,11 @@ class ChatRequestViewController: UIViewController {
     }()
     
     let imageView = UIImageView(image: UIImage(named: "human1"))
-    let nameLabel = UILabel(text: "Сергей", fount: FontAppearance.defaultBoldText)
+    let nameLabel = UILabel(text: "Name", fount: FontAppearance.defaultBoldText)
     let aboutLabel = UILabel(text: "У вас есть возможность пообщаться с самым лучшим человеком в мире!")
     
-    let acceptButton = UIButton(title: "Принять", titleColor: ColorAppearance.white.color(), backgroundColor: ColorAppearance.black.color())
-    let denyButton = UIButton(title: "Отклонить", titleColor: .red, backgroundColor: ColorAppearance.white.color())
+    let acceptButton = UIButton(title: "Accept", titleColor: ColorAppearance.white.color(), backgroundColor: ColorAppearance.black.color())
+    let denyButton = UIButton(title: "Reject", titleColor: .red, backgroundColor: ColorAppearance.white.color())
     
     private var chat: SChat
     
@@ -31,6 +31,7 @@ class ChatRequestViewController: UIViewController {
     init(chat: SChat) {
         self.chat = chat
         nameLabel.text = chat.friendUsername
+        aboutLabel.text = chat.lastMessage
         imageView.sd_setImage(with: URL(string: chat.friendUserImageString))
         super.init(nibName: nil, bundle: nil)
     }

@@ -13,6 +13,8 @@
 			</array>
 		</dict>
 	</array>
+	<key>FirebaseAutomaticScreenReportingEnabled</key>
+	<false/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>SF-Pro-Text-Regular.otf</string>
@@ -38,7 +40,5 @@
 			</array>
 		</dict>
 	</dict>
-	<key>FirebaseAutomaticScreenReportingEnabled</key>
-	<false/>
 </dict>
 </plist>

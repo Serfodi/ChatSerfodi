@@ -19,8 +19,9 @@ extension UIViewController {
 
 extension UIViewController {
     
+    /// Показывать обычное уведомление
     func showAlert(with title: String, and message: String, completion: @escaping () -> Void = {} ) {
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let alertController = UIAlertController(title: NSLocalizedString(title, comment: ""), message: NSLocalizedString(message, comment: ""), preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default) { (_) in
             completion()
         }
@@ -30,20 +31,20 @@ extension UIViewController {
     
 }
 
-extension UIViewController {
-    
-    func registerForKeyboardNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc func keyboardWillShow(_ notification: Notification) {
-       
-    }
-    
-    @objc func keyboardWillHide(_ notification: Notification) {
-        
-    }
-    
-}
+//extension UIViewController {
+//
+//    func registerForKeyboardNotifications() {
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+//    }
+//
+//    @objc func keyboardWillShow(_ notification: Notification) {
+//
+//    }
+//
+//    @objc func keyboardWillHide(_ notification: Notification) {
+//
+//    }
+//
+//}
 

@@ -10,20 +10,18 @@ import FirebaseFirestore
 
 class PeopleViewController: UIViewController {
     
+    enum Padding {
+        static let first: CGFloat = 15
+        static let second: CGFloat = 20
+    }
+    
     var users = [SUser]()
     private var usersListener: ListenerRegistration?
     
     var collectionView: UICollectionView!
     
-    enum Section: Int, CaseIterable {
-        case users
-        
-        func description(userCount: Int) -> String {
-            switch self {
-            case .users:
-                return "\(userCount) человека рядом"
-            }
-        }
+    enum Section: Hashable {
+        case users(String)
     }
     
     var dataSource: UICollectionViewDiffableDataSource<Section, SUser>!
@@ -31,23 +29,26 @@ class PeopleViewController: UIViewController {
     
     private let currentUser: SUser
     
+    // MARK: init
+    
     init(currentUser: SUser) {
         self.currentUser = currentUser
         super.init(nibName: nil, bundle: nil)
         title = currentUser.username
+    }
+    deinit {
+        usersListener?.remove()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    deinit {
-        usersListener?.remove()
-    }
+    
+    // MARK: Live Circle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupSearchBar()
         setupCollectionView()
         createDataSource()
@@ -58,13 +59,14 @@ class PeopleViewController: UIViewController {
                 self.users = users
                 self.reloadData()
             case .failure(let error):
-                self.showAlert(with: "Ошибка!", and: error.localizedDescription)
+                self.showAlert(with: "Error", and: error.localizedDescription)
             }
         })
     }
     
+    // MARK: Setup
+    
     private func setupSearchBar() {
-//        navigationController?.navigationBar.barTintColor = .white
         let searchController = UISearchController(searchResultsController: nil)
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
@@ -80,24 +82,11 @@ class PeopleViewController: UIViewController {
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createCompositionalLayout())
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         collectionView.backgroundColor = ColorAppearance.white.color()
-        
         view.addSubview(collectionView)
         collectionView.delegate = self
         collectionView.register(SectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SectionHeader.reuseId)
         collectionView.register(UserCell.self, forCellWithReuseIdentifier: UserCell.reuseId)
     }
-    
-    private func reloadData(with searchText: String? = nil) {
-        let filtered = users.filter { (user) -> Bool in
-            user.contains(filtr: searchText)
-        }
-        var snapshot = NSDiffableDataSourceSnapshot<Section, SUser>()
-        snapshot.appendSections([.users])
-        snapshot.appendItems(filtered, toSection: .users)
-        
-        dataSource?.apply(snapshot, animatingDifferences: true)
-    }
-    
 }
 
 
@@ -105,75 +94,79 @@ class PeopleViewController: UIViewController {
 extension PeopleViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        reloadData(with: searchText)
+        if searchText == "" {
+            reloadData()
+        } else {
+            reloadData(with: searchText)
+        }
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        reloadData()
     }
 }
 
 
-extension PeopleViewController {
+// MARK: Data Source
+private extension PeopleViewController {
     
-    private func createDataSource() {
-        
+    func createDataSource() {
         dataSource = UICollectionViewDiffableDataSource<Section, SUser>(collectionView: collectionView, cellProvider: { (collectionView, indexPath, user) -> UICollectionViewCell? in
-            guard let section = Section(rawValue: indexPath.section) else { fatalError("Unknow section kind") }
-            switch section {
-            case .users:
-                return self.configure(collectionView: collectionView, cellType: UserCell.self, with: user, for: indexPath)
-            }
+            return self.configure(collectionView: collectionView, cellType: UserCell.self, with: user, for: indexPath)
         })
-        
-        dataSource?.supplementaryViewProvider = { (collectionView, kind, indexPath) in
+        dataSource.supplementaryViewProvider = { (collectionView, kind, indexPath) in
+            let section = self.dataSource.snapshot().sectionIdentifiers[indexPath.section]
             guard let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SectionHeader.reuseId, for: indexPath) as? SectionHeader else {
                 fatalError("Can not create new section")
             }
-            guard let section = Section(rawValue: indexPath.section) else {
-                fatalError("Unknown section kind")
+            switch section {
+            case .users(let items):
+                sectionHeader.configure(text: items, fount: FontAppearance.defaultBoldText, textColor: ColorAppearance.black.color().withAlphaComponent(0.5))
             }
-            let items = self.dataSource.snapshot().itemIdentifiers(inSection: .users)
-            sectionHeader.configure(text: section.description(userCount: items.count), fount: FontAppearance.defaultBoldText, textColor: ColorAppearance.black.color().withAlphaComponent(0.5))
             return sectionHeader
         }
     }
     
-    private func reloadSectionHeader(text: String) {}
+    // MARK: reloadData
     
+    func reloadData(with searchText: String? = nil) {
+        
+        let filtered = users.filter { (user) -> Bool in
+            user.contains(filter: searchText)
+        }
+        
+        var snapshot = NSDiffableDataSourceSnapshot<Section, SUser>()
+        let newSection = Section.users("\(filtered.count) " + NSLocalizedString("peopleNearby", comment: ""))
+        snapshot.appendSections([newSection])
+        snapshot.appendItems(filtered, toSection: newSection)
+        dataSource?.apply(snapshot, animatingDifferences: true)
+    }
 }
 
 
-
 // MARK: UICollectionViewCompositionalLayout
-
 extension PeopleViewController {
     
     private func createCompositionalLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout { (sectionIdex, layoutEnviroment) in
-            guard let section = Section(rawValue: sectionIdex) else { fatalError("Unknow section kind") }
-            switch section {
-            case .users:
-                return self.createUserSection()
-            }
+        let layout = UICollectionViewCompositionalLayout { (_, _) in
+            self.createUserSection()
         }
-        
         let config = UICollectionViewCompositionalLayoutConfiguration()
-        config.interSectionSpacing = 20
+        config.interSectionSpacing = Padding.second
         layout.configuration = config
-        
         return layout
     }
     
     private func createUserSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .fractionalWidth(0.6))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, repeatingSubitem: item, count: 2)
-        group.interItemSpacing = .fixed(15)
-        
+        group.interItemSpacing = .fixed(Padding.first)
         let section = NSCollectionLayoutSection(group: group)
-        section.interGroupSpacing = 15
-        section.contentInsets = NSDirectionalEdgeInsets.init(top: 15, leading: 15, bottom: 0, trailing: 0)
+        section.interGroupSpacing = Padding.first
+        section.contentInsets = NSDirectionalEdgeInsets.init(top: Padding.first, leading: Padding.first, bottom: 0, trailing: 0)
         section.boundarySupplementaryItems = [createSectionHeader()]
-        
         return section
     }
     
@@ -186,8 +179,6 @@ extension PeopleViewController {
 
 
 // MARK: UICollectionViewDelegate
-
-
 extension PeopleViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -196,3 +187,4 @@ extension PeopleViewController: UICollectionViewDelegate {
         present(profileVC, animated: true)
     }
 }
+

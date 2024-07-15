@@ -9,37 +9,48 @@ import UIKit
 import FirebaseFirestore
 import Lottie
 
+private enum Padding {
+    static let first: CGFloat = 60
+    static let second: CGFloat = 40
+    static let third: CGFloat = 20
+    
+    static let interSectionSpacing: CGFloat = 20
+    
+    enum ActiveChats {
+        static let activeCellHeight:  CGFloat = 78
+        static let interGroupSpacing: CGFloat = 10
+        static let contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 0, trailing: 20)
+    }
+    enum WaitingChats {
+        static let waitingChatsHeight: CGFloat = 88
+        static let interGroupSpacing: CGFloat = 16
+        static let contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 0, trailing: 0)
+    }
+}
+
 class ListViewController: UIViewController {
 
+    let searchView = LottieAnimationView(name: "search", contentMode: .scaleAspectFit)
+    let findButton = UIButton(title: "GoSearch", titleColor: ColorAppearance.black.color(), backgroundColor: ColorAppearance.white.color(), fount: FontAppearance.buttonText, isShadow: true)
+    let acceptButton = UIButton(title: "AcceptRequest", titleColor: ColorAppearance.black.color(), backgroundColor: .white, fount: FontAppearance.buttonText, isShadow: true)
+    
+    var collectionView: UICollectionView!
+    var collectionViewTopArc: NSLayoutConstraint!
+    
     var activeChat:[SChat] = []
     var waitingChat:[SChat] = []
     
     private var waitingChatsListener: ListenerRegistration?
     private var activityChatObserve: ListenerRegistration?
     
-    var collectionView: UICollectionView!
-    var collectionViewTopArc: NSLayoutConstraint!
-    
-    var searchView: LottieAnimationView! = {
-        let duckView = LottieAnimationView(name: "search")
-        duckView.loopMode = .loop
-        duckView.contentMode = .scaleAspectFit
-        return duckView
-    }()
-    
-    var findButton = UIButton(title: "Перейти к поискам", titleColor: ColorAppearance.black.color(), backgroundColor: ColorAppearance.white.color(), fount: FontAppearance.buttonText, isShodow: true)
-    
-    var acceptButton = UIButton(title: "Примите запрос!", titleColor: ColorAppearance.black.color(), backgroundColor: .white, fount: FontAppearance.buttonText, isShodow: true)
-    
-    // Можно вынести в глобальную видимость. Для создания документов FirebaseFirestore
     enum Section: Int, CaseIterable {
         case waitingChat, activeChat
         func description() -> String {
             switch self {
             case .waitingChat:
-                return "Ожидающие чаты"
+                return NSLocalizedString("WaitingChat", comment: "")
             case .activeChat:
-                return "Активные чаты"
+                return NSLocalizedString("ActiveChat", comment: "")
             }
         }
     }
@@ -47,6 +58,8 @@ class ListViewController: UIViewController {
     var dataSource: UICollectionViewDiffableDataSource<Section, SChat>?
     
     private let currentUser: SUser
+    
+    // MARK: init
     
     init(currentUser: SUser) {
         self.currentUser = currentUser
@@ -62,21 +75,31 @@ class ListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         view.backgroundColor = .white
-        
         setupSearchBar()
         setupCollectionView()
         createDataSource()
-        reloadData()
-        
-        view.addSubview(searchView)
-        view.addSubview(findButton)
-        view.addSubview(acceptButton)
+//        reloadData()
         setupConstraint()
         findButton.addTarget(self, action: #selector(showFind), for: .touchUpInside)
         acceptButton.addTarget(self, action: #selector(presentPerson), for: .touchUpInside)
-        
+        setupWaitingChatsListener()
+        setupActivityChatObserve()
+        NotificationCenter.default.addObserver(self, selector: #selector(deleteChat(_:)), name: Notification.Name("DeleteChat"), object: nil)
+    }
+    deinit {
+        waitingChatsListener?.remove()
+        activityChatObserve?.remove()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        searchView.play()
+    }
+    
+    // MARK: Setup
+    
+    private func setupWaitingChatsListener() {
         waitingChatsListener = ListenerService.shared.waitingChatObserve(chats: waitingChat, completion: { result in
             switch result {
             case .success(let chats):
@@ -88,36 +111,26 @@ class ListViewController: UIViewController {
                     self.present(chatRequestVC, animated: true)
                 }
             case .failure(let error):
-                self.showAlert(with: "Ошибка!", and: error.localizedDescription)
+                self.showAlert(with: "Error", and: error.localizedDescription)
             }
         })
-        
+    }
+    
+    private func setupActivityChatObserve() {
         activityChatObserve = ListenerService.shared.activityChatObserve(chats: activeChat, completion: { result in
             switch result {
             case .success(let chats):
                 self.activeChat = chats
                 self.reloadData()
             case .failure(let error):
-                self.showAlert(with: "Ошибка!", and: error.localizedDescription)
+                self.showAlert(with: "Error", and: error.localizedDescription)
             }
         })
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(deleteChat(_:)), name: Notification.Name("DeleteChat"), object: nil)
-    }
-    
-    deinit {
-        waitingChatsListener?.remove()
-        activityChatObserve?.remove()
-    }
-        
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        searchView.play()
     }
     
     private func setupCollectionView() {
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createCompositionalLayout())
-        collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight, .flexibleBottomMargin]
+        collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         collectionView.backgroundColor = ColorAppearance.white.color()
         view.addSubview(collectionView)
         collectionView.delegate = self
@@ -126,8 +139,11 @@ class ListViewController: UIViewController {
         collectionView.register(WaitingChatCell.self, forCellWithReuseIdentifier: WaitingChatCell.reuseId)
     }
     
+    // MARK: Action
+    
     @objc func showFind() {
         let generator = UIImpactFeedbackGenerator(style: .light)
+        generator.prepare()
         generator.impactOccurred()
         self.tabBarController?.selectedIndex = 0
     }
@@ -144,16 +160,19 @@ class ListViewController: UIViewController {
     }
 }
 
+
 // MARK: WaitingChatsNavigation
+
 extension ListViewController: WaitingChatsNavigation {
     
     func removeWaitingChats(chat: SChat) {
         FirestoreService.shared.deleteWaitingChat(chat: chat) { result in
             switch result {
             case .success():
-                self.showAlert(with: "Успешно!", and: "Чат с \(chat.friendUsername) был удален.")
+                self.showAlert(with: "Successfully", and: [NSLocalizedString("Chat", comment: ""), chat.friendUsername, NSLocalizedString("wasDeleted", comment: "")].joined(separator: " "))
             case .failure(let error):
-                self.showAlert(with: "Ошибка!", and: "Чат с \(chat.friendUsername) не был удален. Ошибка: \(error.localizedDescription)")
+                self.showAlert(with: "Error", and: [NSLocalizedString("Chat", comment: ""), chat.friendUsername, NSLocalizedString("notWasDeleted", comment: ""),
+                                                    NSLocalizedString("Error", comment: ""), error.localizedDescription].joined(separator: " "))
             }
         }
     }
@@ -162,9 +181,10 @@ extension ListViewController: WaitingChatsNavigation {
         FirestoreService.shared.deleteActiveChat(chat: chat) { result in
             switch result {
             case .success():
-                self.showAlert(with: "Успешно!", and: "Чат с \(chat.friendUsername) был удален.")
+                self.showAlert(with: "Successfully", and: [NSLocalizedString("Chat", comment: ""), chat.friendUsername, NSLocalizedString("wasDeleted", comment: "")].joined(separator: " "))
             case .failure(let error):
-                self.showAlert(with: "Ошибка!", and: "Чат с \(chat.friendUsername) не был удален. Ошибка: \(error.localizedDescription)")
+                self.showAlert(with: "Error", and: [NSLocalizedString("Chat", comment: ""), chat.friendUsername, NSLocalizedString("notWasDeleted", comment: ""),
+                                                    NSLocalizedString("Error", comment: ""), error.localizedDescription].joined(separator: " "))
             }
         }
     }
@@ -173,14 +193,14 @@ extension ListViewController: WaitingChatsNavigation {
         FirestoreService.shared.changeToActive(chat: chat) { result in
             switch result {
             case .success():
-                self.showAlert(with: "Успешно!", and: "Приятного общения с \(chat.friendUsername).")
+                self.showAlert(with: "Successfully", and: NSLocalizedString("EnjoyThe", comment: "") + chat.friendUsername)
             case .failure(let error):
-                self.showAlert(with: "Ошибка!", and: "Чат с \(chat.friendUsername) не был создан. Ошибка: \(error.localizedDescription)")
+                self.showAlert(with: "Error", and: [NSLocalizedString("Chat", comment: ""), chat.friendUsername, NSLocalizedString("notCreated", comment: ""),
+                                                    NSLocalizedString("Error", comment: ""), error.localizedDescription].joined(separator: " "))
             }
         }
     }
 }
-
 
 
 // MARK: - UICollectionViewDelegate
@@ -226,11 +246,17 @@ extension ListViewController {
     
     // MARK: ReloadData
     
-    private func reloadData() {
+    private func reloadData(with searchText: String? = nil) {
+        
+        let filtered = activeChat.filter { (chat) -> Bool in
+            chat.contains(filter: searchText)
+        }
+        
         var snapshot = NSDiffableDataSourceSnapshot<Section, SChat>()
         snapshot.appendSections([.waitingChat, .activeChat])
         snapshot.appendItems(waitingChat, toSection: .waitingChat)
-        snapshot.appendItems(activeChat, toSection: .activeChat)
+        snapshot.appendItems(filtered, toSection: .activeChat)
+        
         dataSource?.apply(snapshot, animatingDifferences: true)
         
         if activeChat.isEmpty && waitingChat.isEmpty {
@@ -244,11 +270,11 @@ extension ListViewController {
         }
         
         if waitingChat.isEmpty {
-            collectionView.frame.origin.y = -140
-            collectionView.frame.size.height = collectionView.frame.height + 140
-        } else if collectionView.frame.origin.y == -140 {
+            collectionView.frame.origin.y = -150
+            collectionView.frame.size.height = collectionView.frame.height + 150
+        } else if collectionView.frame.origin.y == -150 {
             collectionView.frame.origin.y = 0
-            collectionView.frame.size.height = collectionView.frame.height - 140
+            collectionView.frame.size.height = collectionView.frame.height - 150
         }
         
         if activeChat.isEmpty && !waitingChat.isEmpty {
@@ -256,7 +282,6 @@ extension ListViewController {
         } else {
             acceptButton.isHidden = true
         }
-        
     }
 }
 
@@ -266,54 +291,56 @@ extension ListViewController {
 extension ListViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        print(searchText)
+        if searchText == "" {
+            reloadData()
+        } else {
+            reloadData(with: searchText)
+        }
     }
+        
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        reloadData()
+    }
+    
 }
 
 
 // MARK: - Create
 
-extension ListViewController {
+private extension ListViewController {
     
-    private func createActiveChats() -> NSCollectionLayoutSection? {
+    func createActiveChats() -> NSCollectionLayoutSection? {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        let grupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(78))
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: grupSize, subitems: [item])
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(Padding.ActiveChats.activeCellHeight))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets.init(top: 16, leading: 20, bottom: 0, trailing: 20)
-        section.interGroupSpacing = 10
+        section.contentInsets = Padding.ActiveChats.contentInsets
+        section.interGroupSpacing = Padding.ActiveChats.interGroupSpacing
         section.boundarySupplementaryItems = [createSectionHeader()]
         return section
     }
     
-    private func createWaitingChats() -> NSCollectionLayoutSection? {
-        // cells
+    func createWaitingChats() -> NSCollectionLayoutSection? {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        
-        let grupSize = NSCollectionLayoutSize(widthDimension: .absolute(88), heightDimension: .absolute(88))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: grupSize, subitems: [item])
-        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(Padding.WaitingChats.waitingChatsHeight), heightDimension: .absolute(Padding.WaitingChats.waitingChatsHeight))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .continuous
-        section.interGroupSpacing = 16
-        section.contentInsets = NSDirectionalEdgeInsets.init(top: 16, leading: 20, bottom: 0, trailing: 0)
-        
-        // header
+        section.interGroupSpacing = Padding.WaitingChats.interGroupSpacing
+        section.contentInsets = Padding.WaitingChats.contentInsets
         section.boundarySupplementaryItems = [createSectionHeader()]
-        
         return section
     }
     
-    private func createSectionHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
+    func createSectionHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
         let sectionHeaderSeize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(1))
         let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: sectionHeaderSeize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
         return sectionHeader
     }
     
-    
-    private func createCompositionalLayout() -> UICollectionViewLayout {
+    func createCompositionalLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, layoutEnvironment) in
             guard let section = Section(rawValue: sectionIndex) else { fatalError("Unknown section kind") }
             switch section {
@@ -324,48 +351,49 @@ extension ListViewController {
             }
         }
         let config = UICollectionViewCompositionalLayoutConfiguration()
-        config.interSectionSpacing = 20
+        config.interSectionSpacing = Padding.interSectionSpacing
         layout.configuration = config
         return layout
     }
     
-    private func setupSearchBar() {
-        navigationController?.navigationBar.barTintColor = .mainWhite()
+    func setupSearchBar() {
         let searchController = UISearchController(searchResultsController: nil)
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
         searchController.hidesNavigationBarDuringPresentation = false
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.delegate = self
+        
         navigationController?.navigationBar.addBGBlur()
         navigationController?.navigationBar.standardAppearance.titleTextAttributes = [.font: FontAppearance.buttonText, .foregroundColor: ColorAppearance.black.color()]
         navigationController?.navigationBar.scrollEdgeAppearance?.titleTextAttributes = [.font: FontAppearance.buttonText, .foregroundColor: ColorAppearance.black.color()]
     }
     
     func setupConstraint() {
+        view.addSubview(searchView)
+        view.addSubview(findButton)
+        view.addSubview(acceptButton)
+        searchView.isHidden = true
+        findButton.isHidden = true
+        acceptButton.isHidden = true
         searchView.translatesAutoresizingMaskIntoConstraints = false
         findButton.translatesAutoresizingMaskIntoConstraints = false
         acceptButton.translatesAutoresizingMaskIntoConstraints = false
-        
         NSLayoutConstraint.activate([
-            searchView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: -40),
+            searchView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: -Padding.second),
             searchView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
             searchView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
             searchView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
         ])
-        
         NSLayoutConstraint.activate([
-            findButton.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -60),
-            findButton.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 60),
-            findButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -40)
+            findButton.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -Padding.first),
+            findButton.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: Padding.first),
+            findButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -Padding.second)
         ])
-        
         NSLayoutConstraint.activate([
-            acceptButton.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -60),
-            acceptButton.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 60),
-            acceptButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -40)
+            acceptButton.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -Padding.first),
+            acceptButton.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: Padding.first),
+            acceptButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -Padding.second)
         ])
-        
     }
-    
 }

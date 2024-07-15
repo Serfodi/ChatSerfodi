@@ -8,7 +8,7 @@
 import UIKit
 import FirebaseFirestore
 
-struct SChat: Hashable, Decodable {
+struct SChat {
     var friendUsername: String
     var friendUserImageString: String
     var lastMessage: String
@@ -21,6 +21,8 @@ struct SChat: Hashable, Decodable {
         rep["friendId"] = friendId
         return rep
     }
+    
+    // MARK: init
     
     init(friendUsername: String, friendUserImageString: String, lastMessage: String, friendId: String) {
         self.friendUsername = friendUsername
@@ -39,18 +41,28 @@ struct SChat: Hashable, Decodable {
         else {
             return nil
         }
-        
         self.friendUsername = friendUsername
         self.friendUserImageString = friendUserImageString
         self.lastMessage = lastMessage
         self.friendId = friendId
     }
     
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(friendId)
-    }
-    
+    // Equality
     static func == (lhs: SChat, rhs: SChat) -> Bool {
         lhs.friendId == rhs.friendId
+    }
+    
+    /// Check contains `friendUsername` on filter.
+    func contains(filter: String?) -> Bool {
+        guard let filter = filter else { return true }
+        if filter.isEmpty { return true }
+        let lowercasedFilter = filter.lowercased()
+        return friendUsername.lowercased().contains(lowercasedFilter)
+    }
+}
+
+extension SChat: Hashable, Decodable {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(friendId)
     }
 }

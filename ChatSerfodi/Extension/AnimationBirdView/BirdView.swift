@@ -43,8 +43,6 @@ private extension BirdView {
         let aspectRatioConstraint = NSLayoutConstraint(item: birdView!, attribute: .width, relatedBy: .equal, toItem: birdView!, attribute: .height, multiplier: 1.0, constant: 0)
         birdView.addConstraint(aspectRatioConstraint)
         
-        
-        
     }
     
 }

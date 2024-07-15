@@ -8,7 +8,7 @@
 import UIKit
 import FirebaseFirestore
 
-struct SUser: Hashable, Decodable {
+struct SUser {
     
     var username: String
     var email: String
@@ -17,6 +17,18 @@ struct SUser: Hashable, Decodable {
     var sex: String
     var id: String
     
+    var representation: [String: Any] {
+        var rep = ["username": username]
+        rep["email"] = email
+        rep["avatarStringURL"] = avatarStringURL
+        rep["description"] = description
+        rep["sex"] = sex
+        rep["email"] = email
+        rep["uid"] = id
+        return rep
+    }
+    
+    // MARK: init
     
     init(username: String, email: String, avatarStringURL: String, description: String, sex: String, id: String) {
         self.username = username
@@ -26,7 +38,6 @@ struct SUser: Hashable, Decodable {
         self.sex = sex
         self.id = id
     }
-    
     
     init?(document: DocumentSnapshot) {
         guard let data = document.data() else { return nil }
@@ -47,7 +58,6 @@ struct SUser: Hashable, Decodable {
         self.id = uid
     }
     
-    
     init?(document: QueryDocumentSnapshot) {
         let data = document.data()
         guard
@@ -66,33 +76,25 @@ struct SUser: Hashable, Decodable {
         self.sex = sex
         self.id = uid
     }
-    
-    var representation: [String: Any] {
-        var rep = ["username": username]
-        rep["email"] = email
-        rep["avatarStringURL"] = avatarStringURL
-        rep["description"] = description
-        rep["sex"] = sex
-        rep["email"] = email
-        rep["uid"] = id
-        return rep
+            
+    /// Check contains `username` on filter.
+    func contains(filter: String?) -> Bool {
+        guard let filter = filter else { return true }
+        if filter.isEmpty { return true }
+        let lowercasedFilter = filter.lowercased()
+        return username.lowercased().contains(lowercasedFilter)
     }
     
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
-    
+    // Equality
     static func == (lhs: SUser, rhs: SUser) -> Bool {
         lhs.id == rhs.id
     }
-    
-    func contains(filtr: String?) -> Bool {
-        guard let filtr = filtr else { return true }
-        if filtr.isEmpty { return true }
-        let lowercasedFiltr = filtr.lowercased()
-        return username.lowercased().contains(lowercasedFiltr)
+}
+
+// MARK: Hashable & Decodable
+extension SUser: Hashable, Decodable {
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
-    
-    
-    
 }

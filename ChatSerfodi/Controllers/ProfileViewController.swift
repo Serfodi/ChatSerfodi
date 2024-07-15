@@ -19,7 +19,7 @@ class ProfileViewController: UIViewController {
     }()
     
     let imageView = UIImageView(image: UIImage(named: "human1"))
-    let nameLabel = UILabel(text: "Сергей", fount: FontAppearance.defaultBoldText)
+    let nameLabel = UILabel(text: "Name", fount: FontAppearance.defaultBoldText)
     let aboutLabel = UILabel(text: "You have the opportunity to chat with the best man in the world!")
     
     let myTextField = InsertableTextField()
@@ -55,9 +55,9 @@ class ProfileViewController: UIViewController {
             FirestoreService.shared.createWaitingChat(message: message, receiver: self.user) { (result) in
                 switch result {
                 case .success():
-                    UIApplication.shared.getTopVC.showAlert(with: "Успешно", and: "Сообщение для \(self.user.username) отправлено.")
+                    UIApplication.shared.getTopVC.showAlert(with: "Successfully", and: [NSLocalizedString("MessageFor", comment: ""), self.user.username, NSLocalizedString("sent", comment: "")].joined(separator: " "))
                 case .failure(let error):
-                    UIApplication.shared.getTopVC.showAlert(with: "Ошибка!", and: error.localizedDescription)
+                    UIApplication.shared.getTopVC.showAlert(with: "Error!", and: error.localizedDescription)
                 }
             }
         }
@@ -111,9 +111,9 @@ private extension ProfileViewController {
         myTextField.heightAnchor.constraint(equalToConstant: 42).isActive = true
                 
         NSLayoutConstraint.activate([
-            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
-            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
-            stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -30)
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
         ])
         
         NSLayoutConstraint.activate([
@@ -127,7 +127,7 @@ private extension ProfileViewController {
             imageView.topAnchor.constraint(equalTo: view.topAnchor),
             imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            imageView.bottomAnchor.constraint(lessThanOrEqualTo: view.bottomAnchor, constant: -160)
+            imageView.bottomAnchor.constraint(lessThanOrEqualTo: view.bottomAnchor, constant: -140)
         ])
         
     }

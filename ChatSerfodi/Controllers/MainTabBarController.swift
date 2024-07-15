@@ -22,36 +22,27 @@ class MainTabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         configuration()
-        
         let listViewController = ListViewController(currentUser: currentUser)
         let peopleViewController = PeopleViewController(currentUser: currentUser)
         let setupViewController = ProfileSettingViewController(currentSUser: currentUser)
-        
         let boldConfig = UIImage.SymbolConfiguration(weight: .medium)
         let peopleImage = UIImage(systemName: "person.2.fill", withConfiguration: boldConfig)!
         let messageImage = UIImage(systemName: "message.fill", withConfiguration: boldConfig)!
         let personImage = UIImage(systemName: "person.fill", withConfiguration: boldConfig)!
-        
         viewControllers = [
-            generateNavigationViewController(rootViewController: peopleViewController, title: "Люди", image: peopleImage),
-            generateNavigationViewController(rootViewController: listViewController, title: "Чаты", image: messageImage),
-            generateNavigationViewController(rootViewController: setupViewController, title: "Профиль", image: personImage)
+            generateNavigationViewController(rootViewController: peopleViewController, title: "People", image: peopleImage),
+            generateNavigationViewController(rootViewController: listViewController, title: "Chats", image: messageImage),
+            generateNavigationViewController(rootViewController: setupViewController, title: "Profile", image: personImage)
         ]
     }
     
     private func generateNavigationViewController(rootViewController: UIViewController, title: String, image: UIImage) -> UIViewController {
         let navigationVC = UINavigationController(rootViewController: rootViewController)
-        
-        navigationVC.tabBarItem.title = title
+        navigationVC.tabBarItem.title = NSLocalizedString(title, comment: "")
         navigationVC.tabBarItem.image = image
-        
         return navigationVC
     }
-    
-    
-    
 }
 
 private extension MainTabBarController {
@@ -61,9 +52,6 @@ private extension MainTabBarController {
         tabBar.backgroundImage = UIImage()
         tabBar.isTranslucent = true
         tabBar.backgroundColor = .white
-        
         tabBar.addBlur(blur: UIBlurEffect(style: .regular))
-        
-        
     }
 }

@@ -10,38 +10,32 @@ import GoogleSignIn
 
 class LoginViewController: UIViewController {
 
-    let welcomeLabel = UILabel(text: "Добро пожаловать назад!", alignment: .center, fount: FontAppearance.firstTitle)
-//    let loginWithLabel = UILabel(text: "Войти через")
-    let orLabel = UILabel(text: "или", alignment: .center)
-    let passwordLabel = UILabel(text: "Пароль")
-    let needAnAccountLabel = UILabel(text: "Нужен акаунт?")
+    enum Padding {
+        static let first: CGFloat = 60
+        static let second: CGFloat = 40
+        static let third: CGFloat = 30
+    }
+    
+    let welcomeLabel = UILabel(text: "WelcomeBack", alignment: .center, fount: FontAppearance.firstTitle)
+    let orLabel = UILabel(text: "or", alignment: .center)
+    let passwordLabel = UILabel(text: "Password")
+    let needAnAccountLabel = UILabel(text: "DoYouNeedAnAccount")
     let emailLabel = UILabel(text: "Email")
-    
-    
-    let googleButton = UIButton(title: "Google", titleColor: ColorAppearance.black.color(), backgroundColor: .white, isShodow: true)
+    let googleButton = UIButton(title: "Google", titleColor: ColorAppearance.black.color(), backgroundColor: .white, isShadow: true)
     let emailTextField = OneLineTextField(font: FontAppearance.defaultText)
     let passwordTextField = OneLineTextField(font: FontAppearance.defaultText)
-    
-    let loginButton = UIButton(title: "Войти", titleColor: ColorAppearance.white.color(), backgroundColor: ColorAppearance.black.color())
-    
-    let signUpButton: UIButton = {
-        let loginButton = UIButton()
-        loginButton.setTitle("Регистрация", for: .normal)
-        loginButton.setTitleColor(ColorAppearance.blue.color(), for: .normal)
-        loginButton.titleLabel?.font = FontAppearance.defaultBoldText
-        return loginButton
-    }()
-    
-    var stackView: UIStackView!
+    let loginButton = UIButton(title: "Login", titleColor: ColorAppearance.white.color(), backgroundColor: ColorAppearance.black.color())
+    let signUpButton = UIButton(title: "Registration", titleColor: ColorAppearance.blue.color(), fount: FontAppearance.defaultBoldText)
     
     weak var delegate: AuthNavigatingDelegate?
     
+    // MARK: Live Circle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = ColorAppearance.white.color()
-        googleButton.customizeGoogleButton()
         setUpConstraints()
+        googleButton.customizeGoogleButton()
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
         signUpButton.addTarget(self, action: #selector(signButtonTapped), for: .touchUpInside)
         googleButton.addTarget(self, action: #selector(signWithGoogle), for: .touchUpInside)
@@ -53,7 +47,7 @@ class LoginViewController: UIViewController {
         AuthService.shared.login(email: emailTextField.text, password: passwordTextField.text) { result in
             switch result {
             case .success(let user):
-                self.showAlert(with: "Успешно", and: "Вы авторизованы! ") {
+                self.showAlert(with: "Successfully", and: "YouAreLoggedIn") {
                     FirestoreService.shared.getUserData(user: user) { result in
                         switch result {
                         case .success(let suser):
@@ -66,7 +60,7 @@ class LoginViewController: UIViewController {
                     }
                 }
             case .failure(let error):
-                self.showAlert(with: "Ошибка!", and: error.localizedDescription)
+                self.showAlert(with: "Error", and: error.localizedDescription)
             }
         }
     }
@@ -85,36 +79,33 @@ class LoginViewController: UIViewController {
                     FirestoreService.shared.getUserData(user: user) { result in
                         switch result {
                         case .success(let suser):
-                            self.showAlert(with: "Успешно", and: "Вы вошли") {
+                            self.view.endEditing(true)
+                            self.showAlert(with: "Successfully", and: "YouAreLoggedIn") {
                                 let mainTabBar = MainTabBarController(currentUser: suser)
                                 mainTabBar.modalPresentationStyle = .fullScreen
                                 self.present(mainTabBar, animated: true)
                             }
                         case .failure(_):
-                            self.showAlert(with: "Успешно", and: "Вы зарегестрированы") {
+                            self.showAlert(with: "Successfully", and: "YouAreRegistered") {
                                 self.present(SetupProfileViewController(currentUser: user), animated: true)
                             }
                         }
                     }
                 case .failure(let error):
-                    self.showAlert(with: "Ошибка", and: error.localizedDescription)
+                    self.showAlert(with: "Error", and: error.localizedDescription)
                 }
             }
         }
     }
     
     // MARK: Touches
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let _ = touches.first {
             self.view.endEditing(true)
         }
         super.touchesBegan(touches, with: event)
     }
-    
 }
-
-
 
 // MARK: Set Up Constraints
 private extension LoginViewController {
@@ -124,12 +115,10 @@ private extension LoginViewController {
         let passwordStackView = UIStackView(arrangedSubviews: [passwordLabel, passwordTextField], axis: .vertical, spacing: 5)
         let buttonStack = UIStackView(arrangedSubviews: [loginButton, orLabel, googleButton], axis: .vertical, spacing: 10)
         
-        stackView = UIStackView(arrangedSubviews: [emailStackView, passwordStackView, buttonStack], axis: .vertical, spacing: 40)
+        let stackView = UIStackView(arrangedSubviews: [emailStackView, passwordStackView, buttonStack], axis: .vertical, spacing: Padding.second)
         
         signUpButton.contentHorizontalAlignment = .leading
-        let bottomStackView = UIStackView(arrangedSubviews: [
-            needAnAccountLabel, signUpButton
-        ], axis: .horizontal, spacing: 5)
+        let bottomStackView = UIStackView(arrangedSubviews: [needAnAccountLabel, signUpButton], axis: .horizontal, spacing: 5)
         bottomStackView.alignment = .firstBaseline
         
         welcomeLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -141,22 +130,18 @@ private extension LoginViewController {
         view.addSubview(bottomStackView)
         
         NSLayoutConstraint.activate([
-            welcomeLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 40),
+            welcomeLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: Padding.second),
             welcomeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
-        
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: 60),
-            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
-            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40)
+            stackView.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: Padding.first),
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Padding.second),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Padding.second)
         ])
-        
         NSLayoutConstraint.activate([
-            bottomStackView.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 30),
-            bottomStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
-            bottomStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40)
+            bottomStackView.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: Padding.third),
+            bottomStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Padding.second),
+            bottomStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Padding.second)
         ])
-        
     }
-    
 }
