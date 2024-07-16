@@ -13,22 +13,25 @@ struct SChat {
     var friendUserImageString: String
     var lastMessage: String
     var friendId: String
+    var lastDate: Date
     
     var representation: [String: Any] {
-        var rep = ["friendUsername": friendUsername]
+        var rep: [String: Any] = ["friendUsername": friendUsername]
         rep["friendUserImageString"] = friendUserImageString
         rep["lastMessage"] = lastMessage
         rep["friendId"] = friendId
+        rep["lastDate"] = lastDate
         return rep
     }
     
     // MARK: init
     
-    init(friendUsername: String, friendUserImageString: String, lastMessage: String, friendId: String) {
+    init(friendUsername: String, friendUserImageString: String, lastMessage: String, friendId: String, lastDate: Date) {
         self.friendUsername = friendUsername
         self.friendUserImageString = friendUserImageString
         self.lastMessage = lastMessage
         self.friendId = friendId
+        self.lastDate = lastDate
     }
     
     init?(document: QueryDocumentSnapshot) {
@@ -37,7 +40,8 @@ struct SChat {
             let friendUsername = data["friendUsername"] as? String,
             let friendUserImageString = data["friendUserImageString"] as? String,
             let lastMessage = data["lastMessage"] as? String,
-            let friendId = data["friendId"] as? String
+            let friendId = data["friendId"] as? String,
+            let lastDate = data["lastDate"] as? Timestamp
         else {
             return nil
         }
@@ -45,11 +49,16 @@ struct SChat {
         self.friendUserImageString = friendUserImageString
         self.lastMessage = lastMessage
         self.friendId = friendId
+        self.lastDate = lastDate.dateValue()
     }
     
     // Equality
+//    static func == (lhs: SChat, rhs: SChat) -> Bool {
+//        lhs.friendId == rhs.friendId
+//    }
+    
     static func == (lhs: SChat, rhs: SChat) -> Bool {
-        lhs.friendId == rhs.friendId
+        lhs.friendId == rhs.friendId && lhs.lastMessage == rhs.lastMessage && lhs.friendUsername == rhs.friendUsername
     }
     
     /// Check contains `friendUsername` on filter.

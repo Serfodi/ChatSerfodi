@@ -19,6 +19,14 @@ class ListenerService {
         db.collection("users")
     }
     
+    private var waitingChatsRef: CollectionReference {
+        db.collection(["users", currentUserId, "waitingChats"].joined(separator: "/"))
+    }
+    
+    private var activeChatsRef: CollectionReference {
+        db.collection(["users", currentUserId, "activeChats"].joined(separator: "/"))
+    }
+    
     private var currentUserId: String {
         Auth.auth().currentUser!.uid
     }
@@ -34,8 +42,10 @@ class ListenerService {
                 guard let user = SUser(document: diff.document) else { return }
                 switch diff.type {
                 case .added:
-                    guard !users.contains(user) else { return }
-                    guard user.id != self.currentUserId else { return }
+                    guard !users.contains(user),
+                          user.id != self.currentUserId,
+                          !user.isHide
+                    else { return }
                     users.append(user)
                 case .modified:
                     guard let index = users.firstIndex(of: user) else { return }
@@ -79,7 +89,7 @@ class ListenerService {
     }
     
     
-    func activityChatObserve(chats: [SChat], completion: @escaping (Result<[SChat], Error>)-> Void) -> ListenerRegistration? {
+    func activityChatObserve(chats: [SChat], completion: @escaping (Result<([SChat]), Error>)-> Void) -> ListenerRegistration? {
         var chats = chats
         let chatsRef = db.collection(["users", currentUserId, "activeChats"].joined(separator: "/"))
         let chatsListener = chatsRef.addSnapshotListener { (querySnapshot, error) in
@@ -94,7 +104,10 @@ class ListenerService {
                     guard !chats.contains(chat) else { return }
                     chats.append(chat)
                 case .modified:
-                    guard let index = chats.firstIndex(of: chat) else { return }
+                    guard let index = chats.firstIndex(where: { chatF in
+                        chatF.friendId == chat.friendId
+                    }) else { return }
+                    guard let index = chats.firstIndex(where: { $0.friendId == chat.friendId }) else { return }
                     chats[index] = chat
                 case .removed:
                     guard let index = chats.firstIndex(of: chat) else { return }
@@ -105,6 +118,8 @@ class ListenerService {
         }
         return chatsListener
     }
+    
+    
     
     
     // Наблюдатель для сообщений
@@ -130,6 +145,7 @@ class ListenerService {
         }
         return messagesListener
     }
+    
     
     
 }

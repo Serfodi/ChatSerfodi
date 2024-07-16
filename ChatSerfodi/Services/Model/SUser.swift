@@ -16,27 +16,31 @@ struct SUser {
     var description: String
     var sex: String
     var id: String
+    var isHide: Bool
     
-    var representation: [String: Any] {
-        var rep = ["username": username]
-        rep["email"] = email
-        rep["avatarStringURL"] = avatarStringURL
-        rep["description"] = description
-        rep["sex"] = sex
-        rep["email"] = email
-        rep["uid"] = id
+    var representation: [String : Any] {
+        var rep: [String : Any] = [
+            "username": username,
+            "email": email,
+            "avatarStringURL": avatarStringURL,
+            "description" : description,
+            "sex" : sex,
+            "uid" : id,
+            "isHide": isHide
+        ]
         return rep
     }
     
     // MARK: init
     
-    init(username: String, email: String, avatarStringURL: String, description: String, sex: String, id: String) {
+    init(username: String, email: String, avatarStringURL: String, description: String, sex: String, id: String, isHide: Bool) {
         self.username = username
         self.email = email
         self.avatarStringURL = avatarStringURL
         self.description = description
         self.sex = sex
         self.id = id
+        self.isHide = isHide
     }
     
     init?(document: DocumentSnapshot) {
@@ -47,7 +51,8 @@ struct SUser {
             let avatarStringURL = data["avatarStringURL"] as? String,
             let description = data["description"] as? String,
             let sex = data["sex"] as? String,
-            let uid = data["uid"] as? String
+            let uid = data["uid"] as? String,
+            let isHide = data["isHide"] as? Bool
         else { return nil }
         
         self.username = username
@@ -56,6 +61,7 @@ struct SUser {
         self.description = description
         self.sex = sex
         self.id = uid
+        self.isHide = isHide
     }
     
     init?(document: QueryDocumentSnapshot) {
@@ -66,7 +72,8 @@ struct SUser {
             let avatarStringURL = data["avatarStringURL"] as? String,
             let description = data["description"] as? String,
             let sex = data["sex"] as? String,
-            let uid = data["uid"] as? String
+            let uid = data["uid"] as? String,
+            let isHide = data["isHide"] as? Bool
         else { return nil }
         
         self.username = username
@@ -75,6 +82,7 @@ struct SUser {
         self.description = description
         self.sex = sex
         self.id = uid
+        self.isHide = isHide
     }
             
     /// Check contains `username` on filter.

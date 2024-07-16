@@ -26,7 +26,7 @@
 		17ED2C422AFE558700251BAF /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17ED2C412AFE558700251BAF /* ListViewController.swift */; };
 		17ED2C462AFE5A6F00251BAF /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17ED2C452AFE5A6F00251BAF /* MainTabBarController.swift */; };
 		17ED2C482AFE5AD800251BAF /* PeopleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17ED2C472AFE5AD800251BAF /* PeopleViewController.swift */; };
-		A81444FC1F4E80D6C2ECFDA2 /* Pods_ChatSerfodi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA93CD2064AB8105FF24E75A /* Pods_ChatSerfodi.framework */; };
+		6689047BC99438FAE676FEAE /* Pods_ChatSerfodi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FFFC23B7CA038B8736E070B /* Pods_ChatSerfodi.framework */; };
 		B019751D2B0E152B005D4321 /* SUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B019751C2B0E152B005D4321 /* SUser.swift */; };
 		B019751F2B0E1551005D4321 /* SChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = B019751E2B0E1551005D4321 /* SChat.swift */; };
 		B01975222B0E27A0005D4321 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01975212B0E27A0005D4321 /* UserCell.swift */; };
@@ -64,12 +64,12 @@
 		B09186512B2A641900965DC1 /* WaitingChatsNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09186502B2A641900965DC1 /* WaitingChatsNavigation.swift */; };
 		B09186562B2B3FC100965DC1 /* ChatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09186552B2B3FC100965DC1 /* ChatsViewController.swift */; };
 		B09186582B2B7D6C00965DC1 /* UIScrolIView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09186572B2B7D6C00965DC1 /* UIScrolIView + Extension.swift */; };
-		B0E207402C36E11E007346FE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B0E2073F2C36E11E007346FE /* GoogleService-Info.plist */; };
 		B0E207422C37060C007346FE /* ProfileSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E207412C37060C007346FE /* ProfileSettingViewController.swift */; };
 		B0E207442C38010D007346FE /* UINavigationBar + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E207432C38010D007346FE /* UINavigationBar + Extension.swift */; };
 		B0E207462C38C9FC007346FE /* search.json in Resources */ = {isa = PBXBuildFile; fileRef = B0E207452C38C9FC007346FE /* search.json */; };
 		B0F68E9F2C448EDE004DB75D /* LottieAnimationView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F68E9E2C448EDE004DB75D /* LottieAnimationView + Extension.swift */; };
 		B0F68EA42C455D0B004DB75D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B0F68EA62C455D0B004DB75D /* Localizable.strings */; };
+		B0F68EAC2C45B807004DB75D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B0F68EAB2C45B807004DB75D /* GoogleService-Info.plist */; };
 		B0F8E58E2B07A51900C2B00D /* ActiveChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F8E58D2B07A51900C2B00D /* ActiveChatCell.swift */; };
 		B0F8E5902B07ACA800C2B00D /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F8E58F2B07ACA800C2B00D /* GradientView.swift */; };
 		B0F8E5932B07BC8A00C2B00D /* WaitingChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F8E5922B07BC8A00C2B00D /* WaitingChatCell.swift */; };
@@ -79,7 +79,6 @@
 
 /* Begin PBXFileReference section */
 		17040E672AFE7ED9002238B0 /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
-		17731E9D2AE3E406006B1511 /* ChatSerfodi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatSerfodi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		17731EA02AE3E406006B1511 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		17731EA22AE3E406006B1511 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		17731EA42AE3E406006B1511 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
@@ -99,6 +98,9 @@
 		17ED2C412AFE558700251BAF /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		17ED2C452AFE5A6F00251BAF /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		17ED2C472AFE5AD800251BAF /* PeopleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleViewController.swift; sourceTree = "<group>"; };
+		2A2F8ABBBF50BCE1EA9ACD48 /* Pods-ChatSerfodi.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatSerfodi.release.xcconfig"; path = "Target Support Files/Pods-ChatSerfodi/Pods-ChatSerfodi.release.xcconfig"; sourceTree = "<group>"; };
+		4FFFC23B7CA038B8736E070B /* Pods_ChatSerfodi.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChatSerfodi.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A67252F64C313AE2A3B43A5F /* Pods-ChatSerfodi.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatSerfodi.debug.xcconfig"; path = "Target Support Files/Pods-ChatSerfodi/Pods-ChatSerfodi.debug.xcconfig"; sourceTree = "<group>"; };
 		B019751C2B0E152B005D4321 /* SUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SUser.swift; sourceTree = "<group>"; };
 		B019751E2B0E1551005D4321 /* SChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SChat.swift; sourceTree = "<group>"; };
 		B01975212B0E27A0005D4321 /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
@@ -136,7 +138,6 @@
 		B09186502B2A641900965DC1 /* WaitingChatsNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingChatsNavigation.swift; sourceTree = "<group>"; };
 		B09186552B2B3FC100965DC1 /* ChatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsViewController.swift; sourceTree = "<group>"; };
 		B09186572B2B7D6C00965DC1 /* UIScrolIView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrolIView + Extension.swift"; sourceTree = "<group>"; };
-		B0E2073F2C36E11E007346FE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B0E207412C37060C007346FE /* ProfileSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingViewController.swift; sourceTree = "<group>"; };
 		B0E207432C38010D007346FE /* UINavigationBar + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationBar + Extension.swift"; sourceTree = "<group>"; };
 		B0E207452C38C9FC007346FE /* search.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = search.json; sourceTree = "<group>"; };
@@ -145,14 +146,13 @@
 		B0F68EA52C455D0B004DB75D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		B0F68EA72C455D27004DB75D /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		B0F68EA92C456314004DB75D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		B0F68EAB2C45B807004DB75D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		B0F68EAD2C45B8A4004DB75D /* ChatSerfodi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatSerfodi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0F8E58D2B07A51900C2B00D /* ActiveChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveChatCell.swift; sourceTree = "<group>"; };
 		B0F8E58F2B07ACA800C2B00D /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		B0F8E5922B07BC8A00C2B00D /* WaitingChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingChatCell.swift; sourceTree = "<group>"; };
 		B0F8E5942B07BD6C00C2B00D /* SelfConfiguringCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfConfiguringCell.swift; sourceTree = "<group>"; };
 		B0F8E59B2B07C6CF00C2B00D /* SectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeader.swift; sourceTree = "<group>"; };
-		B81AC85BBDB7C5851256C091 /* Pods-ChatSerfodi.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatSerfodi.release.xcconfig"; path = "Target Support Files/Pods-ChatSerfodi/Pods-ChatSerfodi.release.xcconfig"; sourceTree = "<group>"; };
-		D7E62519D2A6848277156333 /* Pods-ChatSerfodi.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatSerfodi.debug.xcconfig"; path = "Target Support Files/Pods-ChatSerfodi/Pods-ChatSerfodi.debug.xcconfig"; sourceTree = "<group>"; };
-		FA93CD2064AB8105FF24E75A /* Pods_ChatSerfodi.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChatSerfodi.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,7 +160,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A81444FC1F4E80D6C2ECFDA2 /* Pods_ChatSerfodi.framework in Frameworks */,
+				6689047BC99438FAE676FEAE /* Pods_ChatSerfodi.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -171,18 +171,10 @@
 			isa = PBXGroup;
 			children = (
 				17731E9F2AE3E406006B1511 /* ChatSerfodi */,
-				17731E9E2AE3E406006B1511 /* Products */,
-				D90E558EBA491BB8D08D2D30 /* Pods */,
-				E07000414C9B6A07214E73F9 /* Frameworks */,
+				755AAA5B9642B300AF73154B /* Pods */,
+				6D3CEEF7F4E37667C6AAA70C /* Frameworks */,
+				B0F68EAD2C45B8A4004DB75D /* ChatSerfodi.app */,
 			);
-			sourceTree = "<group>";
-		};
-		17731E9E2AE3E406006B1511 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				17731E9D2AE3E406006B1511 /* ChatSerfodi.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		17731E9F2AE3E406006B1511 /* ChatSerfodi */ = {
@@ -199,7 +191,7 @@
 				B01C918B2C356C3A001D6ECD /* Design */,
 				17731EAB2AE3E40C006B1511 /* LaunchScreen.storyboard */,
 				17731EAE2AE3E40C006B1511 /* Info.plist */,
-				B0E2073F2C36E11E007346FE /* GoogleService-Info.plist */,
+				B0F68EAB2C45B807004DB75D /* GoogleService-Info.plist */,
 				B036EF622C36C8E1007F5E3B /* Sourses */,
 			);
 			path = ChatSerfodi;
@@ -262,6 +254,23 @@
 				B09186552B2B3FC100965DC1 /* ChatsViewController.swift */,
 			);
 			path = Controllers;
+			sourceTree = "<group>";
+		};
+		6D3CEEF7F4E37667C6AAA70C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4FFFC23B7CA038B8736E070B /* Pods_ChatSerfodi.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		755AAA5B9642B300AF73154B /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				A67252F64C313AE2A3B43A5F /* Pods-ChatSerfodi.debug.xcconfig */,
+				2A2F8ABBBF50BCE1EA9ACD48 /* Pods-ChatSerfodi.release.xcconfig */,
+			);
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		B01975202B0E15B1005D4321 /* Model */ = {
@@ -388,23 +397,6 @@
 			path = Protocol;
 			sourceTree = "<group>";
 		};
-		D90E558EBA491BB8D08D2D30 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				D7E62519D2A6848277156333 /* Pods-ChatSerfodi.debug.xcconfig */,
-				B81AC85BBDB7C5851256C091 /* Pods-ChatSerfodi.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
-		E07000414C9B6A07214E73F9 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				FA93CD2064AB8105FF24E75A /* Pods_ChatSerfodi.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -423,10 +415,8 @@
 			dependencies = (
 			);
 			name = ChatSerfodi;
-			packageProductDependencies = (
-			);
 			productName = ChatSerfodi;
-			productReference = 17731E9D2AE3E406006B1511 /* ChatSerfodi.app */;
+			productReference = B0F68EAD2C45B8A4004DB75D /* ChatSerfodi.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -454,9 +444,7 @@
 				ru,
 			);
 			mainGroup = 17731E942AE3E406006B1511;
-			packageReferences = (
-			);
-			productRefGroup = 17731E9E2AE3E406006B1511 /* Products */;
+			productRefGroup = 17731E942AE3E406006B1511;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -470,6 +458,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0F68EAC2C45B807004DB75D /* GoogleService-Info.plist in Resources */,
 				B01C91AB2C35C9F5001D6ECD /* SF-Pro-Rounded-Medium.otf in Resources */,
 				17731EAD2AE3E40C006B1511 /* LaunchScreen.storyboard in Resources */,
 				B0E207462C38C9FC007346FE /* search.json in Resources */,
@@ -481,7 +470,6 @@
 				B01C91AA2C35C9F3001D6ECD /* SF-Pro-Rounded-Regular.otf in Resources */,
 				B0F68EA42C455D0B004DB75D /* Localizable.strings in Resources */,
 				B02D2F652C398C8100A8F25B /* SF-Pro-Rounded-Bold.otf in Resources */,
-				B0E207402C36E11E007346FE /* GoogleService-Info.plist in Resources */,
 				B01C91A12C358095001D6ECD /* Bird.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -735,7 +723,7 @@
 		};
 		17731EB22AE3E40C006B1511 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D7E62519D2A6848277156333 /* Pods-ChatSerfodi.debug.xcconfig */;
+			baseConfigurationReference = A67252F64C313AE2A3B43A5F /* Pods-ChatSerfodi.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -769,7 +757,7 @@
 		};
 		17731EB32AE3E40C006B1511 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B81AC85BBDB7C5851256C091 /* Pods-ChatSerfodi.release.xcconfig */;
+			baseConfigurationReference = 2A2F8ABBBF50BCE1EA9ACD48 /* Pods-ChatSerfodi.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

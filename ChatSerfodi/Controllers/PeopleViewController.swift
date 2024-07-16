@@ -52,7 +52,13 @@ class PeopleViewController: UIViewController {
         setupSearchBar()
         setupCollectionView()
         createDataSource()
-        
+        setupUsersListener()
+    }
+    
+    
+    // MARK: Users Listener
+    
+    private func setupUsersListener() {
         usersListener = ListenerService.shared.usersObserve(users: users, completion: { (result) in
             switch result {
             case .success(let users):

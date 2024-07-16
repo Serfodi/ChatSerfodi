@@ -15,6 +15,13 @@ class ActiveChatCell: UICollectionViewCell, SelfConfiguringCell {
     let friendImageView = UIImageView()
     let friendName = UILabel(text: "User name", fount:  FontAppearance.defaultBoldText)
     let lastMassage = UILabel(text: "How a you", fount:  FontAppearance.secondDefault, color: ColorAppearance.black.color().withAlphaComponent(0.5))
+    
+    let dateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm"
+        return dateFormatter
+    }()
+    
     var menuButton: MenuButton!
     
     var chat: SChat!
@@ -42,11 +49,13 @@ class ActiveChatCell: UICollectionViewCell, SelfConfiguringCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
     func configure<U>(with value: U) where U : Hashable {
         guard let value: SChat = value as? SChat else { return }
         chat = value
         friendName.text = value.friendUsername
-        lastMassage.text = value.lastMessage
+        let timeString = dateFormatter.string(from: value.lastDate)
+        lastMassage.text = timeString + ": " + value.lastMessage
         friendImageView.sd_setImage(with: URL(string: value.friendUserImageString))
     }
         

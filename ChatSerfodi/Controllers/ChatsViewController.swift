@@ -16,7 +16,7 @@ class ChatsViewController: MessagesViewController {
     private var messageListener: ListenerRegistration?
     
     private let user: SUser
-    private let chat: SChat
+    private var chat: SChat
     
     init(user: SUser, chat: SChat) {
         self.user = user
@@ -67,6 +67,7 @@ class ChatsViewController: MessagesViewController {
                 } else {
                     self.insertNewMessage(message: message)
                 }
+                self.chat.lastMessage = message.descriptor
             case .failure(let error):
                 self.showAlert(with: "Error", and: error.localizedDescription)
             }

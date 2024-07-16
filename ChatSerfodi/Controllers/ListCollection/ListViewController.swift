@@ -79,13 +79,13 @@ class ListViewController: UIViewController {
         setupSearchBar()
         setupCollectionView()
         createDataSource()
-//        reloadData()
         setupConstraint()
         findButton.addTarget(self, action: #selector(showFind), for: .touchUpInside)
         acceptButton.addTarget(self, action: #selector(presentPerson), for: .touchUpInside)
         setupWaitingChatsListener()
         setupActivityChatObserve()
         NotificationCenter.default.addObserver(self, selector: #selector(deleteChat(_:)), name: Notification.Name("DeleteChat"), object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(reloadChat), name: Notification.Name("NewMassage"), object: nil)
     }
     deinit {
         waitingChatsListener?.remove()
@@ -97,7 +97,7 @@ class ListViewController: UIViewController {
         searchView.play()
     }
     
-    // MARK: Setup
+    // MARK: Listener
     
     private func setupWaitingChatsListener() {
         waitingChatsListener = ListenerService.shared.waitingChatObserve(chats: waitingChat, completion: { result in
@@ -224,9 +224,9 @@ extension ListViewController: UICollectionViewDelegate {
 }
 
 // MARK:  Data source
-extension ListViewController {
+private extension ListViewController {
     
-    private func createDataSource() {
+    func createDataSource() {
         dataSource = UICollectionViewDiffableDataSource<Section, SChat>(collectionView: collectionView, cellProvider: { (collectionView, indexPath, chat) -> UICollectionViewCell? in
             guard let section = Section(rawValue: indexPath.section) else { fatalError("Unknown section kind") }
             switch section {
@@ -244,21 +244,32 @@ extension ListViewController {
         }
     }
     
-    // MARK: ReloadData
+    // MARK: Reload Data
     
-    private func reloadData(with searchText: String? = nil) {
-        
-        let filtered = activeChat.filter { (chat) -> Bool in
+    func reloadData(with searchText: String? = nil) {
+        let filteredActiveChat = activeChat.filter { (chat) -> Bool in
             chat.contains(filter: searchText)
         }
-        
+        let filteredWaitingChat = activeChat.filter { (chat) -> Bool in
+            chat.contains(filter: searchText)
+        }
+        var snapshot = NSDiffableDataSourceSnapshot<Section, SChat>()
+        snapshot.appendSections([.waitingChat, .activeChat])
+        snapshot.appendItems(filteredWaitingChat, toSection: .waitingChat)
+        snapshot.appendItems(filteredActiveChat, toSection: .activeChat)
+        dataSource?.apply(snapshot, animatingDifferences: true)
+    }
+    
+    func reloadData() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, SChat>()
         snapshot.appendSections([.waitingChat, .activeChat])
         snapshot.appendItems(waitingChat, toSection: .waitingChat)
-        snapshot.appendItems(filtered, toSection: .activeChat)
-        
+        snapshot.appendItems(activeChat, toSection: .activeChat)
         dataSource?.apply(snapshot, animatingDifferences: true)
-        
+        emptyChats()
+    }
+    
+    func emptyChats() {
         if activeChat.isEmpty && waitingChat.isEmpty {
             collectionView.isHidden = true
             searchView.isHidden = false
@@ -301,7 +312,6 @@ extension ListViewController: UISearchBarDelegate {
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         reloadData()
     }
-    
 }
 
 

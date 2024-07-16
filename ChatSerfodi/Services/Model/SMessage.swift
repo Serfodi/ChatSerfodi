@@ -58,6 +58,17 @@ struct SMessage: MessageType  {
         return rep
     }
     
+    var descriptor: String {
+        switch kind {
+        case .text(let content):
+            return content
+        case .photo(_):
+            return NSLocalizedString("Photo", comment: "")
+        default:
+            return "Сообщение"
+        }
+    }
+    
     // MARK: init
     
     init(user: SUser, content: String) {
@@ -81,7 +92,7 @@ struct SMessage: MessageType  {
         if let content = data["content"] as? String {
             self.content = content
             downloadURL = nil
-        } else if let urlString = data["URL"] as? String, let url = URL(string: urlString) {
+        } else if let urlString = data["url"] as? String, let url = URL(string: urlString) {
             downloadURL = url
             self.content = ""
         } else {
