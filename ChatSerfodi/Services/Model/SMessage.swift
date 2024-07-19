@@ -113,7 +113,6 @@ struct SMessage: MessageType  {
     static func == (lhs: SMessage, rhs: SMessage) -> Bool {
         lhs.messageId == rhs.messageId
     }
-    
 }
 
 // MARK: Hashable

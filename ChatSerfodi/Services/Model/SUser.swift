@@ -17,6 +17,14 @@ struct SUser {
     var sex: String
     var id: String
     var isHide: Bool
+    var exitTime: Date
+    var isOnline: Bool
+        
+    static let repreUsername = "username"
+    static let repreAvatarStringURL =  "avatarStringURL"
+    static let repreDescription = "description"
+    static let repreExitTime = "exitTime"
+    static let repreIsOnline = "isOnline"
     
     var representation: [String : Any] {
         var rep: [String : Any] = [
@@ -26,14 +34,25 @@ struct SUser {
             "description" : description,
             "sex" : sex,
             "uid" : id,
-            "isHide": isHide
+            "isHide": isHide,
+            "exitTime" : exitTime,
+            "isOnline" : isOnline
         ]
         return rep
     }
     
     // MARK: init
     
-    init(username: String, email: String, avatarStringURL: String, description: String, sex: String, id: String, isHide: Bool) {
+    init(username: String,
+         email: String,
+         avatarStringURL: String,
+         description: String,
+         sex: String,
+         id: String,
+         isHide: Bool,
+         entryTime: Date,
+         isOnline: Bool
+    ) {
         self.username = username
         self.email = email
         self.avatarStringURL = avatarStringURL
@@ -41,6 +60,8 @@ struct SUser {
         self.sex = sex
         self.id = id
         self.isHide = isHide
+        self.exitTime = entryTime
+        self.isOnline = isOnline
     }
     
     init?(document: DocumentSnapshot) {
@@ -52,7 +73,9 @@ struct SUser {
             let description = data["description"] as? String,
             let sex = data["sex"] as? String,
             let uid = data["uid"] as? String,
-            let isHide = data["isHide"] as? Bool
+            let isHide = data["isHide"] as? Bool,
+            let exitTime = data["exitTime"] as? Timestamp,
+            let isOnline = data["isOnline"] as? Bool
         else { return nil }
         
         self.username = username
@@ -62,6 +85,8 @@ struct SUser {
         self.sex = sex
         self.id = uid
         self.isHide = isHide
+        self.exitTime = exitTime.dateValue()
+        self.isOnline = isOnline
     }
     
     init?(document: QueryDocumentSnapshot) {
@@ -73,7 +98,9 @@ struct SUser {
             let description = data["description"] as? String,
             let sex = data["sex"] as? String,
             let uid = data["uid"] as? String,
-            let isHide = data["isHide"] as? Bool
+            let isHide = data["isHide"] as? Bool,
+            let exitTime = data["exitTime"] as? Timestamp,
+            let isOnline = data["isOnline"] as? Bool
         else { return nil }
         
         self.username = username
@@ -83,8 +110,15 @@ struct SUser {
         self.sex = sex
         self.id = uid
         self.isHide = isHide
+        self.exitTime = exitTime.dateValue()
+        self.isOnline = isOnline
     }
             
+    // Equality
+    static func == (lhs: SUser, rhs: SUser) -> Bool {
+        lhs.id == rhs.id
+    }
+    
     /// Check contains `username` on filter.
     func contains(filter: String?) -> Bool {
         guard let filter = filter else { return true }
@@ -93,10 +127,6 @@ struct SUser {
         return username.lowercased().contains(lowercasedFilter)
     }
     
-    // Equality
-    static func == (lhs: SUser, rhs: SUser) -> Bool {
-        lhs.id == rhs.id
-    }
 }
 
 // MARK: Hashable & Decodable

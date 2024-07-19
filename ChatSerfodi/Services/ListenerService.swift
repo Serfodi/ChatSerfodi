@@ -61,6 +61,7 @@ class ListenerService {
     }
     
     
+    
     func waitingChatObserve(chats: [SChat], completion: @escaping (Result<[SChat], Error>)-> Void) -> ListenerRegistration? {
         var chats = chats
         let chatsRef = db.collection(["users", currentUserId, "waitingChats"].joined(separator: "/"))
@@ -104,9 +105,6 @@ class ListenerService {
                     guard !chats.contains(chat) else { return }
                     chats.append(chat)
                 case .modified:
-                    guard let index = chats.firstIndex(where: { chatF in
-                        chatF.friendId == chat.friendId
-                    }) else { return }
                     guard let index = chats.firstIndex(where: { $0.friendId == chat.friendId }) else { return }
                     chats[index] = chat
                 case .removed:
@@ -120,7 +118,17 @@ class ListenerService {
     }
     
     
-    
+    func userObserver(userId: String, completion: @escaping (Result<SUser, Error>)-> Void) -> ListenerRegistration? {
+        let userListener = userRef.document(userId).addSnapshotListener { (documentSnapshot, error) in
+            guard let documentSnapshot = documentSnapshot else {
+                completion(.failure(error!))
+                return
+            }
+            guard let sUser = SUser(document: documentSnapshot) else { return }
+            completion(.success(sUser))
+        }
+        return userListener
+    }
     
     // Наблюдатель для сообщений
     

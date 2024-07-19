@@ -64,6 +64,7 @@
 		B09186512B2A641900965DC1 /* WaitingChatsNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09186502B2A641900965DC1 /* WaitingChatsNavigation.swift */; };
 		B09186562B2B3FC100965DC1 /* ChatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09186552B2B3FC100965DC1 /* ChatsViewController.swift */; };
 		B09186582B2B7D6C00965DC1 /* UIScrolIView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09186572B2B7D6C00965DC1 /* UIScrolIView + Extension.swift */; };
+		B0CFB0DB2C480A2F009595F8 /* Date + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFB0DA2C480A2F009595F8 /* Date + Extension.swift */; };
 		B0E207422C37060C007346FE /* ProfileSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E207412C37060C007346FE /* ProfileSettingViewController.swift */; };
 		B0E207442C38010D007346FE /* UINavigationBar + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E207432C38010D007346FE /* UINavigationBar + Extension.swift */; };
 		B0E207462C38C9FC007346FE /* search.json in Resources */ = {isa = PBXBuildFile; fileRef = B0E207452C38C9FC007346FE /* search.json */; };
@@ -138,6 +139,7 @@
 		B09186502B2A641900965DC1 /* WaitingChatsNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingChatsNavigation.swift; sourceTree = "<group>"; };
 		B09186552B2B3FC100965DC1 /* ChatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsViewController.swift; sourceTree = "<group>"; };
 		B09186572B2B7D6C00965DC1 /* UIScrolIView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrolIView + Extension.swift"; sourceTree = "<group>"; };
+		B0CFB0DA2C480A2F009595F8 /* Date + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date + Extension.swift"; sourceTree = "<group>"; };
 		B0E207412C37060C007346FE /* ProfileSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingViewController.swift; sourceTree = "<group>"; };
 		B0E207432C38010D007346FE /* UINavigationBar + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationBar + Extension.swift"; sourceTree = "<group>"; };
 		B0E207452C38C9FC007346FE /* search.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = search.json; sourceTree = "<group>"; };
@@ -184,14 +186,12 @@
 				17731EA22AE3E406006B1511 /* SceneDelegate.swift */,
 				B06BA8EF2B1C96AC00120FB5 /* Services */,
 				17ED2C442AFE5A3E00251BAF /* Controllers */,
-				B0F68EA62C455D0B004DB75D /* Localizable.strings */,
 				B0F8E5962B07BD8B00C2B00D /* Protocol */,
 				17731EBD2AED46F6006B1511 /* Extension */,
 				B06BA8F62B1CA89300120FB5 /* Helpers */,
 				B01C918B2C356C3A001D6ECD /* Design */,
 				17731EAB2AE3E40C006B1511 /* LaunchScreen.storyboard */,
 				17731EAE2AE3E40C006B1511 /* Info.plist */,
-				B0F68EAB2C45B807004DB75D /* GoogleService-Info.plist */,
 				B036EF622C36C8E1007F5E3B /* Sourses */,
 			);
 			path = ChatSerfodi;
@@ -210,6 +210,7 @@
 				B09186482B291A9100965DC1 /* UIImage + Extension.swift */,
 				B09186442B29088800965DC1 /* UIApplication + Extension.swift */,
 				B09186572B2B7D6C00965DC1 /* UIScrolIView + Extension.swift */,
+				B0CFB0DA2C480A2F009595F8 /* Date + Extension.swift */,
 			);
 			path = " UIkit";
 			sourceTree = "<group>";
@@ -251,7 +252,7 @@
 				B0E207412C37060C007346FE /* ProfileSettingViewController.swift */,
 				B01975252B0E8CE7005D4321 /* ProfileViewController.swift */,
 				B019752B2B164766005D4321 /* ChatRequestViewController.swift */,
-				B09186552B2B3FC100965DC1 /* ChatsViewController.swift */,
+				B0CFB0D92C47FF88009595F8 /* ChatViewContoller */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -286,6 +287,7 @@
 		B01C918B2C356C3A001D6ECD /* Design */ = {
 			isa = PBXGroup;
 			children = (
+				B0F68EA62C455D0B004DB75D /* Localizable.strings */,
 				B01C918D2C356C3A001D6ECD /* FontAppearance.swift */,
 				B01C918F2C356C3A001D6ECD /* ColorAppearance.swift */,
 				B01C918C2C356C3A001D6ECD /* SchemeColor.swift */,
@@ -329,6 +331,7 @@
 		B036EF622C36C8E1007F5E3B /* Sourses */ = {
 			isa = PBXGroup;
 			children = (
+				B0F68EAB2C45B807004DB75D /* GoogleService-Info.plist */,
 				17731EA92AE3E40C006B1511 /* Assets.xcassets */,
 				B01C919F2C357EE0001D6ECD /* Animation */,
 				B01C91942C356C60001D6ECD /* Font */,
@@ -357,6 +360,14 @@
 				B06BA8FB2B1CB9F000120FB5 /* UserError.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		B0CFB0D92C47FF88009595F8 /* ChatViewContoller */ = {
+			isa = PBXGroup;
+			children = (
+				B09186552B2B3FC100965DC1 /* ChatsViewController.swift */,
+			);
+			path = ChatViewContoller;
 			sourceTree = "<group>";
 		};
 		B0F68E9D2C448E8C004DB75D /* LottieExtension */ = {
@@ -559,6 +570,7 @@
 				B0F8E5902B07ACA800C2B00D /* GradientView.swift in Sources */,
 				17B2FB8A2AFBCC6B00EECA01 /* SetupProfileViewController.swift in Sources */,
 				17B2FB8C2AFBD06C00EECA01 /* AddPhotoView.swift in Sources */,
+				B0CFB0DB2C480A2F009595F8 /* Date + Extension.swift in Sources */,
 				17731EA32AE3E406006B1511 /* SceneDelegate.swift in Sources */,
 				B0F8E5932B07BC8A00C2B00D /* WaitingChatCell.swift in Sources */,
 				17731EB52AE3E9BD006B1511 /* UIButton + Extension.swift in Sources */,

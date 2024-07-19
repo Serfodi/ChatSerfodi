@@ -20,8 +20,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let clientID = FirebaseApp.app()?.options.clientID {
             let config = GIDConfiguration(clientID: clientID)
             GIDSignIn.sharedInstance.configuration = config
-        }
-        
+            
+            }
+    
         return true
     }
 
@@ -37,6 +38,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {}
-    
+ 
 }
 

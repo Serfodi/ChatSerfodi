@@ -216,7 +216,7 @@ extension ListViewController: UICollectionViewDelegate {
             chatRequestVC.delegate = self
             self.present(chatRequestVC, animated: true)
         case .activeChat:
-            let chatVC = ChatsViewController(user: currentUser, chat: chat)
+            let chatVC = ChatsViewController(chat: chat)
             chatVC.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(chatVC, animated: true)
         }
@@ -239,7 +239,7 @@ private extension ListViewController {
         dataSource?.supplementaryViewProvider = { (collectionView, kind, indexPath) in
             guard let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SectionHeader.reuseId, for: indexPath) as? SectionHeader else { fatalError("Can not create new section") }
             guard let section = Section(rawValue: indexPath.section) else { fatalError("Unknown section kind") }
-            sectionHeader.configure(text: section.description(), fount: FontAppearance.defaultBoldText, textColor: ColorAppearance.black.color().withAlphaComponent(0.5))
+            sectionHeader.configure(text: section.description(), fount: FontAppearance.defaultBoldText, textColor: ColorAppearance.headerTable.color())
             return sectionHeader
         }
     }
@@ -272,10 +272,12 @@ private extension ListViewController {
     func emptyChats() {
         if activeChat.isEmpty && waitingChat.isEmpty {
             collectionView.isHidden = true
+            navigationItem.searchController?.searchBar.isHidden = true
             searchView.isHidden = false
             findButton.isHidden = false
         } else {
             collectionView.isHidden = false
+            navigationItem.searchController?.searchBar.isHidden = false
             searchView.isHidden = true
             findButton.isHidden = true
         }

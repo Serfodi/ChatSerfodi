@@ -34,8 +34,8 @@ public extension CGSize {
     }
     
     func rightCentered(in rect: CGRect) -> CGRect {
-            return CGRect(origin: CGPoint(x: rect.maxX - self.width, y: rect.minY + floor((rect.height - self.height) / 2.0)), size: self)
-        }
+        return CGRect(origin: CGPoint(x: rect.maxX - self.width, y: rect.minY + floor((rect.height - self.height) / 2.0)), size: self)
+    }
     
 }
 

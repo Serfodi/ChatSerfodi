@@ -25,6 +25,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                     let mainTabBar = MainTabBarController(currentUser: suser)
                     mainTabBar.modalPresentationStyle = .fullScreen
                     self.window?.rootViewController = mainTabBar
+                    FirestoreService.shared.updateIsOnline(is: true)
                 case .failure(_):
                     self.window?.rootViewController = AuthViewController()
                 }
@@ -34,6 +35,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
         
         window?.makeKeyAndVisible() 
+    }
+ 
+    func sceneDidBecomeActive(_ scene: UIScene) {
+        FirestoreService.shared.updateIsOnline(is: true)
+    }    
+    
+    func sceneWillResignActive(_ scene: UIScene) {
+        FirestoreService.shared.updateIsOnline(is: false)
+        FirestoreService.shared.updateEntryTime()
     }
     
 }

@@ -16,7 +16,7 @@ extension UINavigationBar {
         appearance.shadowImage = UIImage()
         appearance.shadowColor = .clear
         appearance.backgroundColor = .clear
-        appearance.backgroundEffect = UIBlurEffect(style: .regular)
+        appearance.backgroundEffect = UIBlurEffect(style: .light)
         standardAppearance = appearance
         scrollEdgeAppearance = appearance
     }

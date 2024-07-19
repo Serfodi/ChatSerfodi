@@ -48,7 +48,7 @@ class FirestoreService {
             return
         }
         
-        var suser = SUser(username: username!, email: email, avatarStringURL: "Not exist", description: description!, sex: sex, id: id, isHide: false)
+        var suser = SUser(username: username!, email: email, avatarStringURL: "Not exist", description: description!, sex: sex, id: id, isHide: false, entryTime: Date(), isOnline: true)
         
         StorageService.shared.upload(photo: avatarImage!) { result in
             switch result {
@@ -69,16 +69,16 @@ class FirestoreService {
     
     // MARK: Update Profile in Firebase
     
-    public func updateProfile(sUser: SUser,
-                       username: String,
-                       avatarImage: UIImage?,
-                       description: String,
-                       completion: @escaping (Result<SUser, Error>) -> Void) {
+    public func updateProfile(username: String,
+                              avatarImage: UIImage?,
+                              description: String,
+                              completion: @escaping (Result<SUser, Error>) -> Void) {
         
         guard Validators.ifFilled(username: username, description: description, sex: "sex") else {
             completion(.failure(UserError.notFilled))
             return
         }
+        
         
         StorageService.shared.upload(photo: avatarImage!) { result in
             switch result {
@@ -87,6 +87,15 @@ class FirestoreService {
                     if let error = error {
                         completion(.failure(error))
                     } else {
+                        self.currentUser = SUser(username: username,
+                                            email: self.currentUser.email,
+                                            avatarStringURL: url.absoluteString,
+                                            description: description,
+                                            sex: self.currentUser.sex,
+                                            id: self.currentUser.id,
+                                            isHide: self.currentUser.isHide,
+                                            entryTime: self.currentUser.exitTime,
+                                            isOnline: self.currentUser.isOnline)
                         completion(.success(self.currentUser))
                     }
                 }
@@ -96,8 +105,43 @@ class FirestoreService {
         }
     }
     
+    /// Обновляет дату входа текущего пользователя
+    public func updateEntryTime(date: Date = Date()) {
+        guard let currentUser = currentUser else { return }
+        let currentSUser = usersRef.document(currentUser.id)
+        currentSUser.updateData([SUser.repreExitTime : date]) { error in
+            if let error = error {
+                fatalError(error.localizedDescription)
+            }
+        }
+    }
+    
+    public func updateIsOnline(is online: Bool) {
+        guard let currentUser = currentUser else { return }
+        let user = usersRef.document(currentUser.id)
+        
+        user.updateData([SUser.repreIsOnline : online]) { error in
+            if let error = error {
+                fatalError(error.localizedDescription)
+            }
+            
+            self.activeChatsRef.getDocuments { querySnapshot, error in
+                guard let querySnapshot = querySnapshot else {
+                    return
+                }
+                querySnapshot.documents.forEach { doc in
+                    guard let chat = SChat(document: doc) else { return }
+                    let friend = self.usersRef.document(chat.friendId).collection("activeChats").document(currentUser.id)
+                    friend.updateData([SUser.repreIsOnline : online])
+                }
+            }
+            
+        }
+    }
+    
     // MARK: Get User Data in Firebase
     
+    /// - Warning: Присваивает `currentUser`
     public func getUserData(user: User, completion: @escaping (Result<SUser, Error>) -> Void) {
         let docRef = usersRef.document(user.uid)
         docRef.getDocument { (document, error) in
@@ -107,6 +151,21 @@ class FirestoreService {
                     return
                 }
                 self.currentUser = suser
+                completion(.success(suser))
+            } else {
+                completion(.failure(UserError.cannotGetUserInfo))
+            }
+        }
+    }
+    
+    public func getUserData(userId: String, completion: @escaping (Result<SUser, Error>) -> Void) {
+        let docRef = usersRef.document(userId)
+        docRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                guard let suser = SUser(document: document) else {
+                    completion(.failure(UserError.cannotGetUserInfo))
+                    return
+                }
                 completion(.success(suser))
             } else {
                 completion(.failure(UserError.cannotGetUserInfo))
@@ -131,7 +190,7 @@ class FirestoreService {
         let messageRef = referenceFrom.document(self.currentUser.id).collection("messages")
         
         let message = SMessage(user: currentUser, content: message)
-        let chat = SChat(friendUsername: currentUser.username, friendUserImageString: currentUser.avatarStringURL, lastMessage: message.content , friendId: currentUser.id, lastDate: Date())
+        let chat = SChat(friendUsername: currentUser.username, friendUserImageString: currentUser.avatarStringURL, lastMessage: message.content , friendId: currentUser.id, lastDate: Date(), isOnline: currentUser.isOnline)
         
         referenceFrom.document(currentUser.id).setData(chat.representation) { error in
             if let error = error {
@@ -322,12 +381,12 @@ class FirestoreService {
         let chatForFriend = SChat(friendUsername: currentUser.username,
                                   friendUserImageString: currentUser.avatarStringURL,
                                   lastMessage: message.descriptor,
-                                  friendId: currentUser.id, lastDate: Date())
+                                  friendId: currentUser.id, lastDate: Date(), isOnline: currentUser.isOnline)
         
         let chatForMe = SChat(friendUsername: chat.friendUsername,
                               friendUserImageString: chat.friendUserImageString,
                               lastMessage: message.descriptor,
-                              friendId: chat.friendId, lastDate: Date())
+                              friendId: chat.friendId, lastDate: Date(), isOnline: chat.isOnline)
         
         
         friendRef.setData(chatForFriend.representation) { error in

@@ -51,7 +51,7 @@ private extension MainTabBarController {
         tabBar.shadowImage = UIImage()
         tabBar.backgroundImage = UIImage()
         tabBar.isTranslucent = true
-        tabBar.backgroundColor = .white
+        tabBar.backgroundColor = ColorAppearance.clearWhite.color()
         tabBar.addBlur(blur: UIBlurEffect(style: .regular))
     }
 }

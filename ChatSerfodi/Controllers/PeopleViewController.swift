@@ -11,7 +11,7 @@ import FirebaseFirestore
 class PeopleViewController: UIViewController {
     
     enum Padding {
-        static let first: CGFloat = 15
+        static let first: CGFloat = 20
         static let second: CGFloat = 20
     }
     
@@ -80,6 +80,7 @@ class PeopleViewController: UIViewController {
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.delegate = self
         navigationController?.navigationBar.addBGBlur()
+        navigationController?.navigationBar.backgroundColor = .clear
         navigationController?.navigationBar.standardAppearance.titleTextAttributes = [.font: FontAppearance.buttonText, .foregroundColor: ColorAppearance.black.color()]
         navigationController?.navigationBar.scrollEdgeAppearance?.titleTextAttributes = [.font: FontAppearance.buttonText, .foregroundColor: ColorAppearance.black.color()]
     }
@@ -127,7 +128,7 @@ private extension PeopleViewController {
             }
             switch section {
             case .users(let items):
-                sectionHeader.configure(text: items, fount: FontAppearance.defaultBoldText, textColor: ColorAppearance.black.color().withAlphaComponent(0.5))
+                sectionHeader.configure(text: items, fount: FontAppearance.defaultBoldText, textColor: ColorAppearance.headerTable.color())
             }
             return sectionHeader
         }

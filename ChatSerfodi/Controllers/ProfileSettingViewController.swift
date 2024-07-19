@@ -68,7 +68,7 @@ class ProfileSettingViewController: UIViewController {
     
     @objc func saveProfile() {
         endEditing()
-        FirestoreService.shared.updateProfile(sUser: currentUser,
+        FirestoreService.shared.updateProfile(
                                               username: fullNameTextField.text!,
                                               avatarImage: photoView.image,
                                               description: aboutMeTextField.text!) { result in

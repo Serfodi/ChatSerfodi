@@ -16,6 +16,13 @@ class ActiveChatCell: UICollectionViewCell, SelfConfiguringCell {
     let friendName = UILabel(text: "User name", fount:  FontAppearance.defaultBoldText)
     let lastMassage = UILabel(text: "How a you", fount:  FontAppearance.secondDefault, color: ColorAppearance.black.color().withAlphaComponent(0.5))
     
+    var onlineRound: UIView = {
+        var view = UIView(frame: CGRect(origin: .zero,
+                                        size: CGSize(width: 10, height: 10)))
+        view.layer.cornerRadius = 5
+        return view
+    }()
+    
     let dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HH:mm"
@@ -25,6 +32,9 @@ class ActiveChatCell: UICollectionViewCell, SelfConfiguringCell {
     var menuButton: MenuButton!
     
     var chat: SChat!
+    
+    
+    // MARK: init
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -57,6 +67,7 @@ class ActiveChatCell: UICollectionViewCell, SelfConfiguringCell {
         let timeString = dateFormatter.string(from: value.lastDate)
         lastMassage.text = timeString + ": " + value.lastMessage
         friendImageView.sd_setImage(with: URL(string: value.friendUserImageString))
+        self.onlineRound.backgroundColor = value.isOnline ? .green : .clear
     }
         
 }
@@ -78,6 +89,7 @@ private extension ActiveChatCell {
         friendName.translatesAutoresizingMaskIntoConstraints = false
         lastMassage.translatesAutoresizingMaskIntoConstraints = false
         menuButton.translatesAutoresizingMaskIntoConstraints = false
+        onlineRound.translatesAutoresizingMaskIntoConstraints = false
         
         friendImageView.backgroundColor = .red
         
@@ -85,6 +97,7 @@ private extension ActiveChatCell {
         addSubview(lastMassage)
         addSubview(friendName)
         addSubview(menuButton)
+        addSubview(onlineRound)
         
         NSLayoutConstraint.activate([
             friendImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 9),
@@ -111,6 +124,12 @@ private extension ActiveChatCell {
             menuButton.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             menuButton.heightAnchor.constraint(equalToConstant: 60),
             menuButton.widthAnchor.constraint(equalToConstant: 60)
+        ])
+        NSLayoutConstraint.activate([
+            onlineRound.bottomAnchor.constraint(equalTo: friendImageView.bottomAnchor, constant: 2),
+            onlineRound.trailingAnchor.constraint(equalTo: friendImageView.trailingAnchor, constant: 2),
+            onlineRound.heightAnchor.constraint(equalToConstant: 10),
+            onlineRound.widthAnchor.constraint(equalToConstant: 10)
         ])
     }
     

@@ -27,5 +27,8 @@ enum FontAppearance {
     static let small = Font.att(size: 14, design: .regular, weight: .regular)
     
     
+    enum Chat {
+        static let text = Font.att(size: 18, design: .rounded, weight: .regular)
+    }
     
 }
