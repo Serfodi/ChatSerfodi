@@ -128,7 +128,7 @@ private extension PeopleViewController {
             }
             switch section {
             case .users(let items):
-                sectionHeader.configure(text: items, fount: FontAppearance.defaultBoldText, textColor: ColorAppearance.headerTable.color())
+                sectionHeader.configure(text: items, fount: FontAppearance.defaultBoldText, textColor: ColorAppearance.lightBlack.color())
             }
             return sectionHeader
         }
@@ -165,10 +165,29 @@ extension PeopleViewController {
     }
     
     private func createUserSection() -> NSCollectionLayoutSection {
+        var itemCount = 2
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            itemCount = 3
+        }
+        
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .fractionalWidth(0.6))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, repeatingSubitem: item, count: 2)
+        var groupSize = NSCollectionLayoutSize(widthDimension: .absolute(1), heightDimension: .absolute(1))
+        
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .fractionalWidth(0.6))
+        } else if UIDevice.current.userInterfaceIdiom == .pad {
+            groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.97), heightDimension: .fractionalWidth(0.4))
+        }
+        
+        var group = NSCollectionLayoutGroup(layoutSize: groupSize)
+        
+        if #available(iOS 16.0, *) {
+            group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, repeatingSubitem: item, count: itemCount)
+        } else {
+            group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: itemCount)
+        }
+        
         group.interItemSpacing = .fixed(Padding.first)
         let section = NSCollectionLayoutSection(group: group)
         section.interGroupSpacing = Padding.first

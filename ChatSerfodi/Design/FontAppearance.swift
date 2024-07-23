@@ -10,7 +10,6 @@ import UIKit
 enum FontAppearance {
         
     static let logoTitle = Font.att(size: 50, design: .logo, weight: .none)
-    
     static let secondLogo = Font.att(size: 24, design: .logo, weight: .none)
     
     
@@ -28,7 +27,9 @@ enum FontAppearance {
     
     
     enum Chat {
+        static let topHeaderText = Font.att(size: 16, design: .rounded, weight: .regular)
         static let text = Font.att(size: 18, design: .rounded, weight: .regular)
+        static let bottomText = Font.att(size: 12, design: .rounded, weight: .medium)
     }
     
 }

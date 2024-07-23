@@ -66,14 +66,20 @@ public struct Font {
 }
 
 public extension NSAttributedString {
-    convenience init(string: String, font: UIFont? = nil, textColor: UIColor = UIColor.black) {
+    
+    convenience init(string: String, font: UIFont? = nil, textColor: UIColor? = nil) {
         var attributes: [NSAttributedString.Key: AnyObject] = [:]
         if let font = font {
             attributes[NSAttributedString.Key.font] = font
         }
-        attributes[NSAttributedString.Key.foregroundColor] = textColor
+        if textColor == nil {
+            attributes[NSAttributedString.Key.foregroundColor] = ColorAppearance.black.color()
+        } else {
+            attributes[NSAttributedString.Key.foregroundColor] = textColor
+        }
         self.init(string: string, attributes: attributes)
     }
+    
 }
 
 extension Font {

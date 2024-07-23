@@ -239,7 +239,7 @@ private extension ListViewController {
         dataSource?.supplementaryViewProvider = { (collectionView, kind, indexPath) in
             guard let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SectionHeader.reuseId, for: indexPath) as? SectionHeader else { fatalError("Can not create new section") }
             guard let section = Section(rawValue: indexPath.section) else { fatalError("Unknown section kind") }
-            sectionHeader.configure(text: section.description(), fount: FontAppearance.defaultBoldText, textColor: ColorAppearance.headerTable.color())
+            sectionHeader.configure(text: section.description(), fount: FontAppearance.defaultBoldText, textColor: ColorAppearance.lightBlack.color())
             return sectionHeader
         }
     }

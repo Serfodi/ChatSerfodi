@@ -139,6 +139,20 @@ class FirestoreService {
         }
     }
     
+    
+    public func updateChatTyping(friendId: String, typing: String, completion: @escaping (Error) -> Void) {
+        let friendChat = self.usersRef.document(friendId).collection("activeChats").document(currentUser.id)
+        friendChat.updateData(["typing" : typing]) { error in
+            if let error = error {
+                completion(error)
+            }
+        }
+    }
+    
+    
+    
+    
+    
     // MARK: Get User Data in Firebase
     
     /// - Warning: Присваивает `currentUser`
@@ -190,7 +204,7 @@ class FirestoreService {
         let messageRef = referenceFrom.document(self.currentUser.id).collection("messages")
         
         let message = SMessage(user: currentUser, content: message)
-        let chat = SChat(friendUsername: currentUser.username, friendUserImageString: currentUser.avatarStringURL, lastMessage: message.content , friendId: currentUser.id, lastDate: Date(), isOnline: currentUser.isOnline)
+        let chat = SChat(friendUsername: currentUser.username, friendUserImageString: currentUser.avatarStringURL, lastMessage: message.content , friendId: currentUser.id, lastDate: Date(), isOnline: currentUser.isOnline, typing: "nil")
         
         referenceFrom.document(currentUser.id).setData(chat.representation) { error in
             if let error = error {
@@ -381,12 +395,12 @@ class FirestoreService {
         let chatForFriend = SChat(friendUsername: currentUser.username,
                                   friendUserImageString: currentUser.avatarStringURL,
                                   lastMessage: message.descriptor,
-                                  friendId: currentUser.id, lastDate: Date(), isOnline: currentUser.isOnline)
+                                  friendId: currentUser.id, lastDate: Date(), isOnline: currentUser.isOnline, typing: "отправка")
         
         let chatForMe = SChat(friendUsername: chat.friendUsername,
                               friendUserImageString: chat.friendUserImageString,
                               lastMessage: message.descriptor,
-                              friendId: chat.friendId, lastDate: Date(), isOnline: chat.isOnline)
+                              friendId: chat.friendId, lastDate: Date(), isOnline: chat.isOnline, typing: chat.typing)
         
         
         friendRef.setData(chatForFriend.representation) { error in

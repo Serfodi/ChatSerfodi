@@ -39,7 +39,10 @@ class ListenerService {
                 return
             }
             querySnapshot.documentChanges.forEach { (diff) in
-                guard let user = SUser(document: diff.document) else { return }
+                guard let user = SUser(document: diff.document) else {
+                    print("Error init SUser form QueryDocumentSnapshot")
+                    return
+                }
                 switch diff.type {
                 case .added:
                     guard !users.contains(user),
@@ -118,7 +121,7 @@ class ListenerService {
     }
     
     
-    func userObserver(userId: String, completion: @escaping (Result<SUser, Error>)-> Void) -> ListenerRegistration? {
+    public func userObserver(userId: String, completion: @escaping (Result<SUser, Error>)-> Void) -> ListenerRegistration? {
         let userListener = userRef.document(userId).addSnapshotListener { (documentSnapshot, error) in
             guard let documentSnapshot = documentSnapshot else {
                 completion(.failure(error!))
@@ -130,9 +133,22 @@ class ListenerService {
         return userListener
     }
     
+    public func chatObserve(chatId: String, completion: @escaping (Result<SChat, Error>)-> Void) -> ListenerRegistration? {
+        let userListener = activeChatsRef.document(chatId).addSnapshotListener { (documentSnapshot, error) in
+            guard let documentSnapshot = documentSnapshot else {
+                completion(.failure(error!))
+                return
+            }
+            guard let sChat = SChat(document: documentSnapshot) else { return }
+            completion(.success(sChat))
+        }
+        return userListener
+    }
+    
+    
     // Наблюдатель для сообщений
     
-    func messagesObserve(chat: SChat, completion: @escaping (Result<SMessage, Error>) -> Void) -> ListenerRegistration? {
+    public func messagesObserve(chat: SChat, completion: @escaping (Result<SMessage, Error>) -> Void) -> ListenerRegistration? {
         let ref = userRef.document(currentUserId).collection("activeChats").document(chat.friendId).collection("messages")
         let messagesListener = ref.addSnapshotListener { (querySnapshot, error) in
             guard let snapshot = querySnapshot else {

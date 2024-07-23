@@ -76,7 +76,9 @@ struct SUser {
             let isHide = data["isHide"] as? Bool,
             let exitTime = data["exitTime"] as? Timestamp,
             let isOnline = data["isOnline"] as? Bool
-        else { return nil }
+        else {
+            return nil
+        }
         
         self.username = username
         self.email = email

@@ -64,6 +64,11 @@
 		B09186512B2A641900965DC1 /* WaitingChatsNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09186502B2A641900965DC1 /* WaitingChatsNavigation.swift */; };
 		B09186562B2B3FC100965DC1 /* ChatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09186552B2B3FC100965DC1 /* ChatsViewController.swift */; };
 		B09186582B2B7D6C00965DC1 /* UIScrolIView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09186572B2B7D6C00965DC1 /* UIScrolIView + Extension.swift */; };
+		B09F24AB2C4EDACA00DB5E83 /* FullScreenImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09F24AA2C4EDACA00DB5E83 /* FullScreenImageViewController.swift */; };
+		B09F24AD2C4EE41800DB5E83 /* FullScreenPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09F24AC2C4EE41800DB5E83 /* FullScreenPresentationController.swift */; };
+		B09F24AF2C4EE56B00DB5E83 /* NSLayoutConstraint + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09F24AE2C4EE56B00DB5E83 /* NSLayoutConstraint + Extension.swift */; };
+		B09F24B42C4EEC1C00DB5E83 /* FullScreenTransitionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09F24B32C4EEC1C00DB5E83 /* FullScreenTransitionManager.swift */; };
+		B09F24B82C4EECAA00DB5E83 /* FullScreenAnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09F24B72C4EECAA00DB5E83 /* FullScreenAnimationController.swift */; };
 		B0CFB0DB2C480A2F009595F8 /* Date + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFB0DA2C480A2F009595F8 /* Date + Extension.swift */; };
 		B0E207422C37060C007346FE /* ProfileSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E207412C37060C007346FE /* ProfileSettingViewController.swift */; };
 		B0E207442C38010D007346FE /* UINavigationBar + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E207432C38010D007346FE /* UINavigationBar + Extension.swift */; };
@@ -139,6 +144,11 @@
 		B09186502B2A641900965DC1 /* WaitingChatsNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingChatsNavigation.swift; sourceTree = "<group>"; };
 		B09186552B2B3FC100965DC1 /* ChatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsViewController.swift; sourceTree = "<group>"; };
 		B09186572B2B7D6C00965DC1 /* UIScrolIView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrolIView + Extension.swift"; sourceTree = "<group>"; };
+		B09F24AA2C4EDACA00DB5E83 /* FullScreenImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenImageViewController.swift; sourceTree = "<group>"; };
+		B09F24AC2C4EE41800DB5E83 /* FullScreenPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenPresentationController.swift; sourceTree = "<group>"; };
+		B09F24AE2C4EE56B00DB5E83 /* NSLayoutConstraint + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSLayoutConstraint + Extension.swift"; sourceTree = "<group>"; };
+		B09F24B32C4EEC1C00DB5E83 /* FullScreenTransitionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenTransitionManager.swift; sourceTree = "<group>"; };
+		B09F24B72C4EECAA00DB5E83 /* FullScreenAnimationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenAnimationController.swift; sourceTree = "<group>"; };
 		B0CFB0DA2C480A2F009595F8 /* Date + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date + Extension.swift"; sourceTree = "<group>"; };
 		B0E207412C37060C007346FE /* ProfileSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingViewController.swift; sourceTree = "<group>"; };
 		B0E207432C38010D007346FE /* UINavigationBar + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationBar + Extension.swift"; sourceTree = "<group>"; };
@@ -211,6 +221,7 @@
 				B09186442B29088800965DC1 /* UIApplication + Extension.swift */,
 				B09186572B2B7D6C00965DC1 /* UIScrolIView + Extension.swift */,
 				B0CFB0DA2C480A2F009595F8 /* Date + Extension.swift */,
+				B09F24AE2C4EE56B00DB5E83 /* NSLayoutConstraint + Extension.swift */,
 			);
 			path = " UIkit";
 			sourceTree = "<group>";
@@ -253,6 +264,7 @@
 				B01975252B0E8CE7005D4321 /* ProfileViewController.swift */,
 				B019752B2B164766005D4321 /* ChatRequestViewController.swift */,
 				B0CFB0D92C47FF88009595F8 /* ChatViewContoller */,
+				B09F24B62C4EEC4800DB5E83 /* FullScreenImage */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -362,6 +374,17 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		B09F24B62C4EEC4800DB5E83 /* FullScreenImage */ = {
+			isa = PBXGroup;
+			children = (
+				B09F24B32C4EEC1C00DB5E83 /* FullScreenTransitionManager.swift */,
+				B09F24AA2C4EDACA00DB5E83 /* FullScreenImageViewController.swift */,
+				B09F24AC2C4EE41800DB5E83 /* FullScreenPresentationController.swift */,
+				B09F24B72C4EECAA00DB5E83 /* FullScreenAnimationController.swift */,
+			);
+			name = FullScreenImage;
+			sourceTree = "<group>";
+		};
 		B0CFB0D92C47FF88009595F8 /* ChatViewContoller */ = {
 			isa = PBXGroup;
 			children = (
@@ -426,6 +449,8 @@
 			dependencies = (
 			);
 			name = ChatSerfodi;
+			packageProductDependencies = (
+			);
 			productName = ChatSerfodi;
 			productReference = B0F68EAD2C45B8A4004DB75D /* ChatSerfodi.app */;
 			productType = "com.apple.product-type.application";
@@ -455,6 +480,9 @@
 				ru,
 			);
 			mainGroup = 17731E942AE3E406006B1511;
+			packageReferences = (
+				B09F24B02C4EE60300DB5E83 /* XCRemoteSwiftPackageReference "TinyConstraints" */,
+			);
 			productRefGroup = 17731E942AE3E406006B1511;
 			projectDirPath = "";
 			projectRoot = "";
@@ -537,6 +565,7 @@
 				17B2FB882AFBC33E00EECA01 /* LoginViewController.swift in Sources */,
 				B06BA8FA2B1CB4AA00120FB5 /* FirestoreService.swift in Sources */,
 				17731EC12AED4C02006B1511 /* StackView + Extension.swift in Sources */,
+				B09F24AD2C4EE41800DB5E83 /* FullScreenPresentationController.swift in Sources */,
 				B06BA8FC2B1CB9F000120FB5 /* UserError.swift in Sources */,
 				B019752C2B164766005D4321 /* ChatRequestViewController.swift in Sources */,
 				B091864B2B29B05200965DC1 /* ListenerService.swift in Sources */,
@@ -545,6 +574,7 @@
 				B09186562B2B3FC100965DC1 /* ChatsViewController.swift in Sources */,
 				B0E207442C38010D007346FE /* UINavigationBar + Extension.swift in Sources */,
 				17731EA52AE3E406006B1511 /* AuthViewController.swift in Sources */,
+				B09F24AB2C4EDACA00DB5E83 /* FullScreenImageViewController.swift in Sources */,
 				B0F8E58E2B07A51900C2B00D /* ActiveChatCell.swift in Sources */,
 				B09186512B2A641900965DC1 /* WaitingChatsNavigation.swift in Sources */,
 				B01975282B0E9B46005D4321 /* InsertableTextField.swift in Sources */,
@@ -560,6 +590,7 @@
 				17B2FB842AFBB3EE00EECA01 /* SignUpViewController.swift in Sources */,
 				B01975242B0E2979005D4321 /* UIViewController + Extension.swift in Sources */,
 				17731EBB2AE3FC8C006B1511 /* Label + Extension.swift in Sources */,
+				B09F24B42C4EEC1C00DB5E83 /* FullScreenTransitionManager.swift in Sources */,
 				B019752A2B0E9F96005D4321 /* UIView + Extension.swift in Sources */,
 				B01C91912C356C3A001D6ECD /* FontAppearance.swift in Sources */,
 				B01C91922C356C3A001D6ECD /* Font.swift in Sources */,
@@ -575,6 +606,7 @@
 				B0F8E5932B07BC8A00C2B00D /* WaitingChatCell.swift in Sources */,
 				17731EB52AE3E9BD006B1511 /* UIButton + Extension.swift in Sources */,
 				B06BA8F32B1CA01D00120FB5 /* Validators.swift in Sources */,
+				B09F24AF2C4EE56B00DB5E83 /* NSLayoutConstraint + Extension.swift in Sources */,
 				B091864F2B2A502E00965DC1 /* SMessage.swift in Sources */,
 				17B2FB8E2AFBDB7A00EECA01 /* SegmentedControl + Extension.swift in Sources */,
 				B01C91902C356C3A001D6ECD /* SchemeColor.swift in Sources */,
@@ -587,6 +619,7 @@
 				B019751D2B0E152B005D4321 /* SUser.swift in Sources */,
 				17ED2C462AFE5A6F00251BAF /* MainTabBarController.swift in Sources */,
 				B09186582B2B7D6C00965DC1 /* UIScrolIView + Extension.swift in Sources */,
+				B09F24B82C4EECAA00DB5E83 /* FullScreenAnimationController.swift in Sources */,
 				B06BA8F52B1CA5A900120FB5 /* AuthError.swift in Sources */,
 				B0E207422C37060C007346FE /* ProfileSettingViewController.swift in Sources */,
 			);
@@ -749,8 +782,8 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -763,7 +796,7 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -783,8 +816,8 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -797,7 +830,7 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -823,6 +856,17 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B09F24B02C4EE60300DB5E83 /* XCRemoteSwiftPackageReference "TinyConstraints" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/roberthein/TinyConstraints";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
 	};
 	rootObject = 17731E952AE3E406006B1511 /* Project object */;
 }

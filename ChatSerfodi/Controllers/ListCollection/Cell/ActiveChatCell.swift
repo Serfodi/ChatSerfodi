@@ -65,7 +65,11 @@ class ActiveChatCell: UICollectionViewCell, SelfConfiguringCell {
         chat = value
         friendName.text = value.friendUsername
         let timeString = dateFormatter.string(from: value.lastDate)
-        lastMassage.text = timeString + ": " + value.lastMessage
+        if value.typing != "nil" {
+            lastMassage.text = value.typing
+        } else {
+            lastMassage.text = timeString + ": " + value.lastMessage
+        }
         friendImageView.sd_setImage(with: URL(string: value.friendUserImageString))
         self.onlineRound.backgroundColor = value.isOnline ? .green : .clear
     }
@@ -157,7 +161,9 @@ final class MenuButton: UIButton {
     private func setup(action: [UIAction]) {
         let moreImage = UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(pointSize: 20))
         menu = UIMenu(title: "", image: moreImage, identifier: nil, options: .destructive, children: action)
-        menu?.preferredElementSize = .large
+        if #available(iOS 16.0, *) {
+            menu?.preferredElementSize = .large
+        }
         setImage(moreImage, for: .normal)
         tintColor = ColorAppearance.black.color()
         showsMenuAsPrimaryAction = true

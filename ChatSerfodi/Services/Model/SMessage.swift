@@ -16,6 +16,25 @@ struct ImageItem: MediaItem {
     var image: UIImage?
     var placeholderImage: UIImage
     var size: CGSize
+    
+//    init(image: UIImage) {
+//        self.image = image
+//        size = CGSize(width: 240, height: 240)
+//        placeholderImage = UIImage()
+//    }
+    
+//    init(imageURL: URL) {
+//        url = imageURL
+//        size = CGSize(width: 240, height: 240)
+//        placeholderImage = UIImage(imageLiteralResourceName: "image_message_placeholder")
+//    }
+//
+//    init(placeholderImage: UIImage, size: CGSize) {
+//        self.image = placeholderImage
+//        self.size = size
+//        self.placeholderImage = UIImage()
+//    }
+    
 }
 
 
@@ -95,6 +114,8 @@ struct SMessage: MessageType  {
         } else if let urlString = data["url"] as? String, let url = URL(string: urlString) {
             downloadURL = url
             self.content = ""
+//            self.size = CGSize(width: 240, height: 240)
+//            self.image = UIImage(imageLiteralResourceName: "image_message_placeholder")
         } else {
             return nil
         }

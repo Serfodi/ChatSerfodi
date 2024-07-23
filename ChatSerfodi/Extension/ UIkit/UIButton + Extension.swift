@@ -11,6 +11,7 @@ import Lottie
 
 extension UIButton {
     
+    /// Текстовая кнопка
     convenience init(title: String, titleColor: UIColor, fount: UIFont) {
         self.init(type: .system)
         self.setTitle(NSLocalizedString(title, comment: ""), for: .normal)
@@ -47,6 +48,25 @@ extension UIButton {
         }
         self.heightAnchor.constraint(equalToConstant: 54).isActive = true
     }
+    
+    convenience init(title: String,
+                     titleColor: UIColor,
+                     backgroundEffect: UIVisualEffect,
+                     fount: UIFont? = FontAppearance.buttonText,
+                     cornerRadius: CornerRadiusType = .round) {
+        self.init(type: .system)
+        self.setTitle(NSLocalizedString(title, comment: ""), for: .normal)
+        self.setTitleColor(titleColor, for: .normal)
+        self.titleLabel?.font = fount
+        self.backgroundColor = .clear
+        
+        
+        
+        if cornerRadius == .round {
+            self.layer.cornerRadius = 27
+        }
+    }
+    
     
     func customizeGoogleButton() {
         let googleAnimationLogo = LottieAnimationView(name: "google")

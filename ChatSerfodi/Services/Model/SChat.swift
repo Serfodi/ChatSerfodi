@@ -15,6 +15,7 @@ struct SChat {
     var friendId: String
     var lastDate: Date
     var isOnline: Bool
+    var typing: String
     
     var representation: [String: Any] {
         var rep: [String: Any] = ["friendUsername": friendUsername]
@@ -23,18 +24,20 @@ struct SChat {
         rep["friendId"] = friendId
         rep["lastDate"] = lastDate
         rep["isOnline"] = isOnline
+        rep["typing"] = typing
         return rep
     }
     
     // MARK: init
     
-    init(friendUsername: String, friendUserImageString: String, lastMessage: String, friendId: String, lastDate: Date, isOnline: Bool) {
+    init(friendUsername: String, friendUserImageString: String, lastMessage: String, friendId: String, lastDate: Date, isOnline: Bool, typing: String) {
         self.friendUsername = friendUsername
         self.friendUserImageString = friendUserImageString
         self.lastMessage = lastMessage
         self.friendId = friendId
         self.lastDate = lastDate
         self.isOnline = isOnline
+        self.typing = typing
     }
     
     init?(document: QueryDocumentSnapshot) {
@@ -45,7 +48,8 @@ struct SChat {
             let lastMessage = data["lastMessage"] as? String,
             let friendId = data["friendId"] as? String,
             let lastDate = data["lastDate"] as? Timestamp,
-            let isOnline = data["isOnline"] as? Bool
+            let isOnline = data["isOnline"] as? Bool,
+            let typing = data["typing"] as? String
         else {
             return nil
         }
@@ -55,6 +59,27 @@ struct SChat {
         self.friendId = friendId
         self.lastDate = lastDate.dateValue()
         self.isOnline = isOnline
+        self.typing = typing
+    }
+    
+    init?(document: DocumentSnapshot) {
+        guard let data = document.data() else { return nil }
+        guard
+            let friendUsername = data["friendUsername"] as? String,
+            let friendUserImageString = data["friendUserImageString"] as? String,
+            let lastMessage = data["lastMessage"] as? String,
+            let friendId = data["friendId"] as? String,
+            let lastDate = data["lastDate"] as? Timestamp,
+            let isOnline = data["isOnline"] as? Bool,
+            let typing = data["typing"] as? String
+        else { return nil }
+        self.friendUsername = friendUsername
+        self.friendUserImageString = friendUserImageString
+        self.lastMessage = lastMessage
+        self.friendId = friendId
+        self.lastDate = lastDate.dateValue()
+        self.isOnline = isOnline
+        self.typing = typing
     }
     
     // Equality
@@ -67,7 +92,7 @@ struct SChat {
 //    }
     
     static func == (lhs: SChat, rhs: SChat) -> Bool {
-        (lhs.isOnline == rhs.isOnline) && lhs.lastMessage == rhs.lastMessage && lhs.friendId == rhs.friendId
+        (lhs.isOnline == rhs.isOnline) && lhs.typing == rhs.typing && lhs.lastMessage == rhs.lastMessage && lhs.friendId == rhs.friendId
     }
     
     

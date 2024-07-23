@@ -11,11 +11,8 @@ import InputBarAccessoryView
 import FirebaseFirestore
 
 private enum Const {
-    /// Margin from right anchor of safe area to right anchor of Image
     static let ImageRightMargin: CGFloat = 16
-    /// Margin from bottom anchor of NavBar to bottom anchor of Image for Large NavBar state
     static let ImageBottomMarginForLargeState: CGFloat = 12
-    /// Margin from bottom anchor of NavBar to bottom anchor of Image for Small NavBar state
     static let ImageBottomMarginForSmallState: CGFloat = 6
     static let ImageSize: CGFloat = 40
 }
@@ -26,16 +23,18 @@ class ChatsViewController: MessagesViewController {
     private let titleLabel = UILabel(text: "name", alignment: .center, fount: FontAppearance.buttonText, color: ColorAppearance.black.color())
     private let subtitleLabel = UILabel(text: "был недавно", alignment: .center, fount: FontAppearance.small, color: ColorAppearance.black.color())
     
+    private var fullScreenTransitionManager: FullScreenTransitionManager?
+    
     private var messages = [SMessage]()
+    
     private var messageListener: ListenerRegistration?
+    private var chatListener: ListenerRegistration?
     private var userListener: ListenerRegistration?
     
     private var user: SUser {
         FirestoreService.shared.currentUser
     }
     private var chat: SChat
-    
-    
     
     // DateFormatter
     
@@ -61,10 +60,12 @@ class ChatsViewController: MessagesViewController {
     // MARK: init
     
     init(chat: SChat) {
-//        self.user = user
         self.chat = chat
         super.init(nibName: nil, bundle: nil)
         titleLabel.text = chat.friendUsername
+        if chat.typing != "nil" {
+            subtitleLabel.text = chat.typing
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -75,7 +76,6 @@ class ChatsViewController: MessagesViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         messageInputBar.delegate = self
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
@@ -84,12 +84,22 @@ class ChatsViewController: MessagesViewController {
         configuration()
         // Listener
         setupMessageListener()
+        setupChatListener()
         setupUserListener()
     }
     deinit {
         messageListener?.remove()
+        chatListener?.remove()
         userListener?.remove()
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        FirestoreService.shared.updateChatTyping(friendId: self.chat.friendId, typing: "nil") { error in
+            fatalError(error.localizedDescription)
+        }
+    }
+    
     
     // MARK: Listener
     
@@ -118,16 +128,34 @@ class ChatsViewController: MessagesViewController {
         }
     }
     
-    private func setupUserListener() {
-        userListener = ListenerService.shared.userObserver(userId: chat.friendId, completion: { result in
+    private func setupChatListener() {
+        chatListener = ListenerService.shared.chatObserve(chatId: chat.friendId, completion: { result in
             switch result {
-            case .success(let user):
-                self.subtitleLabel.text = self.getStatus(date: user.exitTime, isOnline: user.isOnline)
+            case .success(let chat):
+                let text = self.getStatus(isOnline: chat.isOnline, typing: chat.typing)
+                if let text = text {
+                    self.subtitleLabel.text = text
+                }
             case .failure(let error):
                 self.showAlert(with: "Error", and: error.localizedDescription)
             }
         })
     }
+    
+    private func setupUserListener() {
+        userListener = ListenerService.shared.userObserver(userId: chat.friendId, completion: { result in
+            switch result {
+            case .success(let user):
+                let text = self.getStatus(date: user.exitTime, isOnline: user.isOnline)
+                if let text = text {
+                    self.subtitleLabel.text = text
+                }
+            case .failure(let error):
+                self.showAlert(with: "Error", and: error.localizedDescription)
+            }
+        })
+    }
+    
     
     // MARK: Message
     
@@ -167,6 +195,20 @@ class ChatsViewController: MessagesViewController {
         }
     }
     
+//    private func insertMessage(_ message: SMessage) {
+//        messages.append(message)
+//        // Reload last section to update header/footer labels and insert a new one
+//        messagesCollectionView.performBatchUpdates({
+//            messagesCollectionView.insertSections([messages.count - 1])
+//            if messages.count >= 2 {
+//                messagesCollectionView.reloadSections([messages.count - 2])
+//            }
+//        }, completion: { [weak self] _ in
+//            if self?.isLastItemVisible() == true {
+//                self?.messagesCollectionView.scrollToLastItem(animated: true)
+//            }
+//        })
+//    }
     
     // MARK: Action
     
@@ -205,10 +247,30 @@ class ChatsViewController: MessagesViewController {
         return messages[indexPath.row].sender.senderId == messages[indexPath.row + 1].sender.senderId && messages[indexPath.row + 1].sentDate.compareDay(messages[indexPath.row].sentDate)
     }
     
-    func getStatus(date: Date, isOnline: Bool) -> String {
+    
+    func isLastItemVisible() -> Bool {
+        guard !messages.isEmpty else { return false }
+        let lastIndexPath = IndexPath(item: messages.count - 1, section: 0)
+        return messagesCollectionView.indexPathsForVisibleItems.contains(lastIndexPath)
+    }
+    
+    
+//    func setTypingIndicatorViewHidden(_ isHidden: Bool, performUpdates updates: (() -> Void)? = nil) {
+//        setTypingIndicatorViewHidden(isHidden, animated: true, whilePerforming: updates) { [weak self] success in
+//            if success, self?.isLastItemVisible() == true {
+//                self?.messagesCollectionView.scrollToLastItem(animated: true)
+//            }
+//        }
+//    }
+    
+    func getStatus(date: Date? = nil, isOnline: Bool, typing: String = "nil") -> String? {
         if isOnline {
+            if typing != "nil" {
+                return typing
+            }
             return NSLocalizedString("online", comment: "")
         } else {
+            guard let date = date else { return nil }
             return dateFormatterLast.string(from: date)
         }
     }
@@ -221,21 +283,26 @@ extension ChatsViewController: MessageCellDelegate {
     
     func didTapMessage(in cell: MessageCollectionViewCell) {
         
-        
-        
-        
-        
     }
     
     func didTapImage(in cell: MessageCollectionViewCell) {
-        print("Image tapped")
+        guard let indexPath = messagesCollectionView.indexPath(for: cell) else { return }
+        guard let message = self.messagesCollectionView.messagesDataSource?.messageForItem(at: indexPath, in: self.messagesCollectionView) else { return }
+        if case MessageKind.photo(let media) = message.kind {
+            let tag = indexPath.row + 1
+            cell.tag = tag
+            let fullScreenTransitionManager = FullScreenTransitionManager(anchorViewTag: tag)
+            let fullScreenImageViewController = FullScreenImageViewController(image: media.placeholderImage, tag: tag)
+            fullScreenImageViewController.modalPresentationStyle = .custom
+            fullScreenImageViewController.transitioningDelegate = fullScreenTransitionManager
+            present(fullScreenImageViewController, animated: true)
+            self.fullScreenTransitionManager = fullScreenTransitionManager
+        }
     }
     
     func didTapAccessoryView(in cell: MessageCollectionViewCell) {
         print("Accessory view tapped")
     }
-    
-    
     
 }
 
@@ -260,14 +327,24 @@ extension ChatsViewController: MessagesDisplayDelegate {
         avatarView.isHidden = true
     }
     
-    
     func textColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
-        isFromCurrentSender(message: message) ? .white : .black
+        isFromCurrentSender(message: message) ? ColorAppearance.clearWhite.color() : ColorAppearance.black.color()
     }
     
     func avatarSize(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGSize? {
         .zero
     }
+    
+    
+    
+//    func configureMediaMessageImageView(_ imageView: UIImageView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+//        if case MessageKind.photo(let media) = message.kind, let imageURL = media.url {
+//            imageView.sd_setImage(with: imageURL)
+//        } else {
+//            imageView.sd_cancelCurrentImageLoad()
+//        }
+//    }
+    
 }
 
 
@@ -286,6 +363,18 @@ extension ChatsViewController: InputBarAccessoryViewDelegate {
             }
         }
         inputBar.inputTextView.text = ""
+    }
+    
+    func inputBar(_ inputBar: InputBarAccessoryView, textViewTextDidChangeTo text: String) {
+        if text != "" {
+            FirestoreService.shared.updateChatTyping(friendId: self.chat.friendId, typing: "пишет…") { error in
+                return
+            }
+        } else {
+            FirestoreService.shared.updateChatTyping(friendId: self.chat.friendId, typing: "nil") { error in
+                return
+            }
+        }
     }
 }
 
@@ -311,17 +400,18 @@ extension ChatsViewController: MessagesDataSource {
         messages.count
     }
     
-    func numberOfSections(in messagesCollectionView: MessageKit.MessagesCollectionView) -> Int {
-        return 1
-    }
+    func numberOfSections(in messagesCollectionView: MessageKit.MessagesCollectionView) -> Int { 1 }
     
     func cellTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
-        return NSAttributedString(string: dateFormatterDay.string(from: message.sentDate), attributes: [.font: FontAppearance.defaultText, .foregroundColor: UIColor.darkGray])
+        return NSAttributedString(string: dateFormatterDay.string(from: message.sentDate), font: FontAppearance.Chat.topHeaderText)
     }
     
     func messageBottomLabelAttributedText(for message: MessageType, at _: IndexPath) -> NSAttributedString? {
         let dateString = dateFormatter.string(from: message.sentDate)
-        return NSAttributedString(string: dateString, attributes: [.font: UIFont.preferredFont(forTextStyle: .caption2)])
+        if isFromCurrentSender(message: message) {
+            return NSAttributedString(string: dateString, font: FontAppearance.Chat.bottomText, textColor: ColorAppearance.haveBlue.color())
+        }
+        return NSAttributedString(string: dateString, font: FontAppearance.Chat.bottomText, textColor: ColorAppearance.lightBlack.color())
     }
 }
 
@@ -344,9 +434,9 @@ extension ChatsViewController: MessagesLayoutDelegate {
 
     func messageBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in _: MessagesCollectionView) -> CGFloat {
         if isFromCurrentSender(message: message) {
-            return isNextMessageSameSender(at: indexPath) ? 0 : 12
+            return isNextMessageSameSender(at: indexPath) ? 0 : 15
         } else {
-            return isNextMessageSameSender(at: indexPath) ? 0 : 12
+            return isNextMessageSameSender(at: indexPath) ? 0 : 15
         }
     }
 }
@@ -368,21 +458,20 @@ extension ChatsViewController: UIImagePickerControllerDelegate {
 
 extension ChatsViewController: UINavigationControllerDelegate {}
 
-
-
-
-
-
-
 // MARK: - Configuration
 
 private extension ChatsViewController {
     
     func configuration() {
+        self.tabBarController?.tabBar.isHidden = true
+        configurationCollectionMessage()
         configureMessageInputBar()
-        configurationTabBar()
         configurationLayout()
         configurationProfileInNavigationBar()
+    }
+    
+    func configurationCollectionMessage() {
+//        self.messagesCollectionView.backgroundColor = ColorAppearance.white.color()
     }
     
     func configureMessageInputBar() {
@@ -395,14 +484,15 @@ private extension ChatsViewController {
         messageInputBar.inputTextView.placeholder = NSLocalizedString("Message", comment: "")
         messageInputBar.inputTextView.layer.masksToBounds = true
         messageInputBar.inputTextView.layer.cornerRadius = 18
-        messageInputBar.inputTextView.layer.borderWidth = 0.4
+        messageInputBar.inputTextView.layer.borderWidth = 0.6
         messageInputBar.separatorLine.isHidden = true
         // Color
         messageInputBar.inputTextView.backgroundColor = ColorAppearance.clearWhite.color()
-        messageInputBar.inputTextView.placeholderTextColor = ColorAppearance.black.color().withAlphaComponent(0.5)
-        messageInputBar.inputTextView.layer.borderColor = ColorAppearance.black.color().withAlphaComponent(0.5).cgColor
+        messageInputBar.inputTextView.placeholderTextColor = ColorAppearance.lightBlack.color()
+        messageInputBar.inputTextView.layer.borderColor = ColorAppearance.lightBlack.color().cgColor
         // Font
         messageInputBar.inputTextView.font = FontAppearance.Chat.text
+        messageInputBar.inputTextView.textColor = ColorAppearance.black.color()
         // UIEdgeInsets
         messageInputBar.inputTextView.textContainerInset = UIEdgeInsets(top: 7, left: 10, bottom: 7, right: 10)
         messageInputBar.inputTextView.placeholderLabelInsets = UIEdgeInsets(top: 7, left: 13, bottom: 7, right: 12)
@@ -421,16 +511,12 @@ private extension ChatsViewController {
         let cameraIcon = InputBarButtonItem(type: .system)
         let cameraImage = UIImage(systemName: "plus.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 36))
         cameraIcon.image = cameraImage
+        cameraIcon.tintColor = ColorAppearance.lightBlack.color()
         cameraIcon.addTarget(self, action: #selector(cameraIconTap), for: .primaryActionTriggered)
         cameraIcon.setSize(CGSize(width: 36, height: 36), animated: false)
         messageInputBar.leftStackView.alignment = .leading
-        messageInputBar.setLeftStackViewWidthConstant(to: 48, animated: false)
+        messageInputBar.setLeftStackViewWidthConstant(to: 36, animated: false)
         messageInputBar.setStackViewItems([cameraIcon], forStack: .left, animated: true)
-        messageInputBar.topStackView.spacing = 18
-    }
-    
-    func configurationTabBar() {
-        self.tabBarController?.tabBar.isHidden = true
     }
     
     func configurationLayout() {
@@ -441,10 +527,10 @@ private extension ChatsViewController {
             layout.photoMessageSizeCalculator.incomingAvatarSize = .zero
             layout.setMessageOutgoingMessageBottomLabelAlignment(LabelAlignment(
                 textAlignment: .right,
-                textInsets: UIEdgeInsets(top: 3, left: 0, bottom: 0, right: 8)))
+                textInsets: UIEdgeInsets(top: 4, left: 0, bottom: 0, right: 10)))
             layout.setMessageIncomingMessageBottomLabelAlignment(LabelAlignment(
                 textAlignment: .left,
-                textInsets: UIEdgeInsets(top: 3, left: 8, bottom: 0, right: 0)))
+                textInsets: UIEdgeInsets(top: 4, left: 10, bottom: 0, right: 0)))
         }
     }
     
@@ -473,10 +559,20 @@ private extension ChatsViewController {
         titleView.insertSubview(subtitleLabel, at: 0)
         titleView.addSubview(button)
         navigationItem.titleView = titleView
+        
+        navigationController?.navigationBar.backgroundColor = .clear
+        navigationController?.navigationBar.isTranslucent = true
     }
-    
 }
 
 
-
 // replay and forward: https://github.com/MessageKit/MessageKit/issues/1676
+// full screen image: https://github.com/thomsmed/ios-examples/tree/main/FullScreenImageTransition
+
+//func isLastSectionVisible() -> Bool {
+//    guard !messageList.isEmpty else { return false }
+//
+//    let lastIndexPath = IndexPath(item: 0, section: messageList.count - 1)
+//
+//    return messagesCollectionView.indexPathsForVisibleItems.contains(lastIndexPath)
+//}

@@ -38,7 +38,7 @@ class UserCell: UICollectionViewCell, SelfConfiguringCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-//        backgroundColor = ColorAppearance.white.color()
+        backgroundColor = ColorAppearance.clearWhite.color()
         
         textView.backgroundColor = .clear
         textView.layer.cornerRadius = 20
@@ -114,7 +114,6 @@ class UserCell: UICollectionViewCell, SelfConfiguringCell {
             nameContainerView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
             nameContainerView.heightAnchor.constraint(equalToConstant: 48)
         ])
-        
         
         NSLayoutConstraint.activate([
             textView.topAnchor.constraint(equalTo: nameContainerView.topAnchor, constant: 4),
