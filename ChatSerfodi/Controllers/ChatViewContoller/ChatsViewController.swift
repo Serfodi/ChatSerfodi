@@ -86,6 +86,9 @@ class ChatsViewController: MessagesViewController {
         setupMessageListener()
         setupChatListener()
         setupUserListener()
+        
+        
+//        loadFirstMessages()
     }
     deinit {
         messageListener?.remove()
@@ -95,32 +98,32 @@ class ChatsViewController: MessagesViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        FirestoreService.shared.updateChatTyping(friendId: self.chat.friendId, typing: "nil") { error in
-            fatalError(error.localizedDescription)
-        }
+        FirestoreService.shared.updateChatTyping(for: chat, typing: "nil")
     }
-    
-    
+        
     // MARK: Listener
     
     private func setupMessageListener() {
         messageListener = ListenerService.shared.messagesObserve(chat: chat) { result in
             switch result {
             case .success(var message):
-                if let url = message.downloadURL {
-                    StorageService.shared.downloadImage(url: url) { [weak self] result in
-                        guard let self = self else { return  }
-                        switch result {
-                        case .success(let image):
-                            message.image = image
-                            self.insertNewMessage(message: message)
-                        case .failure(let error):
-                            self.showAlert(with: "Error", and: error.localizedDescription)
-                        }
-                    }
-                } else {
-                    self.insertNewMessage(message: message)
-                }
+//                if let url = message.downloadURL {
+//
+//                    StorageService.shared.downloadImage(url: url) { [weak self] result in
+//                        guard let self = self else { return  }
+//                        switch result {
+//                        case .success(let image):
+//                            message.image = image
+//                            self.insertNewMessage(message: message)
+//                        case .failure(let error):
+//                            self.showAlert(with: "Error", and: error.localizedDescription)
+//                        }
+//                    }
+//
+//                    self.insertNewMessage(message: message)
+//                } else {
+//                }
+                self.insertNewMessage(message: message, animated: false)
                 self.chat.lastMessage = message.descriptor
             case .failure(let error):
                 self.showAlert(with: "Error", and: error.localizedDescription)
@@ -160,55 +163,50 @@ class ChatsViewController: MessagesViewController {
     // MARK: Message
     
     /// Делает вставку нового сообщения
-    private func insertNewMessage(message: SMessage) {
+    private func insertNewMessage(message: SMessage, animated: Bool = true) {
         guard !messages.contains(message) else { return }
         messages.append(message)
         messages.sort()
         let isLastMessage = messages.firstIndex(of: message) == (messages.count - 1)
         let shouldScrollToBottom = messagesCollectionView.isAtBottom && isLastMessage
-        messagesCollectionView.reloadData()
+        self.messagesCollectionView.reloadData()
         if shouldScrollToBottom {
             DispatchQueue.main.async {
-                self.messagesCollectionView.scrollToLastItem(at: .bottom, animated: true)
+                self.messagesCollectionView.scrollToLastItem(at: .bottom, animated: animated)
             }
         }
     }
     
     /// Отправляет фото
     private func sendPhoto(image: UIImage) {
-        StorageService.shared.uploadImageMessage(photo: image, to: chat) { result in
-            switch result {
-            case .success(let url):
+        Task(priority: .userInitiated) {
+            do {
+                let url = try await StorageService.shared.uploadImageMessage(photo: image, to: chat)
                 var imageMessage = SMessage(user: self.user, image: image)
                 imageMessage.downloadURL = url
-                FirestoreService.shared.sendMessage(chat: self.chat, message: imageMessage) { result in
-                    switch result {
-                    case .success():
-                        self.messagesCollectionView.scrollToLastItem(at: .bottom, animated: true)
-                    case .failure(_):
-                        self.showAlert(with: "Error", and: "NotSent")
-                    }
-                }
-            case .failure(let error):
+                try FirestoreService.shared.sendMessage(from: self.chat, message: imageMessage)
+            }  catch {
                 self.showAlert(with: "Error", and: error.localizedDescription)
             }
         }
     }
     
-//    private func insertMessage(_ message: SMessage) {
-//        messages.append(message)
-//        // Reload last section to update header/footer labels and insert a new one
-//        messagesCollectionView.performBatchUpdates({
+    private func insertMessage(_ message: SMessage) {
+        messages.append(message)
+        // Reload last section to update header/footer labels and insert a new one
+        messagesCollectionView.performBatchUpdates({
 //            messagesCollectionView.insertSections([messages.count - 1])
-//            if messages.count >= 2 {
+            messagesCollectionView.insertItems(at: [IndexPath(row: messages.count - 1, section: 0)])
+            if messages.count >= 2 {
 //                messagesCollectionView.reloadSections([messages.count - 2])
-//            }
-//        }, completion: { [weak self] _ in
-//            if self?.isLastItemVisible() == true {
-//                self?.messagesCollectionView.scrollToLastItem(animated: true)
-//            }
-//        })
-//    }
+                messagesCollectionView.reloadItems(at: [IndexPath(row: messages.count - 2, section: 0)])
+            }
+        }, completion: { [weak self] _ in
+            if self?.isLastItemVisible() == true {
+                self?.messagesCollectionView.scrollToLastItem(animated: true)
+            }
+        })
+    }
     
     // MARK: Action
     
@@ -219,12 +217,12 @@ class ChatsViewController: MessagesViewController {
     }
     
     @objc func openProfile() {
-        FirestoreService.shared.getUserData(userId: chat.friendId) { result in
-            switch result {
-            case .success(let user):
-                let vc = ProfileViewController(user: user)
+        Task(priority: .userInitiated) {
+            do {
+                let sUser = try await FirestoreService.shared.getUserData(id: chat.friendId)
+                let vc = ProfileViewController(user: sUser)
                 self.present(vc, animated: true)
-            case .failure(let error):
+            } catch {
                 self.showAlert(with: "Error", and: error.localizedDescription)
             }
         }
@@ -254,15 +252,6 @@ class ChatsViewController: MessagesViewController {
         return messagesCollectionView.indexPathsForVisibleItems.contains(lastIndexPath)
     }
     
-    
-//    func setTypingIndicatorViewHidden(_ isHidden: Bool, performUpdates updates: (() -> Void)? = nil) {
-//        setTypingIndicatorViewHidden(isHidden, animated: true, whilePerforming: updates) { [weak self] success in
-//            if success, self?.isLastItemVisible() == true {
-//                self?.messagesCollectionView.scrollToLastItem(animated: true)
-//            }
-//        }
-//    }
-    
     func getStatus(date: Date? = nil, isOnline: Bool, typing: String = "nil") -> String? {
         if isOnline {
             if typing != "nil" {
@@ -274,7 +263,6 @@ class ChatsViewController: MessagesViewController {
             return dateFormatterLast.string(from: date)
         }
     }
-    
 }
 
 // MARK: - MessageCellDelegate
@@ -288,22 +276,29 @@ extension ChatsViewController: MessageCellDelegate {
     func didTapImage(in cell: MessageCollectionViewCell) {
         guard let indexPath = messagesCollectionView.indexPath(for: cell) else { return }
         guard let message = self.messagesCollectionView.messagesDataSource?.messageForItem(at: indexPath, in: self.messagesCollectionView) else { return }
-        if case MessageKind.photo(let media) = message.kind {
-            let tag = indexPath.row + 1
-            cell.tag = tag
-            let fullScreenTransitionManager = FullScreenTransitionManager(anchorViewTag: tag)
-            let fullScreenImageViewController = FullScreenImageViewController(image: media.placeholderImage, tag: tag)
-            fullScreenImageViewController.modalPresentationStyle = .custom
-            fullScreenImageViewController.transitioningDelegate = fullScreenTransitionManager
-            present(fullScreenImageViewController, animated: true)
-            self.fullScreenTransitionManager = fullScreenTransitionManager
+        if case MessageKind.photo(let media) = message.kind, let imageURL = media.url {
+            
+            StorageService.shared.downloadImage(url: imageURL) { [weak self] result in
+                guard let self = self else { return  }
+                switch result {
+                case .success(let image):
+                    guard let image = image else { return }
+                    
+                    let tag = indexPath.row + 1
+                    let fullScreenTransitionManager = FullScreenTransitionManager(anchorViewTag: tag)
+                    let fullScreenImageViewController = FullScreenImageViewController(image: image, tag: tag)
+                    fullScreenImageViewController.modalPresentationStyle = .custom
+                    fullScreenImageViewController.transitioningDelegate = fullScreenTransitionManager
+                    self.present(fullScreenImageViewController, animated: true)
+                    self.fullScreenTransitionManager = fullScreenTransitionManager
+                    
+                case .failure(let error):
+                    self.showAlert(with: "Error", and: error.localizedDescription)
+                }
+            }
         }
+        
     }
-    
-    func didTapAccessoryView(in cell: MessageCollectionViewCell) {
-        print("Accessory view tapped")
-    }
-    
 }
 
 
@@ -335,16 +330,20 @@ extension ChatsViewController: MessagesDisplayDelegate {
         .zero
     }
     
-    
-    
-//    func configureMediaMessageImageView(_ imageView: UIImageView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
-//        if case MessageKind.photo(let media) = message.kind, let imageURL = media.url {
-//            imageView.sd_setImage(with: imageURL)
-//        } else {
-//            imageView.sd_cancelCurrentImageLoad()
-//        }
-//    }
-    
+    func configureMediaMessageImageView(_ imageView: UIImageView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+        imageView.tag = indexPath.row + 1
+        if case MessageKind.photo(let media) = message.kind, let imageURL = media.url {
+            StorageService.shared.downloadImage(url: imageURL) { [weak self] result in
+                guard let self = self else { return  }
+                switch result {
+                case .success(let image):
+                    imageView.image = image
+                case .failure(let error):
+                    self.showAlert(with: "Error", and: error.localizedDescription)
+                }
+            }
+        }
+    }
 }
 
 
@@ -354,26 +353,20 @@ extension ChatsViewController: InputBarAccessoryViewDelegate {
     
     func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
         let message = SMessage(user: user, content: text)
-        FirestoreService.shared.sendMessage(chat: chat, message: message) { result in
-            switch result {
-            case .success():
-                self.messagesCollectionView.scrollToLastItem(at: .bottom, animated: true)
-            case .failure(let error):
-                self.showAlert(with: "Error", and: error.localizedDescription)
-            }
+        do {
+            try FirestoreService.shared.sendMessage(from: self.chat, message: message)
+            inputBar.inputTextView.text = ""
+        } catch {
+            self.showAlert(with: "Error", and: "NotSent")
+            print("NotSent: \(error.localizedDescription)")
         }
-        inputBar.inputTextView.text = ""
     }
     
     func inputBar(_ inputBar: InputBarAccessoryView, textViewTextDidChangeTo text: String) {
         if text != "" {
-            FirestoreService.shared.updateChatTyping(friendId: self.chat.friendId, typing: "пишет…") { error in
-                return
-            }
+            FirestoreService.shared.updateChatTyping(for: chat, typing: "пишет…")
         } else {
-            FirestoreService.shared.updateChatTyping(friendId: self.chat.friendId, typing: "nil") { error in
-                return
-            }
+            FirestoreService.shared.updateChatTyping(for: chat, typing: "nil")
         }
     }
 }

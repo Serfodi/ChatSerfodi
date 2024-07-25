@@ -24,7 +24,7 @@ final class FullScreenAnimationController: NSObject, UIViewControllerAnimatedTra
     
     private var propertyAnimator: UIViewPropertyAnimator?
     
-    init(animationType: AnimationType, animationDuration: TimeInterval = 0.3, anchorView: UIView?) {
+    init(animationType: AnimationType, animationDuration: TimeInterval = 0.2, anchorView: UIView?) {
         self.animationType = animationType
         self.anchorView = anchorView
         self.animationDuration = animationDuration

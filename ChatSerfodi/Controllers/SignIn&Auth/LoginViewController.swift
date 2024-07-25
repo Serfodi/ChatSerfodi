@@ -48,13 +48,13 @@ class LoginViewController: UIViewController {
             switch result {
             case .success(let user):
                 self.showAlert(with: "Successfully", and: "YouAreLoggedIn") {
-                    FirestoreService.shared.getUserData(user: user) { result in
-                        switch result {
-                        case .success(let suser):
+                    Task(priority: .userInitiated) {
+                        do {
+                            let suser = try await FirestoreService.shared.getUserData(user: user)
                             let mainTabBar = MainTabBarController(currentUser: suser)
                             mainTabBar.modalPresentationStyle = .fullScreen
                             self.present(mainTabBar, animated: true)
-                        case .failure(_):
+                        } catch {
                             self.present(SetupProfileViewController(currentUser: user), animated: true)
                         }
                     }
@@ -76,16 +76,15 @@ class LoginViewController: UIViewController {
             AuthService.shared.googleLogin(user: result?.user, error: error) { result in
                 switch result {
                 case .success(let user):
-                    FirestoreService.shared.getUserData(user: user) { result in
-                        switch result {
-                        case .success(let suser):
-                            self.view.endEditing(true)
+                    Task(priority: .userInitiated) {
+                        do {
+                            let suser = try await FirestoreService.shared.getUserData(user: user)
                             self.showAlert(with: "Successfully", and: "YouAreLoggedIn") {
                                 let mainTabBar = MainTabBarController(currentUser: suser)
                                 mainTabBar.modalPresentationStyle = .fullScreen
                                 self.present(mainTabBar, animated: true)
                             }
-                        case .failure(_):
+                        } catch {
                             self.showAlert(with: "Successfully", and: "YouAreRegistered") {
                                 self.present(SetupProfileViewController(currentUser: user), animated: true)
                             }

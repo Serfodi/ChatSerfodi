@@ -62,24 +62,23 @@ class SetupProfileViewController: UIViewController {
     }
     
     @objc private func goToChatsButtonTapped() {
-        FirestoreService.shared.saveProfileWith(
-            id: currentUser.uid,
-            email: currentUser.email!,
-            username: fullNameTextField.text,
-            avatarImage: photoView.circleImageView.image,
-            description: aboutMeTextField.text,
-            sex: sexSegmentedController.titleForSegment(at: sexSegmentedController.selectedSegmentIndex)!) { (result) in
-                switch result {
-                case .success(let suser):
-                    self.showAlert(with: "Successfully", and: "YouAreLoggedIn") {
-                        let mainTabBar = MainTabBarController(currentUser: suser)
-                        mainTabBar.modalPresentationStyle = .fullScreen
-                        self.present(mainTabBar, animated: true)
-                    }
-                case .failure(let error):
-                    self.showAlert(with: "Error", and: error.localizedDescription)
+        Task(priority: .userInitiated) {
+            do {
+                let user = try await FirestoreService.shared.saveProfileWith(id: currentUser.uid,
+                                                                  email: currentUser.email!,
+                                                                  username: fullNameTextField.text,
+                                                                  avatarImage: photoView.circleImageView.image,
+                                                                  description: aboutMeTextField.text,
+                                                                  sex: sexSegmentedController.titleForSegment(at: sexSegmentedController.selectedSegmentIndex)!)
+                self.showAlert(with: "Successfully", and: "YouAreLoggedIn") {
+                    let mainTabBar = MainTabBarController(currentUser: user)
+                    mainTabBar.modalPresentationStyle = .fullScreen
+                    self.present(mainTabBar, animated: true)
                 }
+            } catch {
+                self.showAlert(with: "Error", and: error.localizedDescription)
             }
+        }
     }
     
     

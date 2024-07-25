@@ -28,6 +28,7 @@ private enum Padding {
     }
 }
 
+
 class ListViewController: UIViewController {
 
     let searchView = LottieAnimationView(name: "search", contentMode: .scaleAspectFit)
@@ -85,7 +86,6 @@ class ListViewController: UIViewController {
         setupWaitingChatsListener()
         setupActivityChatObserve()
         NotificationCenter.default.addObserver(self, selector: #selector(deleteChat(_:)), name: Notification.Name("DeleteChat"), object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(reloadChat), name: Notification.Name("NewMassage"), object: nil)
     }
     deinit {
         waitingChatsListener?.remove()
@@ -105,7 +105,7 @@ class ListViewController: UIViewController {
             case .success(let chats):
                 self.waitingChat = chats
                 self.reloadData()
-                if self.waitingChat != [],  self.waitingChat.count <= chats.count {
+                if self.waitingChat != [], self.waitingChat.count <= chats.count {
                     let chatRequestVC = ChatRequestViewController(chat: chats.last!)
                     chatRequestVC.delegate = self
                     self.present(chatRequestVC, animated: true)
@@ -126,17 +126,6 @@ class ListViewController: UIViewController {
                 self.showAlert(with: "Error", and: error.localizedDescription)
             }
         })
-    }
-    
-    private func setupCollectionView() {
-        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createCompositionalLayout())
-        collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        collectionView.backgroundColor = ColorAppearance.white.color()
-        view.addSubview(collectionView)
-        collectionView.delegate = self
-        collectionView.register(SectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SectionHeader.reuseId)
-        collectionView.register(ActiveChatCell.self, forCellWithReuseIdentifier: ActiveChatCell.reuseId)
-        collectionView.register(WaitingChatCell.self, forCellWithReuseIdentifier: WaitingChatCell.reuseId)
     }
     
     // MARK: Action
@@ -166,37 +155,30 @@ class ListViewController: UIViewController {
 extension ListViewController: WaitingChatsNavigation {
     
     func removeWaitingChats(chat: SChat) {
-        FirestoreService.shared.deleteWaitingChat(chat: chat) { result in
-            switch result {
-            case .success():
-                self.showAlert(with: "Successfully", and: [NSLocalizedString("Chat", comment: ""), chat.friendUsername, NSLocalizedString("wasDeleted", comment: "")].joined(separator: " "))
-            case .failure(let error):
-                self.showAlert(with: "Error", and: [NSLocalizedString("Chat", comment: ""), chat.friendUsername, NSLocalizedString("notWasDeleted", comment: ""),
-                                                    NSLocalizedString("Error", comment: ""), error.localizedDescription].joined(separator: " "))
-            }
+        do {
+            try FirestoreService.shared.deleteWaitingChat(chat: chat)
+            self.showAlert(with: "Successfully", and: "Chat was deleted.")
+        } catch {
+            self.showAlert(with: "Error", and: "Chat not was deleted.")
         }
     }
     
     func removeActiveChats(chat: SChat) {
-        FirestoreService.shared.deleteActiveChat(chat: chat) { result in
-            switch result {
-            case .success():
-                self.showAlert(with: "Successfully", and: [NSLocalizedString("Chat", comment: ""), chat.friendUsername, NSLocalizedString("wasDeleted", comment: "")].joined(separator: " "))
-            case .failure(let error):
-                self.showAlert(with: "Error", and: [NSLocalizedString("Chat", comment: ""), chat.friendUsername, NSLocalizedString("notWasDeleted", comment: ""),
-                                                    NSLocalizedString("Error", comment: ""), error.localizedDescription].joined(separator: " "))
-            }
+        do {
+            try FirestoreService.shared.deleteActiveChat(chat: chat)
+            self.showAlert(with: "Successfully", and: "Chat was deleted.")
+        } catch {
+            self.showAlert(with: "Error", and: "Chat not was deleted.")
         }
     }
     
     func chatToActive(chat: SChat) {
-        FirestoreService.shared.changeToActive(chat: chat) { result in
-            switch result {
-            case .success():
-                self.showAlert(with: "Successfully", and: NSLocalizedString("EnjoyThe", comment: "") + chat.friendUsername)
-            case .failure(let error):
-                self.showAlert(with: "Error", and: [NSLocalizedString("Chat", comment: ""), chat.friendUsername, NSLocalizedString("notCreated", comment: ""),
-                                                    NSLocalizedString("Error", comment: ""), error.localizedDescription].joined(separator: " "))
+        Task(priority: .userInitiated) {
+            do {
+                try await FirestoreService.shared.changeToActive(chat: chat)
+                self.showAlert(with: "Successfully", and: "EnjoyThe")
+            } catch {
+                self.showAlert(with: "Error", and: error.localizedDescription)
             }
         }
     }
@@ -320,6 +302,17 @@ extension ListViewController: UISearchBarDelegate {
 // MARK: - Create
 
 private extension ListViewController {
+    
+    func setupCollectionView() {
+        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createCompositionalLayout())
+        collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        collectionView.backgroundColor = ColorAppearance.white.color()
+        view.addSubview(collectionView)
+        collectionView.delegate = self
+        collectionView.register(SectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SectionHeader.reuseId)
+        collectionView.register(ActiveChatCell.self, forCellWithReuseIdentifier: ActiveChatCell.reuseId)
+        collectionView.register(WaitingChatCell.self, forCellWithReuseIdentifier: WaitingChatCell.reuseId)
+    }
     
     func createActiveChats() -> NSCollectionLayoutSection? {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))

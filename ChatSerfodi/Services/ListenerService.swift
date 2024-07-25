@@ -65,6 +65,11 @@ class ListenerService {
     
     
     
+    
+    
+    
+    
+    
     func waitingChatObserve(chats: [SChat], completion: @escaping (Result<[SChat], Error>)-> Void) -> ListenerRegistration? {
         var chats = chats
         let chatsRef = db.collection(["users", currentUserId, "waitingChats"].joined(separator: "/"))

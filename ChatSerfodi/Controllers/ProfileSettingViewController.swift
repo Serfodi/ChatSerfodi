@@ -68,16 +68,13 @@ class ProfileSettingViewController: UIViewController {
     
     @objc func saveProfile() {
         endEditing()
-        FirestoreService.shared.updateProfile(
-                                              username: fullNameTextField.text!,
-                                              avatarImage: photoView.image,
-                                              description: aboutMeTextField.text!) { result in
-            switch result {
-            case .success(_):
-                self.showAlert(with: "Successfully", and: "TheChangesAreSaved")
-            case .failure(let error):
-                self.showAlert(with: "Error", and: error.localizedDescription)
-            }
+        do {
+            try FirestoreService.shared.updateProfile(username: fullNameTextField.text!,
+                                                  avatarImage: photoView.image,
+                                                  description: aboutMeTextField.text!)
+            self.showAlert(with: "Successfully", and: "TheChangesAreSaved")
+        } catch {
+            self.showAlert(with: "Error", and: error.localizedDescription)
         }
     }
     

@@ -19,87 +19,85 @@ class StorageService {
         return storageRef.child("avatars")
     }
     
-    private var chatRef: StorageReference {
+    private var chatsRef: StorageReference {
         return storageRef.child("chat")
     }
     
-    private var currentUserID: String {
+    private var currentUserId: String {
         Auth.auth().currentUser!.uid
     }
     
+    private func chatRef(to: String, from: String) -> StorageReference {
+        chatsRef.child(to + from)
+    }
     
+}
+
+// MARK: - Image
+
+extension StorageService {
     
     /// Загружает фото для профиля
-    func upload(photo: UIImage, completion: @escaping (Result<URL, Error>)-> Void) {
-        guard let scaleImage = photo.scaledToSafeUploadSize, let imageData = scaleImage.jpegData(compressionQuality: 0.4) else { return }
-        
-        let metadata = StorageMetadata()
-        metadata.contentType = "image/jpeg"
-        
-        avatarRef.child(currentUserID).putData(imageData, metadata: metadata) { (metadata, error) in
-            guard let _ = metadata else {
-                completion(.failure(error!))
-                return
-            }
-            self.avatarRef.child(self.currentUserID).downloadURL { url, error in
-                guard let downloadURL = url else {
-                    completion(.failure(error!))
-                    return
+        func upload(photo: UIImage, completion: @escaping (Result<URL, Error>)-> Void) {
+            guard let scaleImage = photo.scaledToSafeUploadSize, let imageData = scaleImage.jpegData(compressionQuality: 0.4) else { return }
+            
+            let metadata = StorageMetadata()
+            metadata.contentType = "image/jpeg"
+            
+            avatarRef.child(currentUserId).putData(imageData, metadata: metadata) { result in
+                switch result {
+                case .success(_):
+                    self.avatarRef.child(self.currentUserId).downloadURL { url, error in
+                        guard let downloadURL = url else {
+                            completion(.failure(error!))
+                            return
+                        }
+                        completion(.success(downloadURL))
+                    }
+                case .failure(let error):
+                    completion(.failure(error))
                 }
-                completion(.success(downloadURL))
             }
         }
-    }
     
-    /// Загружает фото для чата
-    func uploadImageMessage(photo: UIImage, to chat: SChat, completion: @escaping (Result<URL, Error>)-> Void) {
-        guard let scaleImage = photo.scaledToSafeUploadSize, let imageData = scaleImage.jpegData(compressionQuality: 0.4) else { return }
+    /// Upload image data in Firestorage for avatars
+    public func upload(photo: UIImage) async throws -> URL {
+        guard let scaleImage = photo.scaledToSafeUploadSize, let imageData = scaleImage.jpegData(compressionQuality: 0.4) else { throw ImageError.uploadImageError }
         let metadata = StorageMetadata()
         metadata.contentType = "image/jpeg"
-        
+        let storeMetadata = try await avatarRef.child(currentUserId).putDataAsync(imageData, metadata: metadata)
+        let downloadURL = try await avatarRef.child(self.currentUserId).downloadURL()
+        return downloadURL
+    }
+    
+    /// Upload image data in Firestorage for messages
+    public func uploadImageMessage(photo: UIImage, to chat: SChat) async throws -> URL {
+        guard let scaleImage = photo.scaledToSafeUploadSize, let imageData = scaleImage.jpegData(compressionQuality: 0.4) else { throw ImageError.uploadImageError }
+        let metadata = StorageMetadata()
+        metadata.contentType = "image/jpeg"
         let imageName = [UUID().uuidString, String( Date().timeIntervalSince1970) ].joined()
-        let chatName = [Auth.auth().currentUser!.uid, chat.friendId].joined()
-        
-        self.chatRef.child(chatName).child(imageName).putData(imageData, metadata: metadata) { metadata, error in
-            guard let _ = metadata else {
-                completion(.failure(error!))
-                return
-            }
-            self.chatRef.child(chatName).child(imageName).downloadURL { url, error in
-                guard let downloadURL = url else {
-                    completion(.failure(error!))
-                    return
+        let _ = try await chatRef(to: currentUserId, from: chat.friendId).child(imageName).putDataAsync(imageData, metadata: metadata)
+        let url = try await chatRef(to: currentUserId, from: chat.friendId).child(imageName).downloadURL()
+        return url
+    }
+    
+    /// Delete all image in chat
+    public func deleteImageMessages(to id: String, from friendId: String) async throws {
+        let ref = try await chatRef(to: id, from: friendId).listAll()
+        await withTaskGroup(of: Void.self, body: { taskGroup in
+            ref.items.forEach { itemRef in
+                taskGroup.addTask {
+                    do {
+                        try await itemRef.delete()
+                    } catch {
+                        print("Error deleteImageMessages: \(error)")
+                    }
                 }
-                completion(.success(downloadURL))
             }
-        }
+        })
     }
     
-    private func deleteAllImageChat(chat: SChat, completion: @escaping (Result<Void, Error>)-> Void) {
-        let chatName = [Auth.auth().currentUser!.uid, chat.friendId].joined()
-        self.chatRef.child(chatName).delete { error in
-            guard let error = error else {
-                completion(.failure(error!))
-                return
-            }
-            completion(.success(Void()))
-        }
-    }
-    
-    public func deleteImageMessage(chat: SChat, message: SMessage, completion: @escaping (Result<Void, Error>)-> Void) {
-        let chatName = [Auth.auth().currentUser!.uid, chat.friendId].joined()
-        let imageName = [ chat.friendId, String(message.sentDate.timeIntervalSince1970)].joined()
-        self.chatRef.child(chatName).child(imageName).delete { error in
-            guard let error = error else {
-                completion(.failure(error!))
-                return
-            }
-            completion(.success(Void()))
-        }
-    }
-    
-    
-    func downloadImage(url: URL, completion: @escaping (Result<UIImage?, Error>)-> Void) {
+    public func downloadImage(url: URL, completion: @escaping (Result<UIImage?, Error>)-> Void) {
         let ref = Storage.storage().reference(forURL: url.absoluteString)
         let megoByte = Int64(1 * 1024 * 1024)
         ref.getData(maxSize: megoByte) { data, error in

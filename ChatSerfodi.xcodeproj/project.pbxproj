@@ -69,6 +69,7 @@
 		B09F24AF2C4EE56B00DB5E83 /* NSLayoutConstraint + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09F24AE2C4EE56B00DB5E83 /* NSLayoutConstraint + Extension.swift */; };
 		B09F24B42C4EEC1C00DB5E83 /* FullScreenTransitionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09F24B32C4EEC1C00DB5E83 /* FullScreenTransitionManager.swift */; };
 		B09F24B82C4EECAA00DB5E83 /* FullScreenAnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09F24B72C4EECAA00DB5E83 /* FullScreenAnimationController.swift */; };
+		B09F24BD2C5191E900DB5E83 /* ImageError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09F24BC2C5191E900DB5E83 /* ImageError.swift */; };
 		B0CFB0DB2C480A2F009595F8 /* Date + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFB0DA2C480A2F009595F8 /* Date + Extension.swift */; };
 		B0E207422C37060C007346FE /* ProfileSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E207412C37060C007346FE /* ProfileSettingViewController.swift */; };
 		B0E207442C38010D007346FE /* UINavigationBar + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E207432C38010D007346FE /* UINavigationBar + Extension.swift */; };
@@ -149,6 +150,7 @@
 		B09F24AE2C4EE56B00DB5E83 /* NSLayoutConstraint + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSLayoutConstraint + Extension.swift"; sourceTree = "<group>"; };
 		B09F24B32C4EEC1C00DB5E83 /* FullScreenTransitionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenTransitionManager.swift; sourceTree = "<group>"; };
 		B09F24B72C4EECAA00DB5E83 /* FullScreenAnimationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenAnimationController.swift; sourceTree = "<group>"; };
+		B09F24BC2C5191E900DB5E83 /* ImageError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageError.swift; sourceTree = "<group>"; };
 		B0CFB0DA2C480A2F009595F8 /* Date + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date + Extension.swift"; sourceTree = "<group>"; };
 		B0E207412C37060C007346FE /* ProfileSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingViewController.swift; sourceTree = "<group>"; };
 		B0E207432C38010D007346FE /* UINavigationBar + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationBar + Extension.swift"; sourceTree = "<group>"; };
@@ -370,6 +372,7 @@
 				B06BA8F22B1CA01D00120FB5 /* Validators.swift */,
 				B06BA8F42B1CA5A900120FB5 /* AuthError.swift */,
 				B06BA8FB2B1CB9F000120FB5 /* UserError.swift */,
+				B09F24BC2C5191E900DB5E83 /* ImageError.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -570,6 +573,7 @@
 				B019752C2B164766005D4321 /* ChatRequestViewController.swift in Sources */,
 				B091864B2B29B05200965DC1 /* ListenerService.swift in Sources */,
 				B09186472B29173600965DC1 /* StorageService.swift in Sources */,
+				B09F24BD2C5191E900DB5E83 /* ImageError.swift in Sources */,
 				B01C91B02C35D42D001D6ECD /* CGSize + Extension.swift in Sources */,
 				B09186562B2B3FC100965DC1 /* ChatsViewController.swift in Sources */,
 				B0E207442C38010D007346FE /* UINavigationBar + Extension.swift in Sources */,
@@ -781,8 +785,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -815,8 +818,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

@@ -16,25 +16,6 @@ struct ImageItem: MediaItem {
     var image: UIImage?
     var placeholderImage: UIImage
     var size: CGSize
-    
-//    init(image: UIImage) {
-//        self.image = image
-//        size = CGSize(width: 240, height: 240)
-//        placeholderImage = UIImage()
-//    }
-    
-//    init(imageURL: URL) {
-//        url = imageURL
-//        size = CGSize(width: 240, height: 240)
-//        placeholderImage = UIImage(imageLiteralResourceName: "image_message_placeholder")
-//    }
-//
-//    init(placeholderImage: UIImage, size: CGSize) {
-//        self.image = placeholderImage
-//        self.size = size
-//        self.placeholderImage = UIImage()
-//    }
-    
 }
 
 
@@ -42,21 +23,28 @@ struct ImageItem: MediaItem {
 
 struct SMessage: MessageType  {
     
+    var messageId: String {
+        id ?? UUID().uuidString
+    }
+    let id: String?
+    
     var sender: MessageKit.SenderType
     var sentDate: Date
-    let id: String?
+    
+    // content
     
     let content: String
     var image: UIImage?
     var downloadURL: URL?
+    var height: Int?
+    var width: Int?
     
-    var messageId: String {
-        id ?? UUID().uuidString
-    }
+    var isRead: Bool
     
-    var kind: MessageKit.MessageKind {
+    
+    var kind: MessageKind {
         if let image = image {
-            let mediaItem = ImageItem(placeholderImage: image, size: image.size)
+            let mediaItem = ImageItem(url: downloadURL, image: image, placeholderImage: image, size: CGSize(width: CGFloat(width!), height: CGFloat(height!)))
             return .photo(mediaItem)
         } else {
             return .text(content)
@@ -67,10 +55,13 @@ struct SMessage: MessageType  {
         var rep: [String : Any] = [
             "created": sentDate,
             "senderID": sender.senderId,
-            "senderName": sender.displayName
+            "senderName": sender.displayName,
+            "isRead" : isRead
         ]
         if let url = downloadURL {
             rep["url"] = url.absoluteString
+            rep["height"] = height
+            rep["width"] = width
         } else {
             rep["content"] = content
         }
@@ -94,6 +85,7 @@ struct SMessage: MessageType  {
         sender = Sender(senderId: user.id, displayName: user.username)
         self.content = content
         sentDate = Date()
+        isRead = false
         id = nil
     }
     
@@ -101,21 +93,24 @@ struct SMessage: MessageType  {
         let data = document.data()
         guard let senderId = data["senderID"] as? String,
               let senderUserName = data["senderName"] as? String,
-              let sentDate = data["created"] as? Timestamp
+              let sentDate = data["created"] as? Timestamp,
+              let isRead = data["isRead"] as? Bool
         else { return nil }
         
         sender = Sender(senderId: senderId, displayName: senderUserName)
         self.sentDate = sentDate.dateValue()
+        self.isRead = isRead
         self.id = document.documentID
         
         if let content = data["content"] as? String {
             self.content = content
             downloadURL = nil
         } else if let urlString = data["url"] as? String, let url = URL(string: urlString) {
+            self.height = data["height"] as? Int
+            self.width = data["width"] as? Int
             downloadURL = url
             self.content = ""
-//            self.size = CGSize(width: 240, height: 240)
-//            self.image = UIImage(imageLiteralResourceName: "image_message_placeholder")
+            self.image = UIImage(imageLiteralResourceName: "image_message_placeholder")
         } else {
             return nil
         }
@@ -124,15 +119,18 @@ struct SMessage: MessageType  {
     init(user: SUser, image: UIImage) {
         sender = Sender(senderId: user.id, displayName: user.username)
         self.image = image
+        self.height = Int(image.size.height)
+        self.width = Int(image.size.width)
         content = ""
         sentDate = Date()
         id = nil
+        isRead = false
     }
     
     // Equality
     
     static func == (lhs: SMessage, rhs: SMessage) -> Bool {
-        lhs.messageId == rhs.messageId
+        lhs.messageId == rhs.messageId && lhs.sentDate == rhs.sentDate
     }
 }
 

@@ -13,20 +13,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
         
         if let user = Auth.auth().currentUser {
-            FirestoreService.shared.getUserData(user: user) { result in
-                switch result {
-                case .success(let suser):
+            Task(priority: .userInitiated) {
+                do {
+                    let suser = try await FirestoreService.shared.getUserData(user: user)
                     let mainTabBar = MainTabBarController(currentUser: suser)
                     mainTabBar.modalPresentationStyle = .fullScreen
                     self.window?.rootViewController = mainTabBar
                     FirestoreService.shared.updateIsOnline(is: true)
-                case .failure(_):
+                } catch {
                     self.window?.rootViewController = AuthViewController()
                 }
             }
@@ -34,7 +35,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             self.window?.rootViewController = AuthViewController()
         }
         
-        window?.makeKeyAndVisible() 
+        window?.overrideUserInterfaceStyle = .light
+        
+        window?.makeKeyAndVisible()
     }
  
     func sceneDidBecomeActive(_ scene: UIScene) {

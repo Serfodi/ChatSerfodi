@@ -21,8 +21,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let config = GIDConfiguration(clientID: clientID)
             GIDSignIn.sharedInstance.configuration = config
             
-            }
-    
+        }
+        
         return true
     }
 
