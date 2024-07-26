@@ -6,7 +6,7 @@
 //
 
 import UIKit
-//import TinyConstraints
+import TinyConstraints
 
 final class FullScreenPresentationController: UIPresentationController {
     
@@ -14,27 +14,17 @@ final class FullScreenPresentationController: UIPresentationController {
     
     private lazy var closeButtonContainer: UIVisualEffectView = {
         let closeButtonBlurEffectView = UIVisualEffectView(effect: blurEffect)
-        closeButtonBlurEffectView.layer.cornerRadius = 24
-        closeButtonBlurEffectView.clipsToBounds = true
-        closeButtonBlurEffectView.frame.size = CGSize(width: 48, height: 48)
+        let vibrancyEffectView = UIVisualEffectView(effect: UIVibrancyEffect(blurEffect: blurEffect))
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "xmark"), for: .normal)
         button.addTarget(self, action: #selector(close), for: .primaryActionTriggered)
-        
-        let vibrancyEffectView = UIVisualEffectView(effect: UIVibrancyEffect(blurEffect: blurEffect))
         closeButtonBlurEffectView.contentView.addSubview(vibrancyEffectView)
         vibrancyEffectView.contentView.addSubview(button)
-        
-        button.frame = vibrancyEffectView.bounds
-        button.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        
-        vibrancyEffectView.frame = closeButtonBlurEffectView.bounds
-        vibrancyEffectView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        
-        closeButtonBlurEffectView.translatesAutoresizingMaskIntoConstraints = false
-        closeButtonBlurEffectView.heightAnchor.constraint(equalToConstant: 48).isActive = true
-        closeButtonBlurEffectView.widthAnchor.constraint(equalToConstant: 48).isActive = true
-        
+        button.edgesToSuperview()
+        vibrancyEffectView.edgesToSuperview()
+        closeButtonBlurEffectView.layer.cornerRadius = 24
+        closeButtonBlurEffectView.clipsToBounds = true
+        closeButtonBlurEffectView.size(CGSize(width: 48, height: 48))
         return closeButtonBlurEffectView
     }()
     
@@ -71,23 +61,12 @@ extension FullScreenPresentationController {
         
         containerView.addSubview(backgroundView)
         containerView.addSubview(closeButtonContainer)
-        containerView.addGestureRecognizer(swipeDownGesture)
-        containerView.addGestureRecognizer(swipeUpGesture)
-        
-        backgroundView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            backgroundView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            backgroundView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            backgroundView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            backgroundView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor)
-        ])
-        
-        closeButtonContainer.translatesAutoresizingMaskIntoConstraints = false
-        closeButtonContainer.topAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.topAnchor, constant: 16).isActive = true
-        closeButtonContainer.trailingAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
+        backgroundView.edgesToSuperview()
+        closeButtonContainer.topToSuperview(offset: 16, usingSafeArea: true)
+        closeButtonContainer.trailingToSuperview(offset: 16, usingSafeArea: true)
         
         guard let transitionCoordinator = presentingViewController.transitionCoordinator else { return }
-        // button animation
+        
         closeButtonContainer.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
         transitionCoordinator.animate(alongsideTransition: { context in
             self.backgroundView.effect = self.blurEffect

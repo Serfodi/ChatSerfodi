@@ -60,8 +60,6 @@ extension UIButton {
         self.titleLabel?.font = fount
         self.backgroundColor = .clear
         
-        
-        
         if cornerRadius == .round {
             self.layer.cornerRadius = 27
         }

@@ -14,6 +14,7 @@ target 'ChatSerfodi' do
   pod 'lottie-ios'
   pod 'GoogleSignIn'
   pod 'MessageKit'
+  pod "TinyConstraints"
 
 post_install do |installer_representation|
   installer_representation.pods_project.targets.each do |target|

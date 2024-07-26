@@ -25,7 +25,9 @@ class MainTabBarController: UITabBarController {
         configuration()
         let listViewController = ListViewController(currentUser: currentUser)
         let peopleViewController = PeopleViewController(currentUser: currentUser)
-        let setupViewController = ProfileSettingViewController(currentSUser: currentUser)
+        let setupViewController = ProfileViewController(user: currentUser)
+//        let setupViewController = SettingProfileViewController(user: currentUser)
+        
         let boldConfig = UIImage.SymbolConfiguration(weight: .medium)
         let peopleImage = UIImage(systemName: "person.2.fill", withConfiguration: boldConfig)!
         let messageImage = UIImage(systemName: "message.fill", withConfiguration: boldConfig)!

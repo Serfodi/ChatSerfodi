@@ -220,7 +220,7 @@ class ChatsViewController: MessagesViewController {
         Task(priority: .userInitiated) {
             do {
                 let sUser = try await FirestoreService.shared.getUserData(id: chat.friendId)
-                let vc = ProfileViewController(user: sUser)
+                let vc = BaseProfileViewController(user: sUser)
                 self.present(vc, animated: true)
             } catch {
                 self.showAlert(with: "Error", and: error.localizedDescription)
@@ -560,12 +560,5 @@ private extension ChatsViewController {
 
 
 // replay and forward: https://github.com/MessageKit/MessageKit/issues/1676
-// full screen image: https://github.com/thomsmed/ios-examples/tree/main/FullScreenImageTransition
 
-//func isLastSectionVisible() -> Bool {
-//    guard !messageList.isEmpty else { return false }
-//
-//    let lastIndexPath = IndexPath(item: 0, section: messageList.count - 1)
-//
-//    return messagesCollectionView.indexPathsForVisibleItems.contains(lastIndexPath)
-//}
+

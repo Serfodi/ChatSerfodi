@@ -26,6 +26,11 @@ enum FontAppearance {
     static let small = Font.att(size: 14, design: .regular, weight: .regular)
     
     
+    enum Profile {
+        static let name = Font.att(size: 26, design: .regular, weight: .bold)
+        static let about = Font.att(size: 18, design: .regular, weight: .regular)
+    }
+    
     enum Chat {
         static let topHeaderText = Font.att(size: 16, design: .rounded, weight: .regular)
         static let text = Font.att(size: 18, design: .rounded, weight: .regular)

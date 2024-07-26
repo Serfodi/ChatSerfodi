@@ -59,11 +59,9 @@ extension FirestoreService {
                                 avatarImage: UIImage?,
                                 description: String?,
                                 sex: String) async throws -> SUser {
-        
         guard Validators.ifFilled(username: username, description: description, sex: sex) else { throw UserError.notFilled }
         guard avatarImage != UIImage(systemName: "person.circle") else { throw UserError.photoNotExist }
-        
-        var suser = SUser(username: username!,
+        let suser = SUser(username: username!,
                           email: email,
                           avatarStringURL: "Not exist",
                           description: description!,
@@ -72,15 +70,11 @@ extension FirestoreService {
                           isHide: false,
                           entryTime: Date(),
                           isOnline: true)
-        
-        
-        Task(priority: .low) {
+        Task(priority: .medium) {
             let url = try await StorageService.shared.upload(photo: avatarImage!)
             try await usersRef.document(id).updateData(["avatarStringURL" : url])
         }
-        
         try await usersRef.document(suser.id).setData(suser.representation)
-        
         return suser
     }
     
@@ -106,7 +100,7 @@ extension FirestoreService {
         let currentSUser = usersRef.document(currentUser.id)
         currentSUser.updateData([SUser.repreExitTime : date]) { error in
             if let error = error {
-                fatalError(error.localizedDescription)
+                print(error)
             }
         }
     }

@@ -50,10 +50,9 @@ final class FullScreenAnimationController: NSObject, UIViewControllerAnimatedTra
             guard let toViewController = transitionContext.viewController(forKey: .to) else {
                 return transitionContext.completeTransition(false)
             }
-            transitionContext.containerView.insertSubview(toViewController.view, at: 1)
-            toViewController.view.frame = transitionContext.containerView.bounds
-            toViewController.view.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-//            toViewController.view.layoutIfNeeded()
+            transitionContext.containerView.insertSubview(toViewController.view, at: 1) // In between the presentations controller's background and close button
+            toViewController.view.edgesToSuperview()
+            toViewController.view.layoutIfNeeded()
             propertyAnimator = presentAnimator(with: transitionContext, animating: toViewController)
         case .dismiss:
             guard let fromViewController = transitionContext.viewController(forKey: .from) else {

@@ -17,11 +17,14 @@ class InsertableTextField: UITextField {
         font = FontAppearance.secondDefault
         clearButtonMode = .whileEditing
         borderStyle = .none
-        layer.cornerRadius = 21
+//        layer.cornerRadius = 21
         layer.masksToBounds = true
         
         layer.borderWidth = 0.3
         layer.borderColor = ColorAppearance.black.color().withAlphaComponent(0.5).cgColor
+        
+        
+        
         
         let button = UIButton(type: .system)
         let image = UIImage(systemName: "arrow.up.message.fill")?.withRenderingMode(.alwaysOriginal)

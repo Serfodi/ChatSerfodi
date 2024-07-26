@@ -18,20 +18,13 @@ class OneLineTextField: UITextField {
         self.textColor = ColorAppearance.black.color()
         self.translatesAutoresizingMaskIntoConstraints = false
         
-        var bottomView =  UIView()
-        bottomView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: 0, height: 0))
+        var bottomView =  UIView(frame: .zero)
         bottomView.backgroundColor = ColorAppearance.black.color()
-        bottomView.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(bottomView)
-        
-        NSLayoutConstraint.activate([
-            bottomView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            bottomView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            bottomView.trailingAnchor.constraint(equalTo: self.trailingAnchor), 
-            bottomView.heightAnchor.constraint(equalToConstant: 1)
-        ])
-        
-        
+        bottomView.height(1)
+        bottomView.bottomToSuperview()
+        bottomView.leftToSuperview()
+        bottomView.rightToSuperview()
     }
     
 }

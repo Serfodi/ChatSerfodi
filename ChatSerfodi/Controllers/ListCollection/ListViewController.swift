@@ -106,9 +106,7 @@ class ListViewController: UIViewController {
                 self.waitingChat = chats
                 self.reloadData()
                 if self.waitingChat != [], self.waitingChat.count <= chats.count {
-                    let chatRequestVC = ChatRequestViewController(chat: chats.last!)
-                    chatRequestVC.delegate = self
-                    self.present(chatRequestVC, animated: true)
+                    self.showRequestViewController(chat: chats.last!)
                 }
             case .failure(let error):
                 self.showAlert(with: "Error", and: error.localizedDescription)
@@ -143,10 +141,24 @@ class ListViewController: UIViewController {
     }
     
     @objc func presentPerson() {
-        let chatRequestVC = ChatRequestViewController(chat: waitingChat.last!)
-        chatRequestVC.delegate = self
-        self.present(chatRequestVC, animated: true)
+        showRequestViewController(chat: waitingChat.last!)
     }
+    
+    // MARK: Helper
+    
+    private func showRequestViewController(chat: SChat) {
+        Task(priority: .userInitiated) {
+            do {
+                let friend = try await FirestoreService.shared.getUserData(id: chat.friendId)
+                let chatRequestVC = RequestViewController(user: friend, chat: chat)
+                chatRequestVC.delegate = self
+                self.present(chatRequestVC, animated: true)
+            } catch {
+                self.showAlert(with: "Error", and: error.localizedDescription)
+            }
+        }
+    }
+    
 }
 
 
@@ -194,9 +206,7 @@ extension ListViewController: UICollectionViewDelegate {
         guard let section = Section(rawValue: indexPath.section) else { return }
         switch section {
         case .waitingChat:
-            let chatRequestVC = ChatRequestViewController(chat: chat)
-            chatRequestVC.delegate = self
-            self.present(chatRequestVC, animated: true)
+            showRequestViewController(chat: chat)
         case .activeChat:
             let chatVC = ChatsViewController(chat: chat)
             chatVC.hidesBottomBarWhenPushed = true
