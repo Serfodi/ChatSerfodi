@@ -15,6 +15,10 @@ class ListenerService {
     
     private let db = Firestore.firestore()
     
+    private var currentUserId: String {
+        Auth.auth().currentUser!.uid
+    }
+    
     private var userRef: CollectionReference {
         db.collection("users")
     }
@@ -27,34 +31,54 @@ class ListenerService {
         db.collection(["users", currentUserId, "activeChats"].joined(separator: "/"))
     }
     
-    private var currentUserId: String {
-        Auth.auth().currentUser!.uid
-    }
+    
+    // MARK: - User Collection
     
     func usersObserve(users: [SUser], completion: @escaping (Result<[SUser], Error>)-> Void) -> ListenerRegistration? {
         var users = users
-        let userListener = userRef.addSnapshotListener { (querySnapshot, error) in
+        
+        var usersRef = userRef.whereField("isHide", isEqualTo: false)
+        
+        print(#function)
+        
+//        if !currentUser.blocked.isEmpty {
+//            usersRef = usersRef.whereField("uid", notIn: currentUser.blocked)
+//        }
+//        if !currentUser.activeChats.isEmpty {
+//            usersRef = usersRef.whereField("uid", notIn: currentUser.activeChats)
+//        }
+        
+        
+        let userListener = usersRef.addSnapshotListener { (querySnapshot, error) in
             guard let querySnapshot = querySnapshot else {
                 completion(.failure(error!))
                 return
             }
             querySnapshot.documentChanges.forEach { (diff) in
                 guard let user = SUser(document: diff.document) else {
-                    print("Error init SUser form QueryDocumentSnapshot")
+                    completion(.failure(UserError.cannotUnwrapToSuser))
                     return
                 }
                 switch diff.type {
                 case .added:
                     guard !users.contains(user),
-                          user.id != self.currentUserId,
-                          !user.isHide
-                    else { return }
+                          user.id != self.currentUserId
+                    else { break }
                     users.append(user)
                 case .modified:
-                    guard let index = users.firstIndex(of: user) else { return }
+//                    guard user.id != self.currentUserId else { break }
+                    guard let index = users.firstIndex(of: user) else { break }
                     users[index] = user
+                    
+//                    if currentUser.blocked.contains(user.id) {
+//                        users.remove(at: index)
+//                    }
+//                    if currentUser.activeChats.contains(user.id) {
+//                        users.remove(at: index)
+//                    }
+                    
                 case .removed:
-                    guard let index = users.firstIndex(of: user) else { return }
+                    guard let index = users.firstIndex(of: user) else { break }
                     users.remove(at: index)
                 }
             }
@@ -64,11 +88,7 @@ class ListenerService {
     }
     
     
-    
-    
-    
-    
-    
+    // MARK: - Waiting Chat Collection
     
     func waitingChatObserve(chats: [SChat], completion: @escaping (Result<[SChat], Error>)-> Void) -> ListenerRegistration? {
         var chats = chats
@@ -97,6 +117,7 @@ class ListenerService {
         return chatsListener
     }
     
+    // MARK: - Activity Chat Collection
     
     func activityChatObserve(chats: [SChat], completion: @escaping (Result<([SChat]), Error>)-> Void) -> ListenerRegistration? {
         var chats = chats
@@ -112,12 +133,19 @@ class ListenerService {
                 case .added:
                     guard !chats.contains(chat) else { return }
                     chats.append(chat)
+                    Task(priority: .userInitiated) {
+                        await FirestoreService.shared.updateActiveChats(chat: chat)
+                    }
                 case .modified:
                     guard let index = chats.firstIndex(where: { $0.friendId == chat.friendId }) else { return }
                     chats[index] = chat
                 case .removed:
                     guard let index = chats.firstIndex(of: chat) else { return }
-                    chats.remove(at: index)
+                    let chat = chats.remove(at: index)
+                    // Обновляет список активных чатов
+                    Task(priority: .userInitiated) {
+                        await FirestoreService.shared.updateActiveChats(chat: chat)
+                    }
                 }
             }
             completion(.success(chats))
@@ -125,6 +153,8 @@ class ListenerService {
         return chatsListener
     }
     
+    
+    // MARK: - User Document
     
     public func userObserver(userId: String, completion: @escaping (Result<SUser, Error>)-> Void) -> ListenerRegistration? {
         let userListener = userRef.document(userId).addSnapshotListener { (documentSnapshot, error) in
@@ -137,6 +167,9 @@ class ListenerService {
         }
         return userListener
     }
+    
+    
+    // MARK: - Chat Document
     
     public func chatObserve(chatId: String, completion: @escaping (Result<SChat, Error>)-> Void) -> ListenerRegistration? {
         let userListener = activeChatsRef.document(chatId).addSnapshotListener { (documentSnapshot, error) in
@@ -151,7 +184,7 @@ class ListenerService {
     }
     
     
-    // Наблюдатель для сообщений
+    // MARK: - Messages Collection
     
     public func messagesObserve(chat: SChat, completion: @escaping (Result<SMessage, Error>) -> Void) -> ListenerRegistration? {
         let ref = userRef.document(currentUserId).collection("activeChats").document(chat.friendId).collection("messages")
@@ -174,7 +207,4 @@ class ListenerService {
         }
         return messagesListener
     }
-    
-    
-    
 }

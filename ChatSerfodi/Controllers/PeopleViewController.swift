@@ -16,7 +16,9 @@ class PeopleViewController: UIViewController {
     }
     
     var users = [SUser]()
+    
     private var usersListener: ListenerRegistration?
+    private var userListener: ListenerRegistration?
     
     var collectionView: UICollectionView!
     
@@ -27,7 +29,7 @@ class PeopleViewController: UIViewController {
     var dataSource: UICollectionViewDiffableDataSource<Section, SUser>!
     
     
-    private let currentUser: SUser
+    private var currentUser: SUser
     
     // MARK: init
     
@@ -35,9 +37,6 @@ class PeopleViewController: UIViewController {
         self.currentUser = currentUser
         super.init(nibName: nil, bundle: nil)
         title = currentUser.username
-    }
-    deinit {
-        usersListener?.remove()
     }
     
     required init?(coder: NSCoder) {
@@ -53,8 +52,12 @@ class PeopleViewController: UIViewController {
         setupCollectionView()
         createDataSource()
         setupUsersListener()
+        setupUserListener()
     }
-    
+    deinit {
+        usersListener?.remove()
+        userListener?.remove()
+    }
     
     // MARK: Users Listener
     
@@ -63,7 +66,24 @@ class PeopleViewController: UIViewController {
             switch result {
             case .success(let users):
                 self.users = users
+                
+                var toRemove = self.currentUser.blocked + self.currentUser.activeChats
+                if !toRemove.isEmpty {
+                    self.users = self.users.filter { !toRemove.contains($0.id) }
+                }
+                
                 self.reloadData()
+            case .failure(let error):
+                self.showAlert(with: "Error", and: #function + error.localizedDescription)
+            }
+        })
+    }
+    
+    private func setupUserListener() {
+        userListener = ListenerService.shared.userObserver(userId: currentUser.id, completion: { result in
+            switch result {
+            case .success(let user):
+                self.currentUser = user
             case .failure(let error):
                 self.showAlert(with: "Error", and: error.localizedDescription)
             }
@@ -210,6 +230,16 @@ extension PeopleViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let user = self.dataSource.itemIdentifier(for: indexPath) else { return }
         let pr = SendProfileViewController(user: user)
+        pr.delegate = self
         present(pr, animated: true)
     }
+}
+
+extension PeopleViewController: GoToAccept {
+    
+    func GoToAccept(user: SUser) {
+        self.tabBarController?.selectedIndex = 1
+        NotificationCenter.default.post(name: Notification.Name("ShowRequestViewController"), object: nil, userInfo: ["SUser" : user])
+    }
+    
 }

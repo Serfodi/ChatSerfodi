@@ -34,18 +34,6 @@ final class FullScreenPresentationController: UIPresentationController {
         return blurVisualEffectView
     }()
     
-    private lazy var swipeDownGesture: UISwipeGestureRecognizer = {
-        let swipeGestureRecognizer =  UISwipeGestureRecognizer(target: self, action: #selector(close))
-        swipeGestureRecognizer.direction = .down
-        return swipeGestureRecognizer
-    }()
-    
-    private lazy var swipeUpGesture: UISwipeGestureRecognizer = {
-        let swipeGestureRecognizer =  UISwipeGestureRecognizer(target: self, action: #selector(close))
-        swipeGestureRecognizer.direction = .up
-        return swipeGestureRecognizer
-    }()
-    
     @objc private func close() {
         presentedViewController.dismiss(animated: true)
     }

@@ -82,9 +82,10 @@ class ListViewController: UIViewController {
         createDataSource()
         setupConstraint()
         findButton.addTarget(self, action: #selector(showFind), for: .touchUpInside)
-        acceptButton.addTarget(self, action: #selector(presentPerson), for: .touchUpInside)
+        acceptButton.addTarget(self, action: #selector(presentPerson(_:)), for: .touchUpInside)
         setupWaitingChatsListener()
         setupActivityChatObserve()
+        NotificationCenter.default.addObserver(self, selector: #selector(presentPersonNotification(_:)), name: Notification.Name("ShowRequestViewController"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(deleteChat(_:)), name: Notification.Name("DeleteChat"), object: nil)
     }
     deinit {
@@ -105,9 +106,9 @@ class ListViewController: UIViewController {
             case .success(let chats):
                 self.waitingChat = chats
                 self.reloadData()
-                if self.waitingChat != [], self.waitingChat.count <= chats.count {
-                    self.showRequestViewController(chat: chats.last!)
-                }
+//                if self.waitingChat != [], self.waitingChat.count <= chats.count {
+//                    self.showRequestViewController(chat: chats.last!)
+//                }
             case .failure(let error):
                 self.showAlert(with: "Error", and: error.localizedDescription)
             }
@@ -140,8 +141,14 @@ class ListViewController: UIViewController {
         removeActiveChats(chat: chat)
     }
     
-    @objc func presentPerson() {
+    @objc func presentPerson(_ sender: UIButton) {
         showRequestViewController(chat: waitingChat.last!)
+    }
+    
+    @objc func presentPersonNotification(_ notification: Notification) {
+        guard let user = notification.userInfo?["SUser"] as? SUser else { return }
+        guard let chat = waitingChat.first(where: { $0.friendId == user.id }) else { return }
+        showRequestViewController(chat: chat)
     }
     
     // MARK: Helper
@@ -167,20 +174,31 @@ class ListViewController: UIViewController {
 extension ListViewController: WaitingChatsNavigation {
     
     func removeWaitingChats(chat: SChat) {
-        do {
-            try FirestoreService.shared.deleteWaitingChat(chat: chat)
-            self.showAlert(with: "Successfully", and: "Chat was deleted.")
-        } catch {
-            self.showAlert(with: "Error", and: "Chat not was deleted.")
+        Task(priority: .userInitiated) {
+            do {
+                try await FirestoreService.shared.deleteWaitingChat(from: chat.friendId)
+                self.showAlert(with: "Successfully", and: "Chat was deleted.")
+            } catch {
+                self.showAlert(with: "Error", and: "Chat not was deleted.")
+            }
         }
     }
     
     func removeActiveChats(chat: SChat) {
-        do {
-            try FirestoreService.shared.deleteActiveChat(chat: chat)
-            self.showAlert(with: "Successfully", and: "Chat was deleted.")
-        } catch {
-            self.showAlert(with: "Error", and: "Chat not was deleted.")
+        Task(priority: .userInitiated) {
+            do {
+                try await FirestoreService.shared.deleteActiveChat(friendId: chat.friendId)
+                self.showAlert(with: "Successfully", and: "Chat was deleted.")
+            } catch {
+                self.showAlert(with: "Error", and: "Chat not was deleted.")
+            }
+        }
+        Task(priority: .background) {
+            do {
+                try await FirestoreService.shared.clearActiveChat(friendId: chat.friendId)
+            } catch {
+                self.showAlert(with: "Error", and: #function + error.localizedDescription)
+            }
         }
     }
     
@@ -190,7 +208,7 @@ extension ListViewController: WaitingChatsNavigation {
                 try await FirestoreService.shared.changeToActive(chat: chat)
                 self.showAlert(with: "Successfully", and: "EnjoyThe")
             } catch {
-                self.showAlert(with: "Error", and: error.localizedDescription)
+                self.showAlert(with: "Error", and: #function + error.localizedDescription)
             }
         }
     }

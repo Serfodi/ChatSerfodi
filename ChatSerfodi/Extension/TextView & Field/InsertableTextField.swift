@@ -23,9 +23,6 @@ class InsertableTextField: UITextField {
         layer.borderWidth = 0.3
         layer.borderColor = ColorAppearance.black.color().withAlphaComponent(0.5).cgColor
         
-        
-        
-        
         let button = UIButton(type: .system)
         let image = UIImage(systemName: "arrow.up.message.fill")?.withRenderingMode(.alwaysOriginal)
         button.setImage(image, for: .normal)

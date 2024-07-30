@@ -31,7 +31,7 @@ class ChatsViewController: MessagesViewController {
     private var chatListener: ListenerRegistration?
     private var userListener: ListenerRegistration?
     
-    private var user: SUser {
+    private var currentUser: SUser {
         FirestoreService.shared.currentUser
     }
     private var chat: SChat
@@ -87,8 +87,7 @@ class ChatsViewController: MessagesViewController {
         setupChatListener()
         setupUserListener()
         
-        
-//        loadFirstMessages()
+        NotificationCenter.default.addObserver(self, selector: #selector(blockedUser(_:)), name: Notification.Name("DeleteUser"), object: nil)
     }
     deinit {
         messageListener?.remove()
@@ -106,23 +105,7 @@ class ChatsViewController: MessagesViewController {
     private func setupMessageListener() {
         messageListener = ListenerService.shared.messagesObserve(chat: chat) { result in
             switch result {
-            case .success(var message):
-//                if let url = message.downloadURL {
-//
-//                    StorageService.shared.downloadImage(url: url) { [weak self] result in
-//                        guard let self = self else { return  }
-//                        switch result {
-//                        case .success(let image):
-//                            message.image = image
-//                            self.insertNewMessage(message: message)
-//                        case .failure(let error):
-//                            self.showAlert(with: "Error", and: error.localizedDescription)
-//                        }
-//                    }
-//
-//                    self.insertNewMessage(message: message)
-//                } else {
-//                }
+            case .success(let message):
                 self.insertNewMessage(message: message, animated: false)
                 self.chat.lastMessage = message.descriptor
             case .failure(let error):
@@ -153,6 +136,11 @@ class ChatsViewController: MessagesViewController {
                 if let text = text {
                     self.subtitleLabel.text = text
                 }
+                
+                if !user.activeChats.contains(self.currentUser.id) {
+                    self.navigationController?.popViewController(animated: true)
+                }
+                
             case .failure(let error):
                 self.showAlert(with: "Error", and: error.localizedDescription)
             }
@@ -182,7 +170,7 @@ class ChatsViewController: MessagesViewController {
         Task(priority: .userInitiated) {
             do {
                 let url = try await StorageService.shared.uploadImageMessage(photo: image, to: chat)
-                var imageMessage = SMessage(user: self.user, image: image)
+                var imageMessage = SMessage(user: self.currentUser, image: image)
                 imageMessage.downloadURL = url
                 try FirestoreService.shared.sendMessage(from: self.chat, message: imageMessage)
             }  catch {
@@ -226,6 +214,10 @@ class ChatsViewController: MessagesViewController {
                 self.showAlert(with: "Error", and: error.localizedDescription)
             }
         }
+    }
+    
+    @objc func blockedUser(_ notification: Notification) {
+        self.dismiss(animated: true)
     }
     
     // MARK: Helpers
@@ -352,7 +344,7 @@ extension ChatsViewController: MessagesDisplayDelegate {
 extension ChatsViewController: InputBarAccessoryViewDelegate {
     
     func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
-        let message = SMessage(user: user, content: text)
+        let message = SMessage(user: currentUser, content: text)
         do {
             try FirestoreService.shared.sendMessage(from: self.chat, message: message)
             inputBar.inputTextView.text = ""
@@ -382,7 +374,7 @@ struct Sender: SenderType {
 extension ChatsViewController: MessagesDataSource {
     
     func currentSender() -> MessageKit.SenderType {
-        Sender(senderId: user.id, displayName: user.username)
+        Sender(senderId: currentUser.id, displayName: currentUser.username)
     }
     
     func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessageKit.MessagesCollectionView) -> MessageKit.MessageType {

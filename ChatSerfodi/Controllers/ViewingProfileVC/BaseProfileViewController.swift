@@ -15,6 +15,8 @@ class BaseProfileViewController: UIViewController {
     private let nameLabel = UILabel(text: "nil", fount: FontAppearance.Profile.name)
     private let aboutLabel = UILabel(text: "nil", fount: FontAppearance.Profile.about)
         
+    private var menuButton: MenuButton!
+    
     // helper
     
     private var fullScreenTransitionManager: FullScreenTransitionManager?
@@ -53,9 +55,11 @@ class BaseProfileViewController: UIViewController {
         imageView.aspectRatio(aspectRatio)
     }
     
+    
     // MARK: Action
     
     @objc func imageTap() {
+        view.endEditing(true)
         let fullScreenTransitionManager = FullScreenTransitionManager(anchorViewTag: 1)
         let fullScreenImageViewController = FullScreenImageViewController(image: imageView.image!, tag: 1)
         fullScreenImageViewController.modalPresentationStyle = .custom
@@ -73,6 +77,7 @@ private extension BaseProfileViewController {
         configurationScrollView()
         configurationImageViewView()
         configurationLabel()
+        configurationMenuButon()
         configurationConstraints()
     }
     
@@ -90,10 +95,8 @@ private extension BaseProfileViewController {
         imageView.backgroundColor = ColorAppearance.gray.color()
         imageView.tag = 1
         imageView.contentMode = .scaleAspectFit
-        
         imageView.setHugging(.defaultHigh, for: .horizontal)
         imageView.setCompressionResistance(.defaultHigh, for: .horizontal)
-        
         imageView.isUserInteractionEnabled = true
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(imageTap))
@@ -104,10 +107,24 @@ private extension BaseProfileViewController {
         aboutLabel.numberOfLines = 0
     }
     
+    func configurationMenuButon() {
+        let action = UIAction(title: NSLocalizedString("Blocking", comment: ""), image: .init(systemName: "nosign"), attributes: .destructive) { action in
+            Task(priority: .userInitiated) {
+                await FirestoreService.shared.blockedUser(user: self.user)
+                self.dismiss(animated: true) {
+                    NotificationCenter.default.post(name: Notification.Name("DeleteUser"), object: nil, userInfo: ["User" : self.user])
+                }
+            }
+            FirestoreService.shared.blockedClear(user: self.user)
+        }
+        menuButton = MenuButton(menuActions: [action])
+    }
+    
     func configurationConstraints() {
         view.addSubview(scrollView)
         scrollView.addSubview(imageView)
         baseLabelView.contentView.addSubview(nameLabel)
+        baseLabelView.contentView.addSubview(menuButton)
         scrollView.addSubview(baseLabelView)
         scrollView.addSubview(aboutLabel)
         
@@ -122,7 +139,15 @@ private extension BaseProfileViewController {
         baseLabelView.leftToSuperview()
         baseLabelView.rightToSuperview()
         
-        nameLabel.edgesToSuperview(insets: .top(10) + .bottom(10) + .left(20) + .right(20))
+        nameLabel.topToSuperview(offset: 10)
+        nameLabel.bottomToSuperview(offset: -10)
+        nameLabel.leftToSuperview(offset: 20)
+        nameLabel.rightToLeft(of: menuButton)
+        
+        menuButton.topToSuperview()
+        menuButton.rightToSuperview()
+        menuButton.bottomToSuperview()
+        menuButton.aspectRatio(1)
         
         aboutLabel.top(to: baseLabelView, baseLabelView.bottomAnchor, offset: 15)
         aboutLabel.leftToSuperview(offset: 20)

@@ -96,7 +96,10 @@ private extension ProfileViewController {
     }
     
     func configurationConstraints() {
-        settingProfileViewController.view.edgesToSuperview()
+        settingProfileViewController.view.topToSuperview()
+        settingProfileViewController.view.leftToSuperview()
+        settingProfileViewController.view.rightToSuperview()
+        settingProfileViewController.view.bottom(to: view, view.keyboardLayoutGuide.topAnchor)
     }
     
 }

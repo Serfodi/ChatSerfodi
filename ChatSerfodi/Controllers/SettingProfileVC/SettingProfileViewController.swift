@@ -15,12 +15,12 @@ class SettingProfileViewController: UIViewController {
     private let fullNameLabel = UILabel(text: "Name")
     private let aboutMeLabel = UILabel(text: "Description")
     private let fullNameTextField = OneLineTextField(font: FontAppearance.defaultText)
-    private let aboutMeTextField = InputTextView(frame: .zero, textContainer: nil)
+    private let aboutMeTextView = OneLineTextView(font: FontAppearance.defaultText)
     private let pickButton = UIButton(title: "ChooseAnotherPhoto", titleColor: ColorAppearance.black.color(), fount: FontAppearance.defaultBoldText)
     
     public var stackView: UIStackView!
     
-    private lazy var aboutMeTextFieldHeight = aboutMeTextField.height(48)
+    private lazy var aboutMeTextViewHeight = aboutMeTextView.height(48)
     
     // helper
     
@@ -44,7 +44,7 @@ class SettingProfileViewController: UIViewController {
     }
     
     public var aboutMeText: String {
-        aboutMeTextField.text
+        aboutMeTextView.text
     }
     
     // MARK: init
@@ -56,7 +56,7 @@ class SettingProfileViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
         imageView.sd_setImage(with: URL(string: user.avatarStringURL))
         fullNameTextField.text = user.username
-        aboutMeTextField.text = user.description
+        aboutMeTextView.text = user.description
     }
     
     required init?(coder: NSCoder) {
@@ -68,7 +68,6 @@ class SettingProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configuration()
-        NotificationCenter.default.addObserver(self, selector: #selector(moveContentUp), name: UIResponder.keyboardWillShowNotification, object: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -88,6 +87,7 @@ class SettingProfileViewController: UIViewController {
     }
     
     @objc func imageTap() {
+        view.endEditing(true)
         let fullScreenTransitionManager = FullScreenTransitionManager(anchorViewTag: 1)
         let fullScreenImageViewController = FullScreenImageViewController(image: imageView.image!, tag: 1)
         fullScreenImageViewController.modalPresentationStyle = .custom
@@ -96,12 +96,6 @@ class SettingProfileViewController: UIViewController {
         self.fullScreenTransitionManager = fullScreenTransitionManager
     }
     
-    @objc func moveContentUp(notification: NSNotification) {
-        let userInfo = notification.userInfo
-        let keyboardFrame = userInfo![UIResponder.keyboardFrameEndUserInfoKey] as? CGRect
-        let keyboardHeight = keyboardFrame!.size.height
-        self.view.frame.origin.y = -keyboardHeight
-    }
 }
 
 
@@ -123,7 +117,7 @@ extension SettingProfileViewController: UITextViewDelegate {
         let size = textView.bounds.size
         let newSize = textView.sizeThatFits(CGSize(width: size.width, height: CGFloat.greatestFiniteMagnitude))
         if size.height != newSize.height {
-            aboutMeTextFieldHeight.constant = newSize.height
+            aboutMeTextViewHeight.constant = newSize.height
             UIView.animate(withDuration: 0.2) {
                 textView.layoutIfNeeded()
             }
@@ -138,7 +132,6 @@ extension SettingProfileViewController: UITextViewDelegate {
         textView.text = textView.text.trimmingCharacters(in: .newlines)
         fixHeight(textView)
     }
-    
 }
 
 
@@ -147,7 +140,6 @@ extension SettingProfileViewController: UIScrollViewDelegate {
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         UIView.animate(withDuration: 0.3) {
-            self.view.frame.origin.y = 0
             self.view.endEditing(true)
         }
     }
@@ -188,11 +180,8 @@ private extension SettingProfileViewController {
     }
     
     func configurationSendTextField() {
-        aboutMeTextField.backgroundColor = .clear
-        aboutMeTextField.layer.borderWidth = 1
-        aboutMeTextField.layer.borderColor = ColorAppearance.black.color().cgColor
-        aboutMeTextField.isScrollEnabled = false
-        aboutMeTextField.delegate = self
+        aboutMeTextView.isScrollEnabled = false
+        aboutMeTextView.delegate = self
     }
     
     func configurationConstraints() {
@@ -207,7 +196,7 @@ private extension SettingProfileViewController {
         imageView.width(to: scrollView)
         
         let fillNameStackView = UIStackView(arrangedSubviews: [fullNameLabel, fullNameTextField], axis: .vertical, spacing: 0)
-        let aboutStackView = UIStackView(arrangedSubviews: [aboutMeLabel, aboutMeTextField], axis: .vertical, spacing: 0)
+        let aboutStackView = UIStackView(arrangedSubviews: [aboutMeLabel, aboutMeTextView], axis: .vertical, spacing: 0)
         
         stackView = UIStackView(arrangedSubviews: [
             pickButton,
