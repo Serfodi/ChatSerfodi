@@ -6,21 +6,23 @@
 //
 
 import UIKit
+import TinyConstraints
 
 class FullScreenImageViewController: UIViewController {
-    
-    var zoomAnimator = UIViewPropertyAnimator()
     
     private lazy var zoomButtonContainer: UIVisualEffectView = {
         let closeButtonBlurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .systemThinMaterial))
         closeButtonBlurEffectView.layer.cornerRadius = 24
         closeButtonBlurEffectView.clipsToBounds = true
-        closeButtonBlurEffectView.frame.size = CGSize(width: 120, height: 48)
+        closeButtonBlurEffectView.size(CGSize(width: 120, height: 48))
+        
         let button = UIButton(type: .system)
-        button.setTitle("Zoom", for: .normal)
+        button.setTitle(NSLocalizedString("Zoom", comment: ""), for: .normal)
         button.titleLabel?.font = FontAppearance.buttonText
-        button.configuration?.imagePadding = -10
-        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
+        
+//        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
+//        button.configuration?.imagePadding = 10
+        
         button.setImage(UIImage(systemName: "arrow.down.right.and.arrow.up.left"), for: .normal)
         button.addTarget(self, action: #selector(zooming), for: .primaryActionTriggered)
         
@@ -31,15 +33,13 @@ class FullScreenImageViewController: UIViewController {
         button.frame = vibrancyEffectView.bounds
         button.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         
-        closeButtonBlurEffectView.translatesAutoresizingMaskIntoConstraints = false
-        closeButtonBlurEffectView.heightAnchor.constraint(equalToConstant: 48).isActive = true
-        closeButtonBlurEffectView.widthAnchor.constraint(equalToConstant: 120).isActive = true
-        
         vibrancyEffectView.frame = closeButtonBlurEffectView.bounds
         vibrancyEffectView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         
         return closeButtonBlurEffectView
     }()
+    
+    var zoomAnimator = UIViewPropertyAnimator()
     
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -51,55 +51,40 @@ class FullScreenImageViewController: UIViewController {
         scrollView.showsHorizontalScrollIndicator = false
         return scrollView
     }()
-        
-//    private let imageView: UIImageView = {
-//        let imageView = UIImageView()
-//        imageView.contentMode = .scaleAspectFit
-//        imageView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-//        imageView.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
-//        return imageView
-//    }()
     
-    private var imageView: UIImageView!
+    private let wrapperView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
+    }()
+    
+    private let imageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.setHugging(.defaultHigh, for: .horizontal)
+        imageView.setCompressionResistance(.defaultHigh, for: .horizontal)
+        return imageView
+    }()
+    
+    private lazy var imageViewLandscapeConstraint = imageView.heightToSuperview(isActive: false, usingSafeArea: true)
+    private lazy var imageViewPortraitConstraint = imageView.widthToSuperview(isActive: false, usingSafeArea: true)
     
     
-//    private lazy var imageViewLandscapeConstraint = imageView.heightToSuperview(isActive: false, usingSafeArea: true)
-//    private lazy var imageViewPortraitConstraint = imageView.widthToSuperview(isActive: false, usingSafeArea: true)
-    
-    // MARK: init
-    
-    init (image: UIImage, tag: Int) {
+    init(image: UIImage, tag: Int) {
         super.init(nibName: nil, bundle: nil)
-        imageView = UIImageView(image: image)
         imageView.tag = tag
-        
-        scrollView.contentSize = image.size
-        setupCurrentMaxandMinZoomScale()
-        
-//        scrollView.zoomScale = scrollView.maximumZoomScale
-//        let margin = (self.view.bounds.size - scrollView.contentSize) * 0.5
-//        let insets = [margin.width, margin.height].map { $0 > 0 ? $0 : 0 }
-//        scrollView.contentInset = UIEdgeInsets(top: insets[1], left: insets[0], bottom: insets[1], right: insets[0])
+        imageView.image = image
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: Life Cycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        configure()
+        configureUI()
         configureBehaviour()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        scrollView.setZoomScale(scrollView.minimumZoomScale, animated: true)
-        let margin = (self.view.bounds.size - scrollView.contentSize) * 0.5
-        let insets = [margin.width, margin.height].map { $0 > 0 ? $0 : 0 }
-        scrollView.contentInset = UIEdgeInsets(top: insets[1], left: insets[0], bottom: insets[1], right: insets[0])
+        showZoomOutAnimation(false)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -108,14 +93,58 @@ class FullScreenImageViewController: UIViewController {
         showZoomOutAnimation(false)
     }
     
-    
-    // MARK: Action
-    
-    @objc func zooming(_ sender: UIButton) {
-        scrollView.setZoomScale(scrollView.minimumZoomScale, animated: true)
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        traitCollectionChanged(from: previousTraitCollection)
     }
     
-    // MARK: Helpers
+    private func configureUI() {
+        view.backgroundColor = .clear
+        
+        view.addSubview(scrollView)
+        view.addSubview(zoomButtonContainer)
+        
+        scrollView.addSubview(wrapperView)
+        wrapperView.addSubview(imageView)
+        
+        scrollView.edgesToSuperview()
+        
+        zoomButtonContainer.topToSuperview(offset: 16, usingSafeArea: true)
+        zoomButtonContainer.centerXToSuperview()
+        
+        // The wrapper view will fill up the scroll view, and act as a target for pinch and pan event
+        wrapperView.edges(to: scrollView.contentLayoutGuide)
+        wrapperView.width(to: scrollView.safeAreaLayoutGuide)
+        wrapperView.height(to: scrollView.safeAreaLayoutGuide)
+        
+        imageView.centerInSuperview()
+        
+        // Constraint UIImageView to fit the aspect ratio of the containing image
+        let aspectRatio = imageView.intrinsicContentSize.height / imageView.intrinsicContentSize.width
+        imageView.heightToWidth(of: imageView, multiplier: aspectRatio)
+    }
+    
+    private func configureBehaviour() {
+        scrollView.delegate = self
+        scrollView.minimumZoomScale = 1.0
+        scrollView.maximumZoomScale = 2.0
+        
+        let doubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(zoomMaxMin))
+        doubleTapGestureRecognizer.numberOfTapsRequired = 2
+        scrollView.addGestureRecognizer(doubleTapGestureRecognizer)
+    }
+    
+    private func traitCollectionChanged(from previousTraitCollection: UITraitCollection?) {
+        if traitCollection.horizontalSizeClass != .compact {
+            // Ladscape
+            imageViewPortraitConstraint.isActive = false
+            imageViewLandscapeConstraint.isActive = true
+        } else {
+            // Portrait
+            imageViewLandscapeConstraint.isActive = false
+            imageViewPortraitConstraint.isActive = true
+        }
+    }
     
     func showZoomOutAnimation(_ isShow: Bool) {
         guard !zoomAnimator.isRunning else { return }
@@ -141,57 +170,6 @@ class FullScreenImageViewController: UIViewController {
         zoomAnimator.startAnimation()
     }
     
-}
-
-// MARK: Configuration
-extension FullScreenImageViewController {
-        
-    private func setupCurrentMaxandMinZoomScale() {
-        let boundsSize = self.view.bounds.size
-        let imageSize = imageView.image!.size
-
-        let xScale = boundsSize.width / imageSize.width
-        let yScale = boundsSize.height / imageSize.height
-        let minScale = min(xScale, yScale)
-
-        var maxScale = 1.0
-        if minScale < 0.1 {
-            maxScale = 0.3
-        }
-        if minScale >= 0.1 && minScale < 0.5  {
-            maxScale = 0.7
-        }
-        if minScale >= 0.5 {
-            maxScale = max(1.0, minScale)
-        }
-        scrollView.maximumZoomScale = maxScale
-        scrollView.minimumZoomScale = minScale
-    }
-    
-    
-    
-    private func configure() {
-        view.backgroundColor = .clear
-        view.addSubview(scrollView)
-        scrollView.addSubview(imageView)
-        view.addSubview(zoomButtonContainer)
-        
-        scrollView.frame = self.view.bounds
-        scrollView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        
-        zoomButtonContainer.translatesAutoresizingMaskIntoConstraints = false
-        zoomButtonContainer.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 16).isActive = true
-        zoomButtonContainer.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-    }
-    
-    private func configureBehaviour() {
-        scrollView.delegate = self
-        
-        let doubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(zoomMaxMin))
-        doubleTapGestureRecognizer.numberOfTapsRequired = 2
-        scrollView.addGestureRecognizer(doubleTapGestureRecognizer)
-    }
-        
     @objc private func zoomMaxMin(_ sender: UITapGestureRecognizer) {
         if scrollView.zoomScale == scrollView.maximumZoomScale {
             scrollView.setZoomScale(scrollView.minimumZoomScale, animated: true)
@@ -202,6 +180,9 @@ extension FullScreenImageViewController {
         }
     }
     
+    @objc func zooming(_ sender: UIButton) {
+        scrollView.setZoomScale(scrollView.minimumZoomScale, animated: true)
+    }
 }
 
 // MARK: UIScrollViewDelegate
@@ -212,14 +193,23 @@ extension FullScreenImageViewController: UIScrollViewDelegate {
         imageView
     }
     
-    func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
-        showZoomOutAnimation(true)
-    }
-    
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        
         if self.scrollView.zoomScale <= self.scrollView.minimumZoomScale {
             showZoomOutAnimation(false)
         }
+        
+        // Make sure the zoomed image stays centred
+        let currentContentSize = scrollView.contentSize
+        let originalContentSize = wrapperView.bounds.size
+        let offsetX = max((originalContentSize.width - currentContentSize.width) * 0.5, 0)
+        let offsetY = max((originalContentSize.height - currentContentSize.height) * 0.5, 0)
+        imageView.center = CGPoint(x: currentContentSize.width * 0.5 + offsetX,
+                                          y: currentContentSize.height * 0.5 + offsetY)
+    }
+    
+    func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
+        showZoomOutAnimation(true)
     }
     
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
@@ -227,5 +217,13 @@ extension FullScreenImageViewController: UIScrollViewDelegate {
             showZoomOutAnimation(false)
         }
     }
+    
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        if scrollView.zoomScale == scrollView.minimumZoomScale {
+            if velocity.y > 0.6 {
+                self.dismiss(animated: true)
+            }
+        }
+    }
+    
 }
-

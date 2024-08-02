@@ -30,9 +30,9 @@
 "TheChangesAreSaved" = "Изменения сохранены.";
 "GetOut" = "Вы точно желаете выйти?";
 "Exit" = "Выход";
+"Cancel" = "Отмена";
 
-"MessageFor" = "Сообщение для";
-"sent" = "отправлено.";
+"SentMessage" = "Сообщение отправлено.";
 
 // MARK: LoginViewController
 
@@ -67,12 +67,9 @@
 "WaitingChat" = "Ожидающие чаты";
 "ActiveChat" = "Активные чаты";
 
-"Chat" = "Чат с";
-"wasDeleted" = "был удален.";
-"notWasDeleted" = "не был удален.";
-
-"EnjoyThe" = "Приятного общения с";
-"notCreated" = "не был создан";
+"Сonversation" = "Приятного общения!";
+"ChatDeleted" = "Чат был удалён.";
+"ChatNotDeleted" = "Чат не был удалён.";
 
 // MARK: Menu
 
@@ -97,3 +94,33 @@
 "FirstMessage" = "Напишите первое сообщение!";
 
 "Photo" = "Фото";
+
+"online" = "онлайн";
+"typing" = "пишет…";
+
+// MARK: BaseProfileViewController
+
+"Blocking" = "Заблокировать";
+
+// MARK: SendProfileViewController
+
+"waiting" = "Ожидайте ответа";
+"accept" = "Примити запрос!";
+
+// MARK: SettingViewController
+
+"Privacy" = "Конфиденциальность";
+"Hide" = "Скрыть     ";
+
+"AccountHidden" = "Ваша анкета скрыта.";
+"AccountShow" = "Ваша анкета опубликована.";
+
+// MARK: Date
+
+"recently" = "недавно";
+"today" = "сегодня";
+"yesterday" = "вчера";
+"long ago" = "давно";
+
+"was" = "был";
+"wasW" = "была";

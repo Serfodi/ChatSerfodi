@@ -8,6 +8,5 @@
 import Foundation
 
 protocol AuthNavigatingDelegate: AnyObject {
-    func toLoginVC()
     func toSignUPVC()
 }

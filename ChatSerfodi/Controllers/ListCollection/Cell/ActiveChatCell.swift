@@ -64,12 +64,14 @@ class ActiveChatCell: UICollectionViewCell, SelfConfiguringCell {
         guard let value: SChat = value as? SChat else { return }
         chat = value
         friendName.text = value.friendUsername
+        
         let timeString = dateFormatter.string(from: value.lastDate)
-        if value.typing != "nil" {
-            lastMassage.text = value.typing
+        if value.typing != TypingType.none.rawValue {
+            lastMassage.text = NSLocalizedString(value.typing, comment: "")
         } else {
             lastMassage.text = timeString + ": " + value.lastMessage
         }
+        
         friendImageView.sd_setImage(with: URL(string: value.friendUserImageString))
         self.onlineRound.backgroundColor = value.isOnline ? .green : .clear
     }

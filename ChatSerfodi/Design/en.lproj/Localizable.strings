@@ -31,9 +31,9 @@
 "TheChangesAreSaved" = "The changes are saved.";
 "GetOut" = "Do you want to get out?";
 "Exit" = "Exit";
+"Cancel" = "Cancel";
 
-"MessageFor" = "A message for";
-"sent" = "sent.";
+"SentMessage" = "The message has been sent.";
 
 // MARK: LoginViewController
 
@@ -68,12 +68,9 @@
 "WaitingChat" = "Waiting chat";
 "ActiveChat" = "Active chat";
 
-"Chat" = "Chat";
-"wasDeleted" = "was deleted.";
-"notWasDeleted" = "was not deleted.";
-
-"EnjoyThe" = "Enjoy the";
-"notCreated" = "not created";
+"Сonversation" = "Have a nice conversation!";
+"ChatDeleted" = "The chat has been deleted.";
+"ChatNotDeleted" = "The chat has not been deleted.";
 
 // MARK: Menu
 
@@ -97,3 +94,33 @@
 
 "FirstMessage" = "Write the first message!";
 "Photo" = "Photo";
+
+"online" = "online";
+"typing" = "typing…";
+
+// MARK: BaseProfileViewController
+
+"Blocking" = "Block";
+
+// MARK: SendProfileViewController
+
+"waiting" = "The message has been sent. Expect a response.";
+"accept" = "Accept the request!";
+
+// MARK: SettingViewController
+
+"Privacy" = "Privacy";
+"Hide" = "Hide";
+
+"AccountHidden" = "Your account is hidden.";
+"AccountShow" = "Your account is show.";
+
+// MARK: Date
+
+"recently" = "recently";
+"today" = "today";
+"yesterday" = "yesterday";
+"long ago" = "long ago";
+
+"was" = "was";
+"wasW" = "wasW";

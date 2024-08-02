@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SunView: UIView {
+final class SunView: UIView {
     
     var one: CAShapeLayer = {
         let layer = CAShapeLayer()
@@ -60,10 +60,7 @@ class SunView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
         create(frame: bounds)
-        self.frame.origin.x -= 35 / 2
-        
     }
     
 }

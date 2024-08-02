@@ -10,24 +10,43 @@ import FirebaseFirestore
 
 struct SUser {
     
+    enum Sex: Int {
+        case man
+        case wom
+        
+        func description() -> String {
+            switch self {
+            case .man:
+                return "Man"
+            case .wom:
+                return "Wom"
+            }
+        }
+    }
+    
     var username: String
     var email: String
     var avatarStringURL: String
     var description: String
-    var sex: String
+    var sex: Int
     var id: String
     var isHide: Bool
     var exitTime: Date
     var isOnline: Bool
-        
+    var blocked: [String]
+    var activeChats: [String]
+    
     static let repreUsername = "username"
     static let repreAvatarStringURL =  "avatarStringURL"
     static let repreDescription = "description"
     static let repreExitTime = "exitTime"
     static let repreIsOnline = "isOnline"
+    static let repreActiveChats = "activeChats"
+    static let repreBlocked = "blocked"
+    static let repreIsHide = "isHide"
     
     var representation: [String : Any] {
-        var rep: [String : Any] = [
+        let rep: [String : Any] = [
             "username": username,
             "email": email,
             "avatarStringURL": avatarStringURL,
@@ -36,7 +55,9 @@ struct SUser {
             "uid" : id,
             "isHide": isHide,
             "exitTime" : exitTime,
-            "isOnline" : isOnline
+            "isOnline" : isOnline,
+            "blocked" : blocked,
+            "activeChats" : activeChats
         ]
         return rep
     }
@@ -47,11 +68,13 @@ struct SUser {
          email: String,
          avatarStringURL: String,
          description: String,
-         sex: String,
+         sex: Int,
          id: String,
-         isHide: Bool,
+         isHide: Bool = false,
          entryTime: Date,
-         isOnline: Bool
+         isOnline: Bool,
+         blocked: [String] = [],
+         activeChats: [String] = []
     ) {
         self.username = username
         self.email = email
@@ -62,6 +85,8 @@ struct SUser {
         self.isHide = isHide
         self.exitTime = entryTime
         self.isOnline = isOnline
+        self.blocked = blocked
+        self.activeChats = activeChats
     }
     
     init?(document: DocumentSnapshot) {
@@ -71,15 +96,14 @@ struct SUser {
             let email = data["email"] as? String,
             let avatarStringURL = data["avatarStringURL"] as? String,
             let description = data["description"] as? String,
-            let sex = data["sex"] as? String,
+            let sex = data["sex"] as? Int,
             let uid = data["uid"] as? String,
             let isHide = data["isHide"] as? Bool,
             let exitTime = data["exitTime"] as? Timestamp,
-            let isOnline = data["isOnline"] as? Bool
-        else {
-            return nil
-        }
-        
+            let isOnline = data["isOnline"] as? Bool,
+            let blocked = data["blocked"] as? [String],
+            let activeChats = data["activeChats"] as? [String]
+        else { return nil }
         self.username = username
         self.email = email
         self.avatarStringURL = avatarStringURL
@@ -89,6 +113,8 @@ struct SUser {
         self.isHide = isHide
         self.exitTime = exitTime.dateValue()
         self.isOnline = isOnline
+        self.blocked = blocked
+        self.activeChats = activeChats
     }
     
     init?(document: QueryDocumentSnapshot) {
@@ -98,13 +124,14 @@ struct SUser {
             let email = data["email"] as? String,
             let avatarStringURL = data["avatarStringURL"] as? String,
             let description = data["description"] as? String,
-            let sex = data["sex"] as? String,
+            let sex = data["sex"] as? Int,
             let uid = data["uid"] as? String,
             let isHide = data["isHide"] as? Bool,
             let exitTime = data["exitTime"] as? Timestamp,
-            let isOnline = data["isOnline"] as? Bool
+            let isOnline = data["isOnline"] as? Bool,
+            let blocked = data["blocked"] as? [String],
+            let activeChats = data["activeChats"] as? [String]
         else { return nil }
-        
         self.username = username
         self.email = email
         self.avatarStringURL = avatarStringURL
@@ -114,6 +141,8 @@ struct SUser {
         self.isHide = isHide
         self.exitTime = exitTime.dateValue()
         self.isOnline = isOnline
+        self.blocked = blocked
+        self.activeChats = activeChats
     }
             
     // Equality
@@ -137,4 +166,20 @@ extension SUser: Hashable, Decodable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
+}
+
+extension SUser {
+    
+    func getStatus() -> String {
+        if isOnline {
+            return NSLocalizedString("online", comment: "")
+        }
+        let sex = Sex(rawValue: sex) ?? .man
+        return sex.representationData() + " " + exitTime.representationDate(sex: sex)
+    }
+    
+    static func mocUser() -> SUser {
+        SUser(username: "", email: "", avatarStringURL: "", description: "", sex: 0, id: "", entryTime: Date(), isOnline: false)
+    }
+    
 }

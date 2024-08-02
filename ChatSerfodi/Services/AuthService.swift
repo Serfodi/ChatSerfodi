@@ -16,12 +16,10 @@ class AuthService {
     private let auth = Auth.auth()
     
     func login(email: String?, password: String?, completion: @escaping (Result<User, Error>) -> Void)  {
-        
         guard let email = email, let password = password else {
             completion(.failure(AuthError.notFilled))
             return
         }
-        
         auth.signIn(withEmail: email, password: password) { (result, error) in
             guard let result = result else {
                 completion(.failure(error!))
@@ -48,6 +46,14 @@ class AuthService {
             completion(.success(result.user))
         }
     }
+    
+    func googleLogin(user: GIDGoogleUser) async throws -> User {
+        guard let idToken = user.idToken?.tokenString else { throw AuthError.googleError }
+        let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: user.accessToken.tokenString)
+        let result = try await auth.signIn(with: credential)
+        return result.user
+    }
+    
     
     func register(email: String?, password: String?, confirmPassword: String?, completion: @escaping (Result<User, Error>) -> Void) {
         // Создания нового акаунта.

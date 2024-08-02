@@ -31,7 +31,7 @@ class ChatsViewController: MessagesViewController {
     private var chatListener: ListenerRegistration?
     private var userListener: ListenerRegistration?
     
-    private var user: SUser {
+    private var currentUser: SUser {
         FirestoreService.shared.currentUser
     }
     private var chat: SChat
@@ -44,18 +44,6 @@ class ChatsViewController: MessagesViewController {
         return dateFormatter
     }()
     
-    let dateFormatterDay: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "d MMM"
-        return dateFormatter
-    }()
-    
-    let dateFormatterLast: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "d MMM, HH:mm"
-        return dateFormatter
-    }()
-    
     
     // MARK: init
     
@@ -63,9 +51,6 @@ class ChatsViewController: MessagesViewController {
         self.chat = chat
         super.init(nibName: nil, bundle: nil)
         titleLabel.text = chat.friendUsername
-        if chat.typing != "nil" {
-            subtitleLabel.text = chat.typing
-        }
     }
     
     required init?(coder: NSCoder) {
@@ -87,8 +72,7 @@ class ChatsViewController: MessagesViewController {
         setupChatListener()
         setupUserListener()
         
-        
-//        loadFirstMessages()
+        NotificationCenter.default.addObserver(self, selector: #selector(blockedUser(_:)), name: Notification.Name("DeleteUser"), object: nil)
     }
     deinit {
         messageListener?.remove()
@@ -98,7 +82,7 @@ class ChatsViewController: MessagesViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        FirestoreService.shared.updateChatTyping(for: chat, typing: "nil")
+        FirestoreService.shared.asyncUpdateChatTyping(for: chat, typing: .none)
     }
         
     // MARK: Listener
@@ -106,23 +90,7 @@ class ChatsViewController: MessagesViewController {
     private func setupMessageListener() {
         messageListener = ListenerService.shared.messagesObserve(chat: chat) { result in
             switch result {
-            case .success(var message):
-//                if let url = message.downloadURL {
-//
-//                    StorageService.shared.downloadImage(url: url) { [weak self] result in
-//                        guard let self = self else { return  }
-//                        switch result {
-//                        case .success(let image):
-//                            message.image = image
-//                            self.insertNewMessage(message: message)
-//                        case .failure(let error):
-//                            self.showAlert(with: "Error", and: error.localizedDescription)
-//                        }
-//                    }
-//
-//                    self.insertNewMessage(message: message)
-//                } else {
-//                }
+            case .success(let message):
                 self.insertNewMessage(message: message, animated: false)
                 self.chat.lastMessage = message.descriptor
             case .failure(let error):
@@ -135,9 +103,8 @@ class ChatsViewController: MessagesViewController {
         chatListener = ListenerService.shared.chatObserve(chatId: chat.friendId, completion: { result in
             switch result {
             case .success(let chat):
-                let text = self.getStatus(isOnline: chat.isOnline, typing: chat.typing)
-                if let text = text {
-                    self.subtitleLabel.text = text
+                if chat.isOnline {
+                    self.subtitleLabel.text = chat.getStatus(usingLastMessage: false)
                 }
             case .failure(let error):
                 self.showAlert(with: "Error", and: error.localizedDescription)
@@ -149,9 +116,11 @@ class ChatsViewController: MessagesViewController {
         userListener = ListenerService.shared.userObserver(userId: chat.friendId, completion: { result in
             switch result {
             case .success(let user):
-                let text = self.getStatus(date: user.exitTime, isOnline: user.isOnline)
-                if let text = text {
-                    self.subtitleLabel.text = text
+                if !user.isOnline {
+                    self.subtitleLabel.text = user.getStatus()
+                }
+                if !user.activeChats.contains(self.currentUser.id) {
+                    self.navigationController?.popViewController(animated: true)
                 }
             case .failure(let error):
                 self.showAlert(with: "Error", and: error.localizedDescription)
@@ -182,9 +151,9 @@ class ChatsViewController: MessagesViewController {
         Task(priority: .userInitiated) {
             do {
                 let url = try await StorageService.shared.uploadImageMessage(photo: image, to: chat)
-                var imageMessage = SMessage(user: self.user, image: image)
+                var imageMessage = SMessage(user: self.currentUser, image: image)
                 imageMessage.downloadURL = url
-                try FirestoreService.shared.sendMessage(from: self.chat, message: imageMessage)
+                try FirestoreService.shared.asyncSendMessage(from: self.chat, message: imageMessage)
             }  catch {
                 self.showAlert(with: "Error", and: error.localizedDescription)
             }
@@ -220,12 +189,16 @@ class ChatsViewController: MessagesViewController {
         Task(priority: .userInitiated) {
             do {
                 let sUser = try await FirestoreService.shared.getUserData(id: chat.friendId)
-                let vc = ProfileViewController(user: sUser)
+                let vc = BaseProfileViewController(user: sUser)
                 self.present(vc, animated: true)
             } catch {
                 self.showAlert(with: "Error", and: error.localizedDescription)
             }
         }
+    }
+    
+    @objc func blockedUser(_ notification: Notification) {
+        self.dismiss(animated: true)
     }
     
     // MARK: Helpers
@@ -250,18 +223,6 @@ class ChatsViewController: MessagesViewController {
         guard !messages.isEmpty else { return false }
         let lastIndexPath = IndexPath(item: messages.count - 1, section: 0)
         return messagesCollectionView.indexPathsForVisibleItems.contains(lastIndexPath)
-    }
-    
-    func getStatus(date: Date? = nil, isOnline: Bool, typing: String = "nil") -> String? {
-        if isOnline {
-            if typing != "nil" {
-                return typing
-            }
-            return NSLocalizedString("online", comment: "")
-        } else {
-            guard let date = date else { return nil }
-            return dateFormatterLast.string(from: date)
-        }
     }
 }
 
@@ -352,21 +313,20 @@ extension ChatsViewController: MessagesDisplayDelegate {
 extension ChatsViewController: InputBarAccessoryViewDelegate {
     
     func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
-        let message = SMessage(user: user, content: text)
+        let message = SMessage(user: currentUser, content: text)
         do {
-            try FirestoreService.shared.sendMessage(from: self.chat, message: message)
+            try FirestoreService.shared.asyncSendMessage(from: self.chat, message: message)
             inputBar.inputTextView.text = ""
         } catch {
             self.showAlert(with: "Error", and: "NotSent")
-            print("NotSent: \(error.localizedDescription)")
         }
     }
     
     func inputBar(_ inputBar: InputBarAccessoryView, textViewTextDidChangeTo text: String) {
         if text != "" {
-            FirestoreService.shared.updateChatTyping(for: chat, typing: "пишет…")
+            FirestoreService.shared.asyncUpdateChatTyping(for: chat, typing: .typing)
         } else {
-            FirestoreService.shared.updateChatTyping(for: chat, typing: "nil")
+            FirestoreService.shared.asyncUpdateChatTyping(for: chat, typing: .none)
         }
     }
 }
@@ -382,7 +342,7 @@ struct Sender: SenderType {
 extension ChatsViewController: MessagesDataSource {
     
     func currentSender() -> MessageKit.SenderType {
-        Sender(senderId: user.id, displayName: user.username)
+        Sender(senderId: currentUser.id, displayName: currentUser.username)
     }
     
     func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessageKit.MessagesCollectionView) -> MessageKit.MessageType {
@@ -396,7 +356,7 @@ extension ChatsViewController: MessagesDataSource {
     func numberOfSections(in messagesCollectionView: MessageKit.MessagesCollectionView) -> Int { 1 }
     
     func cellTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
-        return NSAttributedString(string: dateFormatterDay.string(from: message.sentDate), font: FontAppearance.Chat.topHeaderText)
+        NSAttributedString(string: message.sentDate.formateDate(), font: FontAppearance.Chat.topHeaderText)
     }
     
     func messageBottomLabelAttributedText(for message: MessageType, at _: IndexPath) -> NSAttributedString? {
@@ -422,7 +382,7 @@ extension ChatsViewController: MessagesLayoutDelegate {
     }
     
     func messageTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
-        -7
+        isTimeLabelVisible(at: indexPath) ? 10 : -7
     }
 
     func messageBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in _: MessagesCollectionView) -> CGFloat {
@@ -532,6 +492,7 @@ private extension ChatsViewController {
         let rightButton = UIBarButtonItem(customView: imageFriend)
         rightButton.action = #selector(openProfile)
         navigationItem.rightBarButtonItem = rightButton
+        imageFriend.contentMode = .scaleAspectFill
         imageFriend.layer.cornerRadius = Const.ImageSize / 2
         imageFriend.clipsToBounds = true
         imageFriend.translatesAutoresizingMaskIntoConstraints = false
@@ -560,12 +521,5 @@ private extension ChatsViewController {
 
 
 // replay and forward: https://github.com/MessageKit/MessageKit/issues/1676
-// full screen image: https://github.com/thomsmed/ios-examples/tree/main/FullScreenImageTransition
 
-//func isLastSectionVisible() -> Bool {
-//    guard !messageList.isEmpty else { return false }
-//
-//    let lastIndexPath = IndexPath(item: 0, section: messageList.count - 1)
-//
-//    return messagesCollectionView.indexPathsForVisibleItems.contains(lastIndexPath)
-//}
+
