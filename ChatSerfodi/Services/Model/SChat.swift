@@ -8,6 +8,14 @@
 import UIKit
 import FirebaseFirestore
 
+enum TypingType: String {
+    case typing
+    case none
+}
+
+// to do
+// https://vc.ru/u/748238-dmitry-molokov/227732-kak-smappit-dokumenty-firestore-s-pomoshyu-codable-i-ne-umeret
+
 struct SChat {
     var friendUsername: String
     var friendUserImageString: String
@@ -30,7 +38,7 @@ struct SChat {
     
     // MARK: init
     
-    init(friendUsername: String, friendUserImageString: String, lastMessage: String, friendId: String, lastDate: Date, isOnline: Bool, typing: String) {
+    init(friendUsername: String, friendUserImageString: String, lastMessage: String, friendId: String, lastDate: Date, isOnline: Bool, typing: String = TypingType.none.rawValue) {
         self.friendUsername = friendUsername
         self.friendUserImageString = friendUserImageString
         self.lastMessage = lastMessage
@@ -81,20 +89,10 @@ struct SChat {
         self.isOnline = isOnline
         self.typing = typing
     }
-    
-    // Equality
-//    static func == (lhs: SChat, rhs: SChat) -> Bool {
-//        lhs.friendId == rhs.friendId
-//    }
-    
-//    static func == (lhs: SChat, rhs: SChat) -> Bool {
-//        lhs.friendId == rhs.friendId && lhs.lastMessage == rhs.lastMessage && (lhs.isOnline == rhs.isOnline)
-//    }
-    
+        
     static func == (lhs: SChat, rhs: SChat) -> Bool {
         (lhs.isOnline == rhs.isOnline) && lhs.typing == rhs.typing && lhs.lastMessage == rhs.lastMessage && lhs.friendId == rhs.friendId
     }
-    
     
     /// Check contains `friendUsername` on filter.
     func contains(filter: String?) -> Bool {
@@ -109,4 +107,18 @@ extension SChat: Hashable, Decodable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(friendId)
     }
+}
+
+extension SChat {
+    
+    func getStatus(usingLastMessage: Bool = true) -> String {
+        if typing != TypingType.none.rawValue {
+            return NSLocalizedString(typing, comment: "")
+        }
+        if usingLastMessage {
+            return lastMessage
+        }
+        return NSLocalizedString("online", comment: "")
+    }
+    
 }

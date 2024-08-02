@@ -83,10 +83,10 @@ final class SendProfileViewController: UIViewController {
         guard let message = textView.text, message != "" else { return }
         self.dismiss(animated: true) {
             do {
-                try FirestoreService.shared.createWaitingChat(receiver: self.user, message: message)
-                UIApplication.shared.getTopVC.showAlert(with: "Successfully", and: [NSLocalizedString("MessageFor", comment: ""), self.user.username, NSLocalizedString("sent", comment: "")].joined(separator: " "))
+                try FirestoreService.shared.asyncCreateWaitingChat(receiver: self.user, message: message)
+                UIApplication.shared.getTopVC.showAlert(with: "Successfully", and: "SentMessage")
             } catch {
-                UIApplication.shared.getTopVC.showAlert(with: "Error!", and: error.localizedDescription)
+                UIApplication.shared.getTopVC.showAlert(with: "Error", and: error.localizedDescription)
             }
         }
     }
@@ -124,7 +124,7 @@ private extension SendProfileViewController {
             case .success(let state):
                 self.addLabelResponse(state: state)
             case .failure(let error):
-                self.showAlert(with: "Error!", and: error.localizedDescription)
+                self.showAlert(with: "Error", and: error.localizedDescription)
             }
         }
         
@@ -168,10 +168,12 @@ private extension SendProfileViewController {
         textView.topToSuperview(offset: 12)
         textView.leftToSuperview(offset: 12)
         textView.rightToLeft(of: button, offset: -4)
-        textView.bottom(to: view, view.keyboardLayoutGuide.topAnchor, offset: -12)
+        textView.bottomToSuperview(offset: -12)
+//        textView.bottom(to: view, view.keyboardLayoutGuide.topAnchor, offset: -12)
         
-        button.topToSuperview(offset: 12)
+        button.bottomToSuperview(offset: -12)
         button.rightToSuperview(offset: -12)
+        
         button.size(CGSize(width: 37, height: 37))
         button.aspectRatio(1)
         
@@ -182,7 +184,9 @@ private extension SendProfileViewController {
         view.addSubview(container)
         container.leftToSuperview()
         container.rightToSuperview()
-        container.bottomToSuperview()
+//        container.bottomToSuperview()
+        
+        container.bottom(to: view, view.keyboardLayoutGuide.topAnchor)
         
         profileViewController.view.topToSuperview()
         profileViewController.view.leftToSuperview()
@@ -196,10 +200,13 @@ private extension SendProfileViewController {
         let label = UILabel(text: String(maxLength), alignment: .center, fount: FontAppearance.small, color: ColorAppearance.lightBlack.color())
         stack = UIStackView(arrangedSubviews: [label, currentLengthLabel], axis: .vertical, spacing: 0)
         container.contentView.addSubview(stack)
+        
         stack.rightToSuperview(offset: -12)
         stack.leftToRight(of: textView, offset: 4)
-        stack.bottomToSuperview(offset: -12)
+        stack.topToSuperview(offset: 12)
+        
         stack.height(min: 10, max: 40)
+        
         stack.alpha = 0
     }
     
@@ -208,7 +215,8 @@ private extension SendProfileViewController {
         case .waiting:
             self.textView.removeFromSuperview()
             self.button.removeFromSuperview()
-            let label = UILabel(text: state.rawValue , alignment: .left, fount: FontAppearance.defaultText, color: ColorAppearance.black.color())
+            let label = UILabel(text: state.rawValue , alignment: .center, fount: FontAppearance.defaultText, color: ColorAppearance.black.color())
+            label.text = label.text! + " ⏳"
             container.contentView.addSubview(label)
             label.topToSuperview(offset: 12)
             label.leftToSuperview(offset: 12)
@@ -229,7 +237,6 @@ private extension SendProfileViewController {
             break
         }
     }
-    
 }
 
 // MARK: UITextViewDelegate

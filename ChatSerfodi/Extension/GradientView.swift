@@ -24,7 +24,6 @@ class GradientView: UIView {
         }
     }
     
-    
     enum Point {
         case topLeading
         case leading
@@ -92,5 +91,4 @@ class GradientView: UIView {
             gradientLayer.colors = [startColor.cgColor, endColor.cgColor]
         }
     }
-    
 }

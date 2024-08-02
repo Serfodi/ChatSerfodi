@@ -9,37 +9,18 @@ import UIKit
 import FirebaseFirestore
 import Lottie
 
-private enum Padding {
-    static let first: CGFloat = 60
-    static let second: CGFloat = 40
-    static let third: CGFloat = 20
-    
-    static let interSectionSpacing: CGFloat = 20
-    
-    enum ActiveChats {
-        static let activeCellHeight:  CGFloat = 78
-        static let interGroupSpacing: CGFloat = 10
-        static let contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 0, trailing: 20)
-    }
-    enum WaitingChats {
-        static let waitingChatsHeight: CGFloat = 88
-        static let interGroupSpacing: CGFloat = 16
-        static let contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 0, trailing: 0)
-    }
-}
 
+final class ListViewController: UIViewController {
 
-class ListViewController: UIViewController {
-
-    let searchView = LottieAnimationView(name: "search", contentMode: .scaleAspectFit)
-    let findButton = UIButton(title: "GoSearch", titleColor: ColorAppearance.black.color(), backgroundColor: ColorAppearance.white.color(), fount: FontAppearance.buttonText, isShadow: true)
-    let acceptButton = UIButton(title: "AcceptRequest", titleColor: ColorAppearance.black.color(), backgroundColor: .white, fount: FontAppearance.buttonText, isShadow: true)
+    private lazy var searchView = LottieAnimationView(name: "search", contentMode: .scaleAspectFit)
+    private let findButton = UIButton(title: "GoSearch", titleColor: ColorAppearance.black.color(), backgroundColor: ColorAppearance.white.color(), fount: FontAppearance.buttonText, isShadow: true)
+    private let acceptButton = UIButton(title: "AcceptRequest", titleColor: ColorAppearance.black.color(), backgroundColor: .white, fount: FontAppearance.buttonText, isShadow: true)
     
-    var collectionView: UICollectionView!
-    var collectionViewTopArc: NSLayoutConstraint!
+    private var collectionView: UICollectionView!
+    private var collectionViewTopArc: NSLayoutConstraint!
     
-    var activeChat:[SChat] = []
-    var waitingChat:[SChat] = []
+    private var activeChat:[SChat] = []
+    private var waitingChat:[SChat] = []
     
     private var waitingChatsListener: ListenerRegistration?
     private var activityChatObserve: ListenerRegistration?
@@ -56,16 +37,16 @@ class ListViewController: UIViewController {
         }
     }
     
-    var dataSource: UICollectionViewDiffableDataSource<Section, SChat>?
+    private var dataSource: UICollectionViewDiffableDataSource<Section, SChat>?
     
     private let currentUser: SUser
     
     // MARK: init
     
-    init(currentUser: SUser) {
-        self.currentUser = currentUser
+    init(user: SUser) {
+        self.currentUser = user
         super.init(nibName: nil, bundle: nil)
-        title = currentUser.username
+        title = user.username
     }
     
     required init?(coder: NSCoder) {
@@ -106,9 +87,6 @@ class ListViewController: UIViewController {
             case .success(let chats):
                 self.waitingChat = chats
                 self.reloadData()
-//                if self.waitingChat != [], self.waitingChat.count <= chats.count {
-//                    self.showRequestViewController(chat: chats.last!)
-//                }
             case .failure(let error):
                 self.showAlert(with: "Error", and: error.localizedDescription)
             }
@@ -177,9 +155,9 @@ extension ListViewController: WaitingChatsNavigation {
         Task(priority: .userInitiated) {
             do {
                 try await FirestoreService.shared.deleteWaitingChat(from: chat.friendId)
-                self.showAlert(with: "Successfully", and: "Chat was deleted.")
+                self.showAlert(with: "Successfully", and: "ChatDeleted")
             } catch {
-                self.showAlert(with: "Error", and: "Chat not was deleted.")
+                self.showAlert(with: "Error", and: "ChatNotDeleted")
             }
         }
     }
@@ -188,9 +166,9 @@ extension ListViewController: WaitingChatsNavigation {
         Task(priority: .userInitiated) {
             do {
                 try await FirestoreService.shared.deleteActiveChat(friendId: chat.friendId)
-                self.showAlert(with: "Successfully", and: "Chat was deleted.")
+                self.showAlert(with: "Successfully", and: "ChatDeleted")
             } catch {
-                self.showAlert(with: "Error", and: "Chat not was deleted.")
+                self.showAlert(with: "Error", and: "ChatNotDeleted")
             }
         }
         Task(priority: .background) {
@@ -206,7 +184,7 @@ extension ListViewController: WaitingChatsNavigation {
         Task(priority: .userInitiated) {
             do {
                 try await FirestoreService.shared.changeToActive(chat: chat)
-                self.showAlert(with: "Successfully", and: "EnjoyThe")
+                self.showAlert(with: "Successfully", and: "Сonversation")
             } catch {
                 self.showAlert(with: "Error", and: #function + error.localizedDescription)
             }
@@ -331,6 +309,25 @@ extension ListViewController: UISearchBarDelegate {
 
 private extension ListViewController {
     
+    enum Padding {
+        static let first: CGFloat = 60
+        static let second: CGFloat = 40
+        static let third: CGFloat = 20
+        
+        static let interSectionSpacing: CGFloat = 20
+        
+        enum ActiveChats {
+            static let activeCellHeight:  CGFloat = 78
+            static let interGroupSpacing: CGFloat = 10
+            static let contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 0, trailing: 20)
+        }
+        enum WaitingChats {
+            static let waitingChatsHeight: CGFloat = 88
+            static let interGroupSpacing: CGFloat = 16
+            static let contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 0, trailing: 0)
+        }
+    }
+    
     func setupCollectionView() {
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createCompositionalLayout())
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -397,9 +394,7 @@ private extension ListViewController {
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.delegate = self
         
-        navigationController?.navigationBar.addBGBlur()
-        navigationController?.navigationBar.standardAppearance.titleTextAttributes = [.font: FontAppearance.buttonText, .foregroundColor: ColorAppearance.black.color()]
-        navigationController?.navigationBar.scrollEdgeAppearance?.titleTextAttributes = [.font: FontAppearance.buttonText, .foregroundColor: ColorAppearance.black.color()]
+        navigationController?.navigationBar.configuration()
     }
     
     func setupConstraint() {
@@ -421,12 +416,14 @@ private extension ListViewController {
         NSLayoutConstraint.activate([
             findButton.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -Padding.first),
             findButton.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: Padding.first),
-            findButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -Padding.second)
+            findButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -Padding.second),
+            findButton.heightAnchor.constraint(equalToConstant: 54)
         ])
         NSLayoutConstraint.activate([
             acceptButton.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -Padding.first),
             acceptButton.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: Padding.first),
-            acceptButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -Padding.second)
+            acceptButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -Padding.second),
+            acceptButton.heightAnchor.constraint(equalToConstant: 54)
         ])
     }
 }

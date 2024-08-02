@@ -24,7 +24,7 @@ enum FontAppearance {
     static let secondDefault = Font.att(size: 16, design: .rounded, weight: .regular)
     
     static let small = Font.att(size: 14, design: .regular, weight: .regular)
-    
+    static let smallBold = Font.att(size: 16, design: .regular, weight: .medium)
     
     enum Profile {
         static let name = Font.att(size: 26, design: .regular, weight: .bold)

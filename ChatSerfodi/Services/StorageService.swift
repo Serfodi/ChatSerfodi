@@ -65,7 +65,7 @@ extension StorageService {
         guard let scaleImage = photo.scaledToSafeUploadSize, let imageData = scaleImage.jpegData(compressionQuality: 0.4) else { throw ImageError.uploadImageError }
         let metadata = StorageMetadata()
         metadata.contentType = "image/jpeg"
-        let storeMetadata = try await avatarRef.child(currentUserId).putDataAsync(imageData, metadata: metadata)
+        let _ = try await avatarRef.child(currentUserId).putDataAsync(imageData, metadata: metadata)
         let downloadURL = try await avatarRef.child(self.currentUserId).downloadURL()
         return downloadURL
     }

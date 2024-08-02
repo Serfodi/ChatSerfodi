@@ -9,6 +9,8 @@ import Foundation
 import UIKit
 import Lottie
 
+// https://www.kodeco.com/27854768-uibutton-configuration-tutorial-getting-started
+
 extension UIButton {
     
     /// Текстовая кнопка
@@ -19,50 +21,37 @@ extension UIButton {
         self.titleLabel?.font = fount
     }
     
-    enum CornerRadiusType {
-        case not
-        case round
-    }
     
     convenience init(title: String,
                      titleColor: UIColor,
                      backgroundColor: UIColor,
                      fount: UIFont? = FontAppearance.buttonText,
                      isShadow: Bool = false,
-                     cornerRadius: CGFloat = 27) {
+                     cornerRadius: CGFloat = 27,
+                     image: UIImage? = nil) {
         
         self.init(type: .system)
         self.setTitle(NSLocalizedString(title, comment: ""), for: .normal)
         self.setTitleColor(titleColor, for: .normal)
         self.titleLabel?.font = fount
         self.backgroundColor = backgroundColor
+        self.tintColor = titleColor
         self.layer.cornerRadius = cornerRadius
+        self.titleLabel?.textAlignment = .center
         
         if isShadow {
-            self.layer.shadowColor = UIColor(white: 0.2, alpha: 0.5).cgColor
-            self.layer.shadowRadius = 4
-            self.layer.shadowOpacity = 0.5
-            self.layer.shadowOffset = CGSize(width: 0, height: 2)
+            layer.shadowColor = UIColor(white: 0.2, alpha: 0.5).cgColor
+            layer.shadowRadius = 4
+            layer.shadowOpacity = 0.5
+            layer.shadowOffset = CGSize(width: 0, height: 2)
         }
-    }
-    
-    convenience init(title: String,
-                     titleColor: UIColor,
-                     backgroundEffect: UIVisualEffect,
-                     fount: UIFont? = FontAppearance.buttonText,
-                     cornerRadius: CornerRadiusType = .round) {
-        self.init(type: .system)
-        self.setTitle(NSLocalizedString(title, comment: ""), for: .normal)
-        self.setTitleColor(titleColor, for: .normal)
-        self.titleLabel?.font = fount
-        self.backgroundColor = .clear
         
-        if cornerRadius == .round {
-            self.layer.cornerRadius = 27
+        if let image = image {
+            setImage(image, for: .normal)
         }
     }
     
-    
+
     func customizeGoogleButton() {
         let googleAnimationLogo = LottieAnimationView(name: "google")
         googleAnimationLogo.loopMode = .loop

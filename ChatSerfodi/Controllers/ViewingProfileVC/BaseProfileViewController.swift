@@ -12,9 +12,10 @@ class BaseProfileViewController: UIViewController {
 
     public let scrollView = UIScrollView()
     public let imageView = UIImageView()
-    private let nameLabel = UILabel(text: "nil", fount: FontAppearance.Profile.name)
-    private let aboutLabel = UILabel(text: "nil", fount: FontAppearance.Profile.about)
-        
+    private let nameLabel = UILabel(text: "name", fount: FontAppearance.Profile.name)
+    private let aboutLabel = UILabel(text: "aboutLabel", fount: FontAppearance.Profile.about)
+    private let isOnlineLabel = UILabel(text: "online", fount: FontAppearance.smallBold)
+    
     private var menuButton: MenuButton!
     
     // helper
@@ -36,6 +37,7 @@ class BaseProfileViewController: UIViewController {
         imageView.sd_setImage(with: URL(string: user.avatarStringURL))
         nameLabel.text = user.username
         aboutLabel.text = user.description
+        isOnlineLabel.text = user.getStatus()
     }
     
     required init?(coder: NSCoder) {
@@ -53,6 +55,7 @@ class BaseProfileViewController: UIViewController {
         super.viewWillAppear(animated)
         let aspectRatio = imageView.intrinsicContentSize.width / imageView.intrinsicContentSize.height
         imageView.aspectRatio(aspectRatio)
+        imageView.layoutIfNeeded()
     }
     
     
@@ -104,6 +107,7 @@ private extension BaseProfileViewController {
     }
     
     func configurationLabel() {
+        nameLabel.minimumScaleFactor = 0.5
         aboutLabel.numberOfLines = 0
     }
     
@@ -115,7 +119,7 @@ private extension BaseProfileViewController {
                     NotificationCenter.default.post(name: Notification.Name("DeleteUser"), object: nil, userInfo: ["User" : self.user])
                 }
             }
-            FirestoreService.shared.blockedClear(user: self.user)
+            FirestoreService.shared.asyncBlockedClear(user: self.user)
         }
         menuButton = MenuButton(menuActions: [action])
     }
@@ -127,6 +131,7 @@ private extension BaseProfileViewController {
         baseLabelView.contentView.addSubview(menuButton)
         scrollView.addSubview(baseLabelView)
         scrollView.addSubview(aboutLabel)
+//        scrollView.addSubview(isOnlineLabel)
         
         scrollView.edgesToSuperview()
         
@@ -149,9 +154,26 @@ private extension BaseProfileViewController {
         menuButton.bottomToSuperview()
         menuButton.aspectRatio(1)
         
-        aboutLabel.top(to: baseLabelView, baseLabelView.bottomAnchor, offset: 15)
+        
+        let view = UIView()
+        view.backgroundColor = ColorAppearance.gray.color()
+        view.layer.cornerRadius = 20
+        
+        scrollView.addSubview(view)
+        
+        view.addSubview(isOnlineLabel)
+        isOnlineLabel.edgesToSuperview(insets: .top(10) + .bottom(10) + .left(15) + .right(15))
+        
+        view.topToBottom(of: baseLabelView, offset: 10)
+        view.leftToSuperview(offset: 10)
+        
+        
+        aboutLabel.topToBottom(of: view, offset: 10)
         aboutLabel.leftToSuperview(offset: 20)
         aboutLabel.rightToSuperview(offset: -20)
-        aboutLabel.bottomToSuperview(offset: -15)
+        aboutLabel.bottomToSuperview(offset: -20)
+        
+        
+        
     }
 }

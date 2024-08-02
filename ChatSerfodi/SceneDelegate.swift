@@ -11,41 +11,35 @@ import FirebaseAuth
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-
+    
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        
         guard let windowScene = (scene as? UIWindowScene) else { return }
-        
+
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
-        
+                
         if let user = Auth.auth().currentUser {
-            Task(priority: .userInitiated) {
-                do {
-                    let suser = try await FirestoreService.shared.getUserData(user: user)
-                    let mainTabBar = MainTabBarController(currentUser: suser)
-                    mainTabBar.modalPresentationStyle = .fullScreen
-                    self.window?.rootViewController = mainTabBar
-                    FirestoreService.shared.updateIsOnline(is: true)
-                } catch {
-                    self.window?.rootViewController = AuthViewController()
-                }
-            }
+            let mainTabBar = MainTabBarController(user: user)
+            mainTabBar.modalPresentationStyle = .fullScreen
+            self.window?.rootViewController = mainTabBar
         } else {
             self.window?.rootViewController = AuthViewController()
         }
         
         window?.overrideUserInterfaceStyle = .light
-        
         window?.makeKeyAndVisible()
     }
- 
+    
+    func sceneWillEnterForeground(_ scene: UIScene) {
+        FirestoreService.shared.asyncUpdateIsOnline(is: true)
+    }
+    
     func sceneDidBecomeActive(_ scene: UIScene) {
-        FirestoreService.shared.updateIsOnline(is: true)
+        FirestoreService.shared.asyncUpdateIsOnline(is: true)
     }    
     
     func sceneWillResignActive(_ scene: UIScene) {
-        FirestoreService.shared.updateIsOnline(is: false)
+        FirestoreService.shared.asyncUpdateIsOnline(is: false)
         FirestoreService.shared.updateEntryTime()
     }
     

@@ -7,50 +7,44 @@
 
 import UIKit
 import FirebaseFirestore
+import TinyConstraints
 
-class PeopleViewController: UIViewController {
-    
-    enum Padding {
-        static let first: CGFloat = 20
-        static let second: CGFloat = 20
-    }
-    
-    var users = [SUser]()
-    
-    private var usersListener: ListenerRegistration?
-    private var userListener: ListenerRegistration?
-    
-    var collectionView: UICollectionView!
+final class PeopleViewController: UIViewController {
     
     enum Section: Hashable {
         case users(String)
     }
     
-    var dataSource: UICollectionViewDiffableDataSource<Section, SUser>!
+    private var users = [SUser]()
     
+    private var usersListener: ListenerRegistration?
+    private var userListener: ListenerRegistration?
     
-    private var currentUser: SUser
+    private var collectionView: UICollectionView!
+    private var dataSource: UICollectionViewDiffableDataSource<Section, SUser>!
+    
+    // helpers View
+    
+    private var hideStack: UIStackView!
     
     // MARK: init
     
-    init(currentUser: SUser) {
-        self.currentUser = currentUser
+    private var currentUser: SUser
+        
+    init(user: SUser) {
+        self.currentUser = user
         super.init(nibName: nil, bundle: nil)
-        title = currentUser.username
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
     // MARK: Live Circle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupSearchBar()
-        setupCollectionView()
-        createDataSource()
+        configuration()
         setupUsersListener()
         setupUserListener()
     }
@@ -67,10 +61,12 @@ class PeopleViewController: UIViewController {
             case .success(let users):
                 self.users = users
                 
-                var toRemove = self.currentUser.blocked + self.currentUser.activeChats
+                // MARK: - to do
+                let toRemove = self.currentUser.blocked + self.currentUser.activeChats
                 if !toRemove.isEmpty {
                     self.users = self.users.filter { !toRemove.contains($0.id) }
                 }
+                // MARK: to do -
                 
                 self.reloadData()
             case .failure(let error):
@@ -84,40 +80,37 @@ class PeopleViewController: UIViewController {
             switch result {
             case .success(let user):
                 self.currentUser = user
+                self.showHideMessages(isHide: user.isHide)
             case .failure(let error):
                 self.showAlert(with: "Error", and: error.localizedDescription)
             }
         })
     }
     
-    // MARK: Setup
+    // MARK: Reload Data
     
-    private func setupSearchBar() {
-        let searchController = UISearchController(searchResultsController: nil)
-        navigationItem.searchController = searchController
-        navigationItem.hidesSearchBarWhenScrolling = false
-        searchController.hidesNavigationBarDuringPresentation = false
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.delegate = self
-        navigationController?.navigationBar.addBGBlur()
-        navigationController?.navigationBar.backgroundColor = .clear
-        navigationController?.navigationBar.standardAppearance.titleTextAttributes = [.font: FontAppearance.buttonText, .foregroundColor: ColorAppearance.black.color()]
-        navigationController?.navigationBar.scrollEdgeAppearance?.titleTextAttributes = [.font: FontAppearance.buttonText, .foregroundColor: ColorAppearance.black.color()]
+    private func reloadData(with searchText: String? = nil) {
+        let filtered = users.filter { (user) -> Bool in
+            user.contains(filter: searchText)
+        }
+        var snapshot = NSDiffableDataSourceSnapshot<Section, SUser>()
+        let newSection = Section.users("\(filtered.count) " + NSLocalizedString("peopleNearby", comment: ""))
+        snapshot.appendSections([newSection])
+        snapshot.appendItems(filtered, toSection: newSection)
+        dataSource?.apply(snapshot, animatingDifferences: true)
     }
     
-    private func setupCollectionView() {
-        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createCompositionalLayout())
-        collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        collectionView.backgroundColor = ColorAppearance.white.color()
-        view.addSubview(collectionView)
-        collectionView.delegate = self
-        collectionView.register(SectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SectionHeader.reuseId)
-        collectionView.register(UserCell.self, forCellWithReuseIdentifier: UserCell.reuseId)
+    // helpers
+    
+    private func showHideMessages(isHide: Bool) {
+        collectionView.isHidden = isHide
+        hideStack.isHidden = !isHide
     }
+    
 }
 
-
 // MARK: UISearchBarDelegate
+
 extension PeopleViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -133,48 +126,72 @@ extension PeopleViewController: UISearchBarDelegate {
     }
 }
 
+// MARK: UICollectionViewDelegate
 
-// MARK: Data Source
-private extension PeopleViewController {
+extension PeopleViewController: UICollectionViewDelegate {
     
-    func createDataSource() {
-        dataSource = UICollectionViewDiffableDataSource<Section, SUser>(collectionView: collectionView, cellProvider: { (collectionView, indexPath, user) -> UICollectionViewCell? in
-            return self.configure(collectionView: collectionView, cellType: UserCell.self, with: user, for: indexPath)
-        })
-        dataSource.supplementaryViewProvider = { (collectionView, kind, indexPath) in
-            let section = self.dataSource.snapshot().sectionIdentifiers[indexPath.section]
-            guard let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SectionHeader.reuseId, for: indexPath) as? SectionHeader else {
-                fatalError("Can not create new section")
-            }
-            switch section {
-            case .users(let items):
-                sectionHeader.configure(text: items, fount: FontAppearance.defaultBoldText, textColor: ColorAppearance.lightBlack.color())
-            }
-            return sectionHeader
-        }
-    }
-    
-    // MARK: reloadData
-    
-    func reloadData(with searchText: String? = nil) {
-        
-        let filtered = users.filter { (user) -> Bool in
-            user.contains(filter: searchText)
-        }
-        
-        var snapshot = NSDiffableDataSourceSnapshot<Section, SUser>()
-        let newSection = Section.users("\(filtered.count) " + NSLocalizedString("peopleNearby", comment: ""))
-        snapshot.appendSections([newSection])
-        snapshot.appendItems(filtered, toSection: newSection)
-        dataSource?.apply(snapshot, animatingDifferences: true)
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let user = self.dataSource.itemIdentifier(for: indexPath) else { return }
+        let pr = SendProfileViewController(user: user)
+        pr.delegate = self
+        present(pr, animated: true)
     }
 }
 
+// MARK: GoToAccept
 
-// MARK: UICollectionViewCompositionalLayout
-extension PeopleViewController {
+extension PeopleViewController: GoToAccept {
     
-    private func createCompositionalLayout() -> UICollectionViewLayout {
+    func GoToAccept(user: SUser) {
+        self.tabBarController?.selectedIndex = 1
+        NotificationCenter.default.post(name: Notification.Name("ShowRequestViewController"), object: nil, userInfo: ["SUser" : user])
+    }
+    
+}
+
+
+// MARK: - Configuration
+
+private extension PeopleViewController {
+    
+    func configuration() {
+        configurationView()
+        configurationNavigationBar()
+        configurationCollectionView()
+        configurationDataSource()
+        configurationStack()
+    }
+    
+    func configurationView() {
+        title = NSLocalizedString("People", comment: "")
+        view.backgroundColor = ColorAppearance.white.color()
+    }
+    
+    func configurationNavigationBar() {
+        let searchController = UISearchController.defaultConfiguration()
+        searchController.searchBar.delegate = self
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+        navigationController?.navigationBar.configuration()
+    }
+    
+    func configurationCollectionView() {
+        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createCompositionalLayout())
+        collectionView.register(SectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SectionHeader.reuseId)
+        collectionView.register(UserCell.self, forCellWithReuseIdentifier: UserCell.reuseId)
+        collectionView.delegate = self
+        collectionView.backgroundColor = .clear
+        view.addSubview(collectionView)
+        collectionView.edgesToSuperview()
+    }
+    
+    enum Padding {
+        static let first: CGFloat = 20
+        static let second: CGFloat = 20
+    }
+    
+    
+    func createCompositionalLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { (_, _) in
             self.createUserSection()
         }
@@ -184,7 +201,7 @@ extension PeopleViewController {
         return layout
     }
     
-    private func createUserSection() -> NSCollectionLayoutSection {
+    func createUserSection() -> NSCollectionLayoutSection {
         var itemCount = 2
         if UIDevice.current.userInterfaceIdiom == .pad {
             itemCount = 3
@@ -221,25 +238,38 @@ extension PeopleViewController {
         let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: sectionHeaderSeize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
         return sectionHeader
     }
-}
-
-
-// MARK: UICollectionViewDelegate
-extension PeopleViewController: UICollectionViewDelegate {
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let user = self.dataSource.itemIdentifier(for: indexPath) else { return }
-        let pr = SendProfileViewController(user: user)
-        pr.delegate = self
-        present(pr, animated: true)
+    func configurationDataSource() {
+        dataSource = UICollectionViewDiffableDataSource<Section, SUser>(collectionView: collectionView, cellProvider: { (collectionView, indexPath, user) -> UICollectionViewCell? in
+            return self.configure(collectionView: collectionView, cellType: UserCell.self, with: user, for: indexPath)
+        })
+        dataSource.supplementaryViewProvider = { (collectionView, kind, indexPath) in
+            let section = self.dataSource.snapshot().sectionIdentifiers[indexPath.section]
+            guard let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SectionHeader.reuseId, for: indexPath) as? SectionHeader else {
+                fatalError("Can not create new section")
+            }
+            switch section {
+            case .users(let items):
+                sectionHeader.configure(text: items, fount: FontAppearance.defaultBoldText, textColor: ColorAppearance.lightBlack.color())
+            }
+            return sectionHeader
+        }
     }
-}
-
-extension PeopleViewController: GoToAccept {
     
-    func GoToAccept(user: SUser) {
-        self.tabBarController?.selectedIndex = 1
-        NotificationCenter.default.post(name: Notification.Name("ShowRequestViewController"), object: nil, userInfo: ["SUser" : user])
+    func configurationStack() {
+        let label = UILabel(text: "AccountHidden", alignment: .center, fount: FontAppearance.firstTitle, color: ColorAppearance.black.color())
+        let image = UIImageView(image: UIImage(systemName: "eye.slash.fill"))
+        image.contentMode = .scaleAspectFit
+        image.tintColor = ColorAppearance.black.color()
+        hideStack = UIStackView(arrangedSubviews: [image, label], axis: .vertical, spacing: 10)
+        hideStack.alignment = .center
+        hideStack.isHidden = true
+        view.addSubview(hideStack)
+        image.height(100)
+        let aspect = image.intrinsicContentSize.height / image.intrinsicContentSize.width
+        image.aspectRatio(aspect)
+        label.height(30)
+        hideStack.centerInSuperview()
     }
     
 }

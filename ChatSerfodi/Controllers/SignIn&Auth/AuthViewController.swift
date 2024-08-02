@@ -6,41 +6,27 @@
 //
 
 import UIKit
-import Lottie
+import TinyConstraints
+import GoogleSignIn
 
-class AuthViewController: UIViewController {
-    
-    enum Padding {
-        static let first: CGFloat = 50
-        static let second: CGFloat = 25
-        static let fixedAnimationView: CGFloat = 35
-        static let top: CGFloat = 10
-    }
-    
-    let gradientView = GradientView(from: .topTrailing, to: .bottomLeading , startColor: ColorAppearance.white.color(), endColor: ColorAppearance.blue.color())
-    let logoLabel = UILabel(text: "Щебетарь", fount: FontAppearance.logoTitle, color: ColorAppearance.black.color())
-    let welcomeLabel = UILabel(text: "Welcome", fount: FontAppearance.firstTitle, color: ColorAppearance.black.color())
-    let signButton = UIButton(title: "Registration", titleColor: ColorAppearance.white.color(), backgroundColor: ColorAppearance.black.color())
-    let loginButton = UIButton(title: "Login", titleColor: ColorAppearance.black.color(), backgroundColor: ColorAppearance.white.color())
-    let birdView = LottieAnimationView(name: "Bird", contentMode: .scaleAspectFill)
-    var sunView = SunView()
+final class AuthViewController: UIViewController {
+        
+    private let gradientView = GradientView(from: .topTrailing, to: .bottomLeading , startColor: ColorAppearance.white.color(), endColor: ColorAppearance.blue.color())
+    private let logoLabel = UILabel(text: "Щебетарь", fount: FontAppearance.logoTitle, color: ColorAppearance.black.color())
+    private let welcomeLabel = UILabel(text: "Welcome", alignment: .center, fount: FontAppearance.firstTitle, color: ColorAppearance.black.color())
+    private let loginButton = UIButton(title: "Login", titleColor: ColorAppearance.white.color(), backgroundColor: ColorAppearance.black.color())
+    private let googleButton = UIButton(title: "Google", titleColor: ColorAppearance.white.color(), backgroundColor: ColorAppearance.black.color())
+    private let birdView = BirdView()
     
     // MARK: ViewController
     
     let loginVC = LoginViewController()
-    let signVC = SignUpViewController()
     
     // MARK: Live Circle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = ColorAppearance.blue.color()
-        view.addSubview(gradientView)
-        setupConstraints()
-        signVC.delegate = self
-        loginVC.delegate = self
-        signButton.addTarget(self, action: #selector(emailButtonTapped), for: .touchUpInside)
-        loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
+        configuration()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -48,69 +34,77 @@ class AuthViewController: UIViewController {
         birdView.play()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        self.gradientView.frame = self.view.frame
-        self.sunView.frame = birdView.frame
-    }
-    
     // MARK: Action
-    
-    @objc private func emailButtonTapped() {
-        present(signVC, animated: true)
-    }
     
     @objc private func loginButtonTapped() {
         present(loginVC, animated: true)
     }
-}
-
-
-// MARK: AuthNavigatingDelegate
-extension AuthViewController: AuthNavigatingDelegate {
     
-    func toLoginVC() {
-        present(loginVC, animated: true)
+    @objc func signWithGoogle() {
+        GIDSignIn.sharedInstance.signIn(withPresenting: self) { [unowned self] result, error in
+            AuthService.shared.googleLogin(user: result?.user, error: error) { result in
+                switch result {
+                case .success(let user):
+                    Task(priority: .userInitiated) {
+                        do {
+                            let suser = try await FirestoreService.shared.getUserData(user: user)
+                            self.showAlert(with: "Successfully", and: "YouAreLoggedIn") {
+                                let mainTabBar = MainTabBarController(sUser: suser)
+                                mainTabBar.modalPresentationStyle = .fullScreen
+                                self.present(mainTabBar, animated: true)
+                            }
+                        } catch {
+                            self.showAlert(with: "Successfully", and: "YouAreRegistered") {
+                                self.present(SetupProfileViewController(currentUser: user), animated: true)
+                            }
+                        }
+                    }
+                case .failure(let error):
+                    self.showAlert(with: "Error", and: error.localizedDescription)
+                }
+            }
+        }
     }
-    func toSignUPVC() {
-        present(signVC, animated: true)
-    }
+    
 }
 
 
-// MARK: Constraints
+// MARK: - Configuration
+
 private extension AuthViewController {
-    func setupConstraints() {
-        self.view.addSubview(sunView)
-        self.view.addSubview(logoLabel)
-        self.view.addSubview(birdView)
+    
+    func configuration() {
+        configurationButton()
+        configurationConstraints()
+    }
+    
+    func configurationButton() {
+        googleButton.customizeGoogleButton()
+        googleButton.addTarget(self, action: #selector(signWithGoogle), for: .touchUpInside)
+        loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
+    }
+    
+    func configurationConstraints() {
+        view.addSubview(gradientView)
+        gradientView.edgesToSuperview()
         
-        logoLabel.translatesAutoresizingMaskIntoConstraints = false
-        birdView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(logoLabel)
+        view.addSubview(birdView)
         
-        NSLayoutConstraint.activate([
-            logoLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            logoLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: Padding.top)
-        ])
-        NSLayoutConstraint.activate([
-            birdView.topAnchor.constraint(equalTo: logoLabel.bottomAnchor, constant: -Padding.fixedAnimationView),
-            birdView.leftAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leftAnchor),
-            birdView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: Padding.fixedAnimationView),
-        ])
-        let aspectRatioConstraint = NSLayoutConstraint(item: birdView, attribute: .width, relatedBy: .equal, toItem: birdView, attribute: .height, multiplier: 1.0, constant: 0)
-        birdView.addConstraint(aspectRatioConstraint)
+        logoLabel.centerXToSuperview()
+        logoLabel.topToSuperview(offset: 10, usingSafeArea: true)
         
-        let stackView = UIStackView(arrangedSubviews: [welcomeLabel, signButton, loginButton], axis: .vertical, spacing: Padding.second)
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(stackView)
+        birdView.topToBottom(of: logoLabel, offset: -35)
+        birdView.leftToSuperview()
+        birdView.rightToSuperview()
         
-        welcomeLabel.centerXAnchor.constraint(equalTo: stackView.centerXAnchor).isActive = true
-        welcomeLabel.textAlignment = .center
+        let stackView = UIStackView(arrangedSubviews: [welcomeLabel, loginButton, googleButton], axis: .vertical, spacing: 25)
+        view.addSubview(stackView)
+        googleButton.height(54)
+        loginButton.height(54)
         
-        NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: birdView.bottomAnchor, constant: -Padding.second),
-            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Padding.first),
-            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Padding.first)
-        ])
+        stackView.topToBottom(of: birdView, offset: -25)
+        stackView.leftToSuperview(offset: 50)
+        stackView.rightToSuperview(offset: -50)
     }
 }

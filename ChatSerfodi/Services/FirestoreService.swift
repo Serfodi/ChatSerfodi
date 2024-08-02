@@ -59,10 +59,10 @@ extension FirestoreService {
                                 username: String?,
                                 avatarImage: UIImage?,
                                 description: String?,
-                                sex: String) async throws -> SUser {
-        guard Validators.ifFilled(username: username, description: description, sex: sex) else { throw UserError.notFilled }
-        guard avatarImage != UIImage(systemName: "person.circle") else { throw UserError.photoNotExist }
-        let suser = SUser(username: username!,
+                                sex: Int) async throws -> SUser {
+        guard Validators.ifFilled(username: username, description: description) else { throw UserError.notFilled }
+        guard avatarImage != UIImage(imageLiteralResourceName: "image_message_placeholder") else { throw UserError.photoNotExist }
+        var suser = SUser(username: username!,
                           email: email,
                           avatarStringURL: "Not exist",
                           description: description!,
@@ -73,31 +73,25 @@ extension FirestoreService {
                           isOnline: true,
                           blocked: [],
                           activeChats: [])
-        Task(priority: .medium) {
-            let url = try await StorageService.shared.upload(photo: avatarImage!)
-            try await usersRef.document(id).updateData(["avatarStringURL" : url])
-        }
+        let url = try await StorageService.shared.upload(photo: avatarImage!)
+        suser.avatarStringURL = url.absoluteString
         try await usersRef.document(suser.id).setData(suser.representation)
         return suser
     }
     
     // MARK: Update Profile in Firebase
     
-    public func updateProfile(username: String,
-                              avatarImage: UIImage?,
-                              description: String) throws {
-        guard Validators.ifFilled(username: username, description: description, sex: "sex") else { throw UserError.notFilled }
+    public func updateProfile(username: String, avatarImage: UIImage?,description: String) async throws {
+        guard Validators.ifFilled(username: username, description: description) else { throw UserError.notFilled }
         guard let avatarImage = avatarImage else { throw UserError.photoNotExist }
-        Task(priority: .low) {
-            let url = try await StorageService.shared.upload(photo: avatarImage)
-            try await usersRef.document(currentUser.id).updateData(["avatarStringURL": url.absoluteString, "username": username, "description": description])
-            currentUser.avatarStringURL = url.absoluteString
-        }
+        let url = try await StorageService.shared.upload(photo: avatarImage)
+        try await usersRef.document(currentUser.id).updateData([SUser.repreAvatarStringURL: url.absoluteString, "username": username, "description": description])
+        currentUser.avatarStringURL = url.absoluteString
         currentUser.username = username
         currentUser.description = description
     }
     
-    /// Обновляет дату входа текущего пользователя
+    /// Обновляет дату выхода пользователя
     public func updateEntryTime(date: Date = Date()) {
         guard let currentUser = currentUser else { return }
         let currentSUser = usersRef.document(currentUser.id)
@@ -108,8 +102,8 @@ extension FirestoreService {
         }
     }
     
-    
-    public func updateIsOnline(is online: Bool) {
+    /// Обновляет состояния у пользователя и у связных с ним активных чатов.
+    public func asyncUpdateIsOnline(is online: Bool) {
         guard let currentUser = currentUser else { return }
         let user = usersRef.document(currentUser.id)
         Task(priority: .low) {
@@ -124,13 +118,13 @@ extension FirestoreService {
                                 let ref = self.activeChatsRef(id: chat.friendId).document(currentUser.id)
                                 try await ref.updateData([SUser.repreIsOnline : online])
                             } catch {
-                                print("Error updateIsOnline: \(error)")
+                                print(#function + error.localizedDescription)
                             }
                         }
                     }
                 })
             } catch {
-                print(error.localizedDescription)
+                print(#function + error.localizedDescription)
             }
         }
     }
@@ -145,7 +139,7 @@ extension FirestoreService {
         self.currentUser = sUser
         return sUser
     }
-        
+    
     public func getUserData(id: String) async throws -> SUser {
         let userDocRef = usersRef.document(id)
         let document = try await userDocRef.getDocument()
@@ -155,16 +149,23 @@ extension FirestoreService {
         return sUser
     }
     
-    public func updateActiveChats(chat: SChat) async {
+    public func getCurrentUserData() async throws -> SUser {
+        let userDocRef = usersRef.document(currentUser.id)
+        let document = try await userDocRef.getDocument()
+        guard document.exists, let sUser = SUser(document: document) else {
+            throw UserError.cannotGetUserInfo
+        }
+        return sUser
+    }
+    
+    public func updateActiveChatsArray(chat: SChat) async {
         do {
             let docs = try await activeChatsRef.getDocuments()
             let id = docs.documents.map { $0.documentID }
             try await usersRef.document(currentUser.id).updateData([SUser.repreActiveChats : id])
-            
             let fdocs = try await activeChatsRef(id: chat.friendId).getDocuments()
             let fId = fdocs.documents.map { $0.documentID }
             try await usersRef.document(chat.friendId).updateData([SUser.repreActiveChats : fId])
-            
         } catch {
             print(#function + error.localizedDescription)
         }
@@ -184,6 +185,12 @@ extension FirestoreService {
         try await usersRef.document(currentUser.id).updateData([SUser.repreBlocked : blocked])
     }
     
+    /// Обновляет дату входа текущего пользователя
+    public func updateIsHide(hide: Bool) async throws {
+        let currentSUser = usersRef.document(currentUser.id)
+        try await currentSUser.updateData([SUser.repreIsHide: hide])
+    }
+    
 }
 
 
@@ -191,14 +198,12 @@ extension FirestoreService {
 
 extension FirestoreService {
     
-    
-    public func createWaitingChat(receiver: SUser, message: String) throws {
+    /// Создает ожидающий чат с сообщением от другого пользователя
+    public func asyncCreateWaitingChat(receiver: SUser, message: String) throws {
         let receiverWaitingChatsRef = waitingChatsRef(id: receiver.id)
         let receiverWaitingChatMessagesRef = waitingChatMessagesRef(to: receiver.id, from: currentUser.id)
-        
         let message = SMessage(user: currentUser, content: message)
-        let chat = SChat(friendUsername: currentUser.username, friendUserImageString: currentUser.avatarStringURL, lastMessage: message.content , friendId: currentUser.id, lastDate: Date(), isOnline: currentUser.isOnline, typing: "nil")
-        
+        let chat = SChat(friendUsername: currentUser.username, friendUserImageString: currentUser.avatarStringURL, lastMessage: message.content , friendId: currentUser.id, lastDate: Date(), isOnline: currentUser.isOnline)
         Task(priority: .userInitiated) {
             do {
                 try await receiverWaitingChatsRef.document(currentUser.id).setData(chat.representation)
@@ -259,9 +264,17 @@ extension FirestoreService {
                                   friendId: currentUser.id,
                                   lastDate: Date(),
                                   isOnline: currentUser.isOnline,
-                                  typing: "nil")
+                                  typing: TypingType.none.rawValue)
         
-        async let meChat: Void = try createActiveChat(to: currentUser.id, from: chat.friendId, chat: chat, messages: waitingChatMessages)
+        let forMeChat = SChat(friendUsername: chat.friendUsername,
+                           friendUserImageString: chat.friendUserImageString,
+                           lastMessage: chat.lastMessage,
+                           friendId: chat.friendId,
+                           lastDate: Date(),
+                              isOnline: chat.isOnline,
+                           typing: TypingType.none.rawValue)
+        
+        async let meChat: Void = try createActiveChat(to: currentUser.id, from: chat.friendId, chat: forMeChat, messages: waitingChatMessages)
         async let friendChat: Void = try createActiveChat(to: chat.friendId, from: currentUser.id, chat: forFriendChat, messages: waitingChatMessages)
         let _ = try await [meChat, friendChat]
     }
@@ -271,6 +284,7 @@ extension FirestoreService {
     private func createActiveChat(to id: String, from friendId: String, chat: SChat, messages: [SMessage]) async throws {
         let meActiveChatRef = activeChatsRef(id: id).document(friendId)
         let meMessagesActiveChatRef = activeChatMessagesRef(to: id, from: friendId)
+        
         try await meActiveChatRef.setData(chat.representation)
         await withTaskGroup(of: Void.self, body: { taskGroup in
             messages.forEach { message in
@@ -292,7 +306,7 @@ extension FirestoreService {
         let _ = try await [deleteMeChat, deleteFriendChat]
     }
     
-    /// Удаляет всю связную информацию у текущего пользователя и у друга.
+    /// Удаляет активный чат и всю связную информацию у текущего пользователя и у друга.
     public func clearActiveChat(friendId: String) async throws {
         async let deleteMeMessages: () = try deleteActiveChatMessages(to: currentUser.id, from: friendId)
         async let deleteFriendMessages: () = try deleteActiveChatMessages(to: friendId, from: currentUser.id)
@@ -302,19 +316,15 @@ extension FirestoreService {
     }
     
     
-    public func updateChatTyping(for chat: SChat, typing: String) {
+    public func asyncUpdateChatTyping(for chat: SChat, typing: TypingType) {
         let friendActiveChatRef = activeChatsRef(id: chat.friendId).document(currentUser.id)
         Task(priority: .userInitiated) {
             do {
-                try await friendActiveChatRef.updateData(["typing" : typing])
+                try await friendActiveChatRef.updateData(["typing" : typing.rawValue])
             } catch {
                 print(error.localizedDescription)
             }
         }
-    }
-    
-    public func getActiveChatsDocs() async throws {
-        try await activeChatsRef.getDocuments()
     }
 }
 
@@ -325,14 +335,14 @@ extension FirestoreService {
     
     /// Func sending and write data message from Firestore
     /// Update chat for me and friend
-    public func sendMessage(from chat: SChat, message: SMessage) throws {
+    public func asyncSendMessage(from chat: SChat, message: SMessage) throws {
         let forFriendChat = SChat(friendUsername: currentUser.username,
                                   friendUserImageString: currentUser.avatarStringURL,
                                   lastMessage: message.descriptor,
                                   friendId: currentUser.id,
                                   lastDate: Date(),
                                   isOnline: currentUser.isOnline,
-                                  typing: "nil")
+                                  typing: TypingType.none.rawValue)
         let forMeChat = SChat(friendUsername: chat.friendUsername,
                               friendUserImageString: chat.friendUserImageString,
                               lastMessage: message.descriptor,
@@ -400,7 +410,7 @@ extension FirestoreService {
 }
 
 
-// MARK: - Other Func
+// MARK: - Other
 
 extension FirestoreService {
     
@@ -416,7 +426,7 @@ extension FirestoreService {
     
     /// Блокирует и удаляет всю связную информацию из текущего юзера
     ///  - Parameter: user Пользователь которого нужно заблокировать
-    public func blockedClear(user: SUser) {
+    public func asyncBlockedClear(user: SUser) {
         Task(priority: .userInitiated) {
             do {
                 async let deleteWaiting: () = try deleteWaitingChat(from: user.id)
@@ -428,13 +438,11 @@ extension FirestoreService {
         }
         Task(priority: .background) {
             do {
-                async let clearActive: () = try clearActiveChat(friendId: user.id)
-                let _ = try await [clearActive]
+                try await clearActiveChat(friendId: user.id)
             } catch {
                 print(#function + error.localizedDescription)
             }
         }
     }
-    
     
 }

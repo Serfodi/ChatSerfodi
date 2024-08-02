@@ -38,31 +38,52 @@ final class ProfileViewController: UIViewController {
     
     @objc func saveProfile() {
         view.endEditing(true)
-        do {
-            try FirestoreService.shared.updateProfile(username: settingProfileViewController.fullNameText,
-                                                  avatarImage: settingProfileViewController.image,
-                                                      description: settingProfileViewController.aboutMeText)
-            self.showAlert(with: "Successfully", and: "TheChangesAreSaved")
-        } catch {
-            self.showAlert(with: "Error", and: error.localizedDescription)
+        Task(priority: .userInitiated) {
+            do {
+                try await FirestoreService.shared.updateProfile(
+                    username: settingProfileViewController.fullNameText,
+                    avatarImage: settingProfileViewController.image,
+                    description: settingProfileViewController.aboutMeText)
+                self.showAlert(with: "Successfully", and: "TheChangesAreSaved") {
+                    self.configurationBarButton(change: false)
+                }
+            } catch {
+                self.showAlert(with: "Error", and: error.localizedDescription) {
+                    self.configurationBarButton(change: false)
+                }
+            }
         }
     }
     
-    @objc private func signOut() {
-        view.endEditing(true)
-        let ac = UIAlertController(title: nil, message: NSLocalizedString("GetOut", comment: ""), preferredStyle: .alert)
-        ac.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel))
-        ac.addAction(UIAlertAction(title: NSLocalizedString("Exit", comment: ""), style: .destructive, handler: { _ in
-            do {
-                try Auth.auth().signOut()
-                UIApplication.shared.firstKeyWindow?.rootViewController = AuthViewController()
-            } catch {
-                print("Error signing out: \(error.localizedDescription)")
-            }
-        }))
-        present(ac, animated: true)
+    @objc private func settingOpen() {
+        let settingVC = SettingViewController()
+        present(settingVC, animated: true)
     }
     
+    @objc private func cancelChange() {
+        cancel()
+    }
+    
+    private func cancel() {
+        view.endEditing(true)
+        settingProfileViewController.changeCancel()
+        configurationBarButton(change: false)
+        
+    }
+    
+}
+
+extension ProfileViewController: ProfileChangesDelegate {
+    
+    func changeBegin() {
+        configurationBarButton(change: true)
+        
+    }
+    
+    func changeCancel() {
+        cancel()
+    }
+
 }
 
 
@@ -84,15 +105,24 @@ private extension ProfileViewController {
         addChild(settingProfileViewController)
         view.addSubview(settingProfileViewController.view)
         settingProfileViewController.didMove(toParent: self)
+        settingProfileViewController.delegate = self
     }
     
     func configurationNavigationBar() {
         navigationItem.title = NSLocalizedString("MyProfile", comment: "")
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Exit", comment: ""), style: .done, target: self, action: #selector(signOut))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Save", comment: ""), style: .done, target: self, action: #selector(saveProfile))
-        navigationController?.navigationBar.addBGBlur()
-        navigationController?.navigationBar.standardAppearance.titleTextAttributes = [.font: FontAppearance.buttonText, .foregroundColor: ColorAppearance.black.color()]
-        navigationController?.navigationBar.scrollEdgeAppearance?.titleTextAttributes = [.font: FontAppearance.buttonText, .foregroundColor: ColorAppearance.black.color()]
+        configurationBarButton(change: false)
+        navigationController?.navigationBar.configuration()
+    }
+    
+    func configurationBarButton(change: Bool) {
+        if change {
+            navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .done, target: self, action: #selector(cancelChange))
+            navigationItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Save", comment: ""), style: .done, target: self, action: #selector(saveProfile))
+        } else {
+            navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "gearshape.fill"), style: .done, target: self, action: #selector(settingOpen))
+            navigationItem.leftBarButtonItem?.tintColor = ColorAppearance.black.color()
+            navigationItem.rightBarButtonItem = nil
+        }
     }
     
     func configurationConstraints() {

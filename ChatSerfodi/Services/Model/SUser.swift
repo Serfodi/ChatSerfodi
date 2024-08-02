@@ -10,11 +10,25 @@ import FirebaseFirestore
 
 struct SUser {
     
+    enum Sex: Int {
+        case man
+        case wom
+        
+        func description() -> String {
+            switch self {
+            case .man:
+                return "Man"
+            case .wom:
+                return "Wom"
+            }
+        }
+    }
+    
     var username: String
     var email: String
     var avatarStringURL: String
     var description: String
-    var sex: String
+    var sex: Int
     var id: String
     var isHide: Bool
     var exitTime: Date
@@ -29,6 +43,7 @@ struct SUser {
     static let repreIsOnline = "isOnline"
     static let repreActiveChats = "activeChats"
     static let repreBlocked = "blocked"
+    static let repreIsHide = "isHide"
     
     var representation: [String : Any] {
         let rep: [String : Any] = [
@@ -53,13 +68,13 @@ struct SUser {
          email: String,
          avatarStringURL: String,
          description: String,
-         sex: String,
+         sex: Int,
          id: String,
-         isHide: Bool,
+         isHide: Bool = false,
          entryTime: Date,
          isOnline: Bool,
-         blocked: [String],
-         activeChats: [String]
+         blocked: [String] = [],
+         activeChats: [String] = []
     ) {
         self.username = username
         self.email = email
@@ -81,7 +96,7 @@ struct SUser {
             let email = data["email"] as? String,
             let avatarStringURL = data["avatarStringURL"] as? String,
             let description = data["description"] as? String,
-            let sex = data["sex"] as? String,
+            let sex = data["sex"] as? Int,
             let uid = data["uid"] as? String,
             let isHide = data["isHide"] as? Bool,
             let exitTime = data["exitTime"] as? Timestamp,
@@ -109,7 +124,7 @@ struct SUser {
             let email = data["email"] as? String,
             let avatarStringURL = data["avatarStringURL"] as? String,
             let description = data["description"] as? String,
-            let sex = data["sex"] as? String,
+            let sex = data["sex"] as? Int,
             let uid = data["uid"] as? String,
             let isHide = data["isHide"] as? Bool,
             let exitTime = data["exitTime"] as? Timestamp,
@@ -151,4 +166,20 @@ extension SUser: Hashable, Decodable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
+}
+
+extension SUser {
+    
+    func getStatus() -> String {
+        if isOnline {
+            return NSLocalizedString("online", comment: "")
+        }
+        let sex = Sex(rawValue: sex) ?? .man
+        return sex.representationData() + " " + exitTime.representationDate(sex: sex)
+    }
+    
+    static func mocUser() -> SUser {
+        SUser(username: "", email: "", avatarStringURL: "", description: "", sex: 0, id: "", entryTime: Date(), isOnline: false)
+    }
+    
 }

@@ -44,18 +44,6 @@ class ChatsViewController: MessagesViewController {
         return dateFormatter
     }()
     
-    let dateFormatterDay: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "d MMM"
-        return dateFormatter
-    }()
-    
-    let dateFormatterLast: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "d MMM, HH:mm"
-        return dateFormatter
-    }()
-    
     
     // MARK: init
     
@@ -63,9 +51,6 @@ class ChatsViewController: MessagesViewController {
         self.chat = chat
         super.init(nibName: nil, bundle: nil)
         titleLabel.text = chat.friendUsername
-        if chat.typing != "nil" {
-            subtitleLabel.text = chat.typing
-        }
     }
     
     required init?(coder: NSCoder) {
@@ -97,7 +82,7 @@ class ChatsViewController: MessagesViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        FirestoreService.shared.updateChatTyping(for: chat, typing: "nil")
+        FirestoreService.shared.asyncUpdateChatTyping(for: chat, typing: .none)
     }
         
     // MARK: Listener
@@ -118,9 +103,8 @@ class ChatsViewController: MessagesViewController {
         chatListener = ListenerService.shared.chatObserve(chatId: chat.friendId, completion: { result in
             switch result {
             case .success(let chat):
-                let text = self.getStatus(isOnline: chat.isOnline, typing: chat.typing)
-                if let text = text {
-                    self.subtitleLabel.text = text
+                if chat.isOnline {
+                    self.subtitleLabel.text = chat.getStatus(usingLastMessage: false)
                 }
             case .failure(let error):
                 self.showAlert(with: "Error", and: error.localizedDescription)
@@ -132,15 +116,12 @@ class ChatsViewController: MessagesViewController {
         userListener = ListenerService.shared.userObserver(userId: chat.friendId, completion: { result in
             switch result {
             case .success(let user):
-                let text = self.getStatus(date: user.exitTime, isOnline: user.isOnline)
-                if let text = text {
-                    self.subtitleLabel.text = text
+                if !user.isOnline {
+                    self.subtitleLabel.text = user.getStatus()
                 }
-                
                 if !user.activeChats.contains(self.currentUser.id) {
                     self.navigationController?.popViewController(animated: true)
                 }
-                
             case .failure(let error):
                 self.showAlert(with: "Error", and: error.localizedDescription)
             }
@@ -172,7 +153,7 @@ class ChatsViewController: MessagesViewController {
                 let url = try await StorageService.shared.uploadImageMessage(photo: image, to: chat)
                 var imageMessage = SMessage(user: self.currentUser, image: image)
                 imageMessage.downloadURL = url
-                try FirestoreService.shared.sendMessage(from: self.chat, message: imageMessage)
+                try FirestoreService.shared.asyncSendMessage(from: self.chat, message: imageMessage)
             }  catch {
                 self.showAlert(with: "Error", and: error.localizedDescription)
             }
@@ -242,18 +223,6 @@ class ChatsViewController: MessagesViewController {
         guard !messages.isEmpty else { return false }
         let lastIndexPath = IndexPath(item: messages.count - 1, section: 0)
         return messagesCollectionView.indexPathsForVisibleItems.contains(lastIndexPath)
-    }
-    
-    func getStatus(date: Date? = nil, isOnline: Bool, typing: String = "nil") -> String? {
-        if isOnline {
-            if typing != "nil" {
-                return typing
-            }
-            return NSLocalizedString("online", comment: "")
-        } else {
-            guard let date = date else { return nil }
-            return dateFormatterLast.string(from: date)
-        }
     }
 }
 
@@ -346,19 +315,18 @@ extension ChatsViewController: InputBarAccessoryViewDelegate {
     func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
         let message = SMessage(user: currentUser, content: text)
         do {
-            try FirestoreService.shared.sendMessage(from: self.chat, message: message)
+            try FirestoreService.shared.asyncSendMessage(from: self.chat, message: message)
             inputBar.inputTextView.text = ""
         } catch {
             self.showAlert(with: "Error", and: "NotSent")
-            print("NotSent: \(error.localizedDescription)")
         }
     }
     
     func inputBar(_ inputBar: InputBarAccessoryView, textViewTextDidChangeTo text: String) {
         if text != "" {
-            FirestoreService.shared.updateChatTyping(for: chat, typing: "пишет…")
+            FirestoreService.shared.asyncUpdateChatTyping(for: chat, typing: .typing)
         } else {
-            FirestoreService.shared.updateChatTyping(for: chat, typing: "nil")
+            FirestoreService.shared.asyncUpdateChatTyping(for: chat, typing: .none)
         }
     }
 }
@@ -388,7 +356,7 @@ extension ChatsViewController: MessagesDataSource {
     func numberOfSections(in messagesCollectionView: MessageKit.MessagesCollectionView) -> Int { 1 }
     
     func cellTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
-        return NSAttributedString(string: dateFormatterDay.string(from: message.sentDate), font: FontAppearance.Chat.topHeaderText)
+        NSAttributedString(string: message.sentDate.formateDate(), font: FontAppearance.Chat.topHeaderText)
     }
     
     func messageBottomLabelAttributedText(for message: MessageType, at _: IndexPath) -> NSAttributedString? {
@@ -414,7 +382,7 @@ extension ChatsViewController: MessagesLayoutDelegate {
     }
     
     func messageTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
-        -7
+        isTimeLabelVisible(at: indexPath) ? 10 : -7
     }
 
     func messageBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in _: MessagesCollectionView) -> CGFloat {
@@ -524,6 +492,7 @@ private extension ChatsViewController {
         let rightButton = UIBarButtonItem(customView: imageFriend)
         rightButton.action = #selector(openProfile)
         navigationItem.rightBarButtonItem = rightButton
+        imageFriend.contentMode = .scaleAspectFill
         imageFriend.layer.cornerRadius = Const.ImageSize / 2
         imageFriend.clipsToBounds = true
         imageFriend.translatesAutoresizingMaskIntoConstraints = false

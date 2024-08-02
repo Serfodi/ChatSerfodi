@@ -18,8 +18,6 @@ class InputTextView: UITextView {
         }
     }
     
-    
-    
     // MARK: Init
         
     init(font: UIFont, textColor: UIColor = ColorAppearance.black.color(), backgroundColor: UIColor, textContainerInset: UIEdgeInsets? = nil) {
@@ -67,7 +65,6 @@ extension UITextView {
         let numberOfLines = Int(contentHeight / lineHeight)
         return numberOfLines
     }
-    
 }
 
 

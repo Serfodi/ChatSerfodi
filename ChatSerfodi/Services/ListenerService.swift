@@ -36,19 +36,7 @@ class ListenerService {
     
     func usersObserve(users: [SUser], completion: @escaping (Result<[SUser], Error>)-> Void) -> ListenerRegistration? {
         var users = users
-        
-        var usersRef = userRef.whereField("isHide", isEqualTo: false)
-        
-        print(#function)
-        
-//        if !currentUser.blocked.isEmpty {
-//            usersRef = usersRef.whereField("uid", notIn: currentUser.blocked)
-//        }
-//        if !currentUser.activeChats.isEmpty {
-//            usersRef = usersRef.whereField("uid", notIn: currentUser.activeChats)
-//        }
-        
-        
+        let usersRef = userRef.whereField("isHide", isEqualTo: false)
         let userListener = usersRef.addSnapshotListener { (querySnapshot, error) in
             guard let querySnapshot = querySnapshot else {
                 completion(.failure(error!))
@@ -66,17 +54,8 @@ class ListenerService {
                     else { break }
                     users.append(user)
                 case .modified:
-//                    guard user.id != self.currentUserId else { break }
                     guard let index = users.firstIndex(of: user) else { break }
                     users[index] = user
-                    
-//                    if currentUser.blocked.contains(user.id) {
-//                        users.remove(at: index)
-//                    }
-//                    if currentUser.activeChats.contains(user.id) {
-//                        users.remove(at: index)
-//                    }
-                    
                 case .removed:
                     guard let index = users.firstIndex(of: user) else { break }
                     users.remove(at: index)
@@ -133,19 +112,15 @@ class ListenerService {
                 case .added:
                     guard !chats.contains(chat) else { return }
                     chats.append(chat)
-                    Task(priority: .userInitiated) {
-                        await FirestoreService.shared.updateActiveChats(chat: chat)
-                    }
                 case .modified:
                     guard let index = chats.firstIndex(where: { $0.friendId == chat.friendId }) else { return }
                     chats[index] = chat
                 case .removed:
                     guard let index = chats.firstIndex(of: chat) else { return }
-                    let chat = chats.remove(at: index)
-                    // Обновляет список активных чатов
-                    Task(priority: .userInitiated) {
-                        await FirestoreService.shared.updateActiveChats(chat: chat)
-                    }
+                    chats.remove(at: index)
+                }
+                Task(priority: .userInitiated) {
+                    await FirestoreService.shared.updateActiveChatsArray(chat: chat)
                 }
             }
             completion(.success(chats))

@@ -41,7 +41,6 @@ struct SMessage: MessageType  {
     
     var isRead: Bool
     
-    
     var kind: MessageKind {
         if let image = image {
             let mediaItem = ImageItem(url: downloadURL, image: image, placeholderImage: image, size: CGSize(width: CGFloat(width!), height: CGFloat(height!)))

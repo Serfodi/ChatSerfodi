@@ -17,10 +17,12 @@ class FullScreenImageViewController: UIViewController {
         closeButtonBlurEffectView.size(CGSize(width: 120, height: 48))
         
         let button = UIButton(type: .system)
-        button.setTitle("Zoom", for: .normal)
+        button.setTitle(NSLocalizedString("Zoom", comment: ""), for: .normal)
         button.titleLabel?.font = FontAppearance.buttonText
-        button.configuration?.imagePadding = -10
-        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
+        
+//        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
+//        button.configuration?.imagePadding = 10
+        
         button.setImage(UIImage(systemName: "arrow.down.right.and.arrow.up.left"), for: .normal)
         button.addTarget(self, action: #selector(zooming), for: .primaryActionTriggered)
         

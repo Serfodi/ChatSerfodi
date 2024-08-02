@@ -17,7 +17,6 @@ class InsertableTextField: UITextField {
         font = FontAppearance.secondDefault
         clearButtonMode = .whileEditing
         borderStyle = .none
-//        layer.cornerRadius = 21
         layer.masksToBounds = true
         
         layer.borderWidth = 0.3

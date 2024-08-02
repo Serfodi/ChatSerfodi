@@ -21,6 +21,10 @@ class SettingProfileViewController: UIViewController {
     public var stackView: UIStackView!
     
     private lazy var aboutMeTextViewHeight = aboutMeTextView.height(48)
+    private lazy var aspectRatioImage = imageView.aspectRatio(1)
+    
+    
+    weak var delegate: ProfileChangesDelegate?
     
     // helper
     
@@ -36,7 +40,15 @@ class SettingProfileViewController: UIViewController {
     // geters
     
     public var image: UIImage? {
-        imageView.image
+        get {
+            imageView.image
+        }
+        set {
+            imageView.image = newValue
+            aspectRatioImage.isActive = false
+            let aspectRatio = imageView.intrinsicContentSize.width / imageView.intrinsicContentSize.height
+            aspectRatioImage = imageView.aspectRatio(aspectRatio)
+        }
     }
     
     public var fullNameText: String {
@@ -47,12 +59,15 @@ class SettingProfileViewController: UIViewController {
         aboutMeTextView.text
     }
     
+    
     // MARK: init
     
+    private var addViewToScroll: [UIView]?
     private let user: SUser
     
-    init(user: SUser) {
+    init(user: SUser, addViewToScroll: [UIView]? = nil) {
         self.user = user
+        self.addViewToScroll = addViewToScroll
         super.init(nibName: nil, bundle: nil)
         imageView.sd_setImage(with: URL(string: user.avatarStringURL))
         fullNameTextField.text = user.username
@@ -72,13 +87,15 @@ class SettingProfileViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        aspectRatioImage.isActive = false
         let aspectRatio = imageView.intrinsicContentSize.width / imageView.intrinsicContentSize.height
-        imageView.aspectRatio(aspectRatio)
+        aspectRatioImage = imageView.aspectRatio(aspectRatio)
     }
     
     // MARK: Action
     
-    @objc func chengePhoto() {
+    @objc private func chengePhoto() {
+        delegate?.changeBegin()
         view.endEditing(true)
         let imagePickerController = UIImagePickerController()
         imagePickerController.delegate = self
@@ -86,7 +103,7 @@ class SettingProfileViewController: UIViewController {
         present(imagePickerController, animated: true)
     }
     
-    @objc func imageTap() {
+    @objc private func imageTap() {
         view.endEditing(true)
         let fullScreenTransitionManager = FullScreenTransitionManager(anchorViewTag: 1)
         let fullScreenImageViewController = FullScreenImageViewController(image: imageView.image!, tag: 1)
@@ -96,8 +113,13 @@ class SettingProfileViewController: UIViewController {
         self.fullScreenTransitionManager = fullScreenTransitionManager
     }
     
+    public func changeCancel() {
+        imageView.sd_setImage(with: URL(string: user.avatarStringURL))
+        fullNameTextField.text = user.username
+        aboutMeTextView.text = user.description
+    }
+    
 }
-
 
 // MARK: UIImagePickerControllerDelegate
 extension SettingProfileViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -105,10 +127,9 @@ extension SettingProfileViewController: UIImagePickerControllerDelegate, UINavig
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true)
         guard let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else { return }
-        imageView.image = image
+        self.image = image
     }
 }
-
 
 // MARK: UITextViewDelegate
 extension SettingProfileViewController: UITextViewDelegate {
@@ -128,25 +149,36 @@ extension SettingProfileViewController: UITextViewDelegate {
         fixHeight(textView)
     }
     
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        delegate?.changeBegin()
+    }
+    
     func textViewDidEndEditing(_ textView: UITextView) {
         textView.text = textView.text.trimmingCharacters(in: .newlines)
         fixHeight(textView)
     }
 }
 
-
 // MARK: UIScrollViewDelegate
 extension SettingProfileViewController: UIScrollViewDelegate {
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        UIView.animate(withDuration: 0.3) {
-            self.view.endEditing(true)
-        }
+        self.view.endEditing(true)
+    }
+}
+
+// MARK: UITextFieldDelegate
+extension SettingProfileViewController: UITextFieldDelegate {
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        delegate?.changeBegin()
     }
 }
 
 
-// MARK: Configuration
+
+// MARK: - Configuration
+
 private extension SettingProfileViewController {
     
     func configuration() {
@@ -159,6 +191,7 @@ private extension SettingProfileViewController {
     
     func configurationView() {
         view.backgroundColor = ColorAppearance.white.color()
+        pickButton.addTarget(self, action: #selector(chengePhoto), for: .touchUpInside)
     }
     
     func configurationScrollView() {
@@ -180,6 +213,7 @@ private extension SettingProfileViewController {
     }
     
     func configurationSendTextField() {
+        fullNameTextField.delegate = self
         aboutMeTextView.isScrollEnabled = false
         aboutMeTextView.delegate = self
     }
@@ -197,12 +231,8 @@ private extension SettingProfileViewController {
         
         let fillNameStackView = UIStackView(arrangedSubviews: [fullNameLabel, fullNameTextField], axis: .vertical, spacing: 0)
         let aboutStackView = UIStackView(arrangedSubviews: [aboutMeLabel, aboutMeTextView], axis: .vertical, spacing: 0)
-        
-        stackView = UIStackView(arrangedSubviews: [
-            pickButton,
-            fillNameStackView,
-            aboutStackView
-        ], axis: .vertical, spacing: 30)
+        var view = [pickButton, fillNameStackView, aboutStackView] + (addViewToScroll ?? [])
+        stackView = UIStackView(arrangedSubviews: view, axis: .vertical, spacing: 30)
         container.contentView.addSubview(stackView)
         stackView.edgesToSuperview(insets: .top(10) + .bottom(10) + .left(20) + .right(20))
         container.topToBottom(of: imageView, offset: -20)

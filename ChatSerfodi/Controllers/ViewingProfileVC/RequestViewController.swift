@@ -14,7 +14,7 @@ final class RequestViewController: UIViewController {
     
     private lazy var profileViewController = BaseProfileViewController(user: user)
     private let acceptButton = UIButton(title: "Accept", titleColor: ColorAppearance.white.color(), backgroundColor: ColorAppearance.black.color())
-    private let messageLabel = UILabel(text: "nil", fount: FontAppearance.Chat.text)
+    private let messageLabel = UILabel(text: "", fount: FontAppearance.Chat.text)
     
     
     // helpers
