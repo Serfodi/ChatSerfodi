@@ -204,6 +204,12 @@ table thead th {
 	background: rgba(4,15,26,.05);
 }
 
+table tbody tr td:last-child, 
+table thead tr th:last-child {
+    border-radius: 0 10px 10px 0;
+}
+
+
 table tbody td {
 	padding: 10px 10px;
     -webkit-hyphens: auto;
@@ -223,6 +229,23 @@ table thead tr th:first-child  {
 table tbody tr td:last-child, 
 table thead tr th:last-child {
     border-radius: 0 10px 10px 0;
+}
+
+@media (max-width: 420px) {
+    table thead th {
+        padding: 4px 4px;
+    }
+    table tbody td {
+        padding: 4px 4px;
+    }
+    table tbody tr td:first-child, 
+    table thead tr th:first-child  {
+	    border-radius: 4px 0 0 4px;
+    }
+    table tbody tr td:last-child, 
+    table thead tr th:last-child {
+        border-radius: 0 4px 4px 0;
+    }
 }
 
 @media screen and (max-width: 600px) {
