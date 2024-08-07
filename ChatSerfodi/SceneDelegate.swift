@@ -31,7 +31,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     func sceneWillEnterForeground(_ scene: UIScene) {
-        FirestoreService.shared.asyncUpdateIsOnline(is: true)
+//        FirestoreService.shared.asyncUpdateIsOnline(is: true)
     }
     
     func sceneDidBecomeActive(_ scene: UIScene) {

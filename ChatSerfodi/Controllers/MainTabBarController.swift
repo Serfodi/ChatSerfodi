@@ -36,6 +36,7 @@ class MainTabBarController: UITabBarController {
     init(sUser: SUser) {
         super.init(nibName: nil, bundle: nil)
         configuration(sUser: sUser)
+        FirestoreService.shared.asyncUpdateIsOnline(is: true)
     }
     
     required init?(coder: NSCoder) {
@@ -47,6 +48,7 @@ class MainTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configuration()
+        
     }
     
 }

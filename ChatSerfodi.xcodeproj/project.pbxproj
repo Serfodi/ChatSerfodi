@@ -59,6 +59,7 @@
 		B06BA8F82B1CAF7100120FB5 /* AuthNavigatingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06BA8F72B1CAF7100120FB5 /* AuthNavigatingDelegate.swift */; };
 		B06BA8FA2B1CB4AA00120FB5 /* FirestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06BA8F92B1CB4AA00120FB5 /* FirestoreService.swift */; };
 		B06BA8FC2B1CB9F000120FB5 /* UserError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06BA8FB2B1CB9F000120FB5 /* UserError.swift */; };
+		B07BBB382C622B8900ECF626 /* PrivacyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07BBB372C622B8900ECF626 /* PrivacyViewController.swift */; };
 		B09186452B29088800965DC1 /* UIApplication + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09186442B29088800965DC1 /* UIApplication + Extension.swift */; };
 		B09186472B29173600965DC1 /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09186462B29173600965DC1 /* StorageService.swift */; };
 		B09186492B291A9100965DC1 /* UIImage + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09186482B291A9100965DC1 /* UIImage + Extension.swift */; };
@@ -146,6 +147,7 @@
 		B06BA8F72B1CAF7100120FB5 /* AuthNavigatingDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthNavigatingDelegate.swift; sourceTree = "<group>"; };
 		B06BA8F92B1CB4AA00120FB5 /* FirestoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreService.swift; sourceTree = "<group>"; };
 		B06BA8FB2B1CB9F000120FB5 /* UserError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserError.swift; sourceTree = "<group>"; };
+		B07BBB372C622B8900ECF626 /* PrivacyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyViewController.swift; sourceTree = "<group>"; };
 		B09186442B29088800965DC1 /* UIApplication + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication + Extension.swift"; sourceTree = "<group>"; };
 		B09186462B29173600965DC1 /* StorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageService.swift; sourceTree = "<group>"; };
 		B09186482B291A9100965DC1 /* UIImage + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage + Extension.swift"; sourceTree = "<group>"; };
@@ -279,6 +281,7 @@
 				B026295B2C544FBB00D8302A /* SettingProfileVC */,
 				B05F54752C597DA100EF1B9D /* SettingViewController.swift */,
 				B09F24B62C4EEC4800DB5E83 /* FullScreenImage */,
+				B07BBB372C622B8900ECF626 /* PrivacyViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -617,6 +620,7 @@
 				B01C91B02C35D42D001D6ECD /* CGSize + Extension.swift in Sources */,
 				B09186562B2B3FC100965DC1 /* ChatsViewController.swift in Sources */,
 				B0E207442C38010D007346FE /* UINavigationBar + Extension.swift in Sources */,
+				B07BBB382C622B8900ECF626 /* PrivacyViewController.swift in Sources */,
 				17731EA52AE3E406006B1511 /* AuthViewController.swift in Sources */,
 				B09F24AB2C4EDACA00DB5E83 /* FullScreenImageViewController.swift in Sources */,
 				B0F8E58E2B07A51900C2B00D /* ActiveChatCell.swift in Sources */,
