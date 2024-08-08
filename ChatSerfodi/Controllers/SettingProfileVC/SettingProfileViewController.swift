@@ -45,9 +45,7 @@ class SettingProfileViewController: UIViewController {
         }
         set {
             imageView.image = newValue
-            aspectRatioImage.isActive = false
-            let aspectRatio = imageView.intrinsicContentSize.width / imageView.intrinsicContentSize.height
-            aspectRatioImage = imageView.aspectRatio(aspectRatio)
+            resizeImage()
         }
     }
     
@@ -87,9 +85,7 @@ class SettingProfileViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        aspectRatioImage.isActive = false
-        let aspectRatio = imageView.intrinsicContentSize.width / imageView.intrinsicContentSize.height
-        aspectRatioImage = imageView.aspectRatio(aspectRatio)
+        resizeImage()
     }
     
     // MARK: Action
@@ -115,8 +111,17 @@ class SettingProfileViewController: UIViewController {
     
     public func changeCancel() {
         imageView.sd_setImage(with: URL(string: user.avatarStringURL))
+        resizeImage()
         fullNameTextField.text = user.username
         aboutMeTextView.text = user.description
+    }
+    
+    // Helpers
+    
+    private func resizeImage() {
+        aspectRatioImage.isActive = false
+        let aspectRatio = imageView.intrinsicContentSize.width / imageView.intrinsicContentSize.height
+        aspectRatioImage = imageView.aspectRatio(aspectRatio)
     }
     
 }

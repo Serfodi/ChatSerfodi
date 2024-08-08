@@ -43,18 +43,23 @@ class SettingViewController: UIViewController {
         let ac = UIAlertController(title: nil, message: NSLocalizedString("GetOut", comment: ""), preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel))
         ac.addAction(UIAlertAction(title: NSLocalizedString("Exit", comment: ""), style: .destructive, handler: { _ in
-            do {
-                try Auth.auth().signOut()
-                UIApplication.shared.firstKeyWindow?.rootViewController = AuthViewController()
-            } catch {
-                print("Error signing out: \(error.localizedDescription)")
+            UIApplication.shared.firstKeyWindow?.rootViewController = AuthViewController()
+            Task {
+                do {
+                    FirestoreService.shared.updateEntryTime()
+                    await FirestoreService.shared.updateIsOnline(is: false)
+                    try Auth.auth().signOut()
+                } catch {
+                    print("Error signing out: \(error.localizedDescription)")
+                }
             }
         }))
         present(ac, animated: true)
     }
     
     @objc private func openDocs() {
-        
+        let privacyVC = PrivacyViewController()
+        present(privacyVC, animated: true)
     }
     
     @objc private func hideUser() {

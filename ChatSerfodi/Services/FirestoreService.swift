@@ -106,7 +106,7 @@ extension FirestoreService {
     public func asyncUpdateIsOnline(is online: Bool) {
         guard let currentUser = currentUser else { return }
         let user = usersRef.document(currentUser.id)
-        Task(priority: .low) {
+        Task(priority: .high) {
             do {
                 try await user.updateData([SUser.repreIsOnline : online])
                 let querySnapshot = try await activeChatsRef.getDocuments()
@@ -128,6 +128,32 @@ extension FirestoreService {
             }
         }
     }
+    
+    public func updateIsOnline(is online: Bool) async {
+        guard let currentUser = currentUser else { return }
+        let user = usersRef.document(currentUser.id)
+        do {
+            try await user.updateData([SUser.repreIsOnline : online])
+            let querySnapshot = try await activeChatsRef.getDocuments()
+            await withTaskGroup(of: Void.self, body: { taskGroup in
+                querySnapshot.documents.forEach { doc in
+                    taskGroup.addTask {
+                        do {
+                            guard let chat = SChat(document: doc) else { return }
+                            let ref = self.activeChatsRef(id: chat.friendId).document(currentUser.id)
+                            try await ref.updateData([SUser.repreIsOnline : online])
+                        } catch {
+                            print(#function + error.localizedDescription)
+                        }
+                    }
+                }
+            })
+        } catch {
+            print(#function + error.localizedDescription)
+        }
+    }
+    
+    
     
     /// - Warning: Присваивает `currentUser`
     public func getUserData(user: User) async throws -> SUser {

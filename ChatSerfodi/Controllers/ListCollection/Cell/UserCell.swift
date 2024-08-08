@@ -44,6 +44,8 @@ class UserCell: UICollectionViewCell, SelfConfiguringCell {
         textView.layer.cornerRadius = 20
         textView.clipsToBounds = true
         
+        userName.minimumScaleFactor = 0.5
+        
         setupConstraints()
         
         self.layer.cornerRadius = 24
