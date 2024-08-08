@@ -58,7 +58,7 @@
 
 // MARK: PeopleViewController
 
-"peopleNearby" = "человек рядом";
+"peopleNearby" = "найдено";
 
 // MARK: ListViewController
 
