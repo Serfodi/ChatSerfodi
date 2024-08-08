@@ -257,6 +257,7 @@ private extension ListViewController {
         emptyChats()
     }
     
+    
     func emptyChats() {
         if activeChat.isEmpty && waitingChat.isEmpty {
             collectionView.isHidden = true
@@ -270,13 +271,28 @@ private extension ListViewController {
             findButton.isHidden = true
         }
         
-        if waitingChat.isEmpty {
-            collectionView.frame.origin.y = -150
-            collectionView.frame.size.height = collectionView.frame.height + 150
-        } else if collectionView.frame.origin.y == -150 {
-            collectionView.frame.origin.y = 0
-            collectionView.frame.size.height = collectionView.frame.height - 150
+        if #available(iOS 17.0, *) {
+            
+            if waitingChat.isEmpty {
+                collectionView.frame.origin.y = -60
+                collectionView.frame.size.height = collectionView.frame.height + 60
+            } else if collectionView.frame.origin.y == -60 {
+                collectionView.frame.origin.y = 0
+                collectionView.frame.size.height = collectionView.frame.height - 60
+            }
+            
+        } else {
+            
+            if waitingChat.isEmpty {
+                collectionView.frame.origin.y = -150
+                collectionView.frame.size.height = collectionView.frame.height + 150
+            } else if collectionView.frame.origin.y == -150 {
+                collectionView.frame.origin.y = 0
+                collectionView.frame.size.height = collectionView.frame.height - 150
+            }
+            
         }
+        
         
         if activeChat.isEmpty && !waitingChat.isEmpty {
             acceptButton.isHidden = false

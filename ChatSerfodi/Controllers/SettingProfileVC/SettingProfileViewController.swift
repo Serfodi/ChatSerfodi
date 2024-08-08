@@ -236,7 +236,7 @@ private extension SettingProfileViewController {
         
         let fillNameStackView = UIStackView(arrangedSubviews: [fullNameLabel, fullNameTextField], axis: .vertical, spacing: 0)
         let aboutStackView = UIStackView(arrangedSubviews: [aboutMeLabel, aboutMeTextView], axis: .vertical, spacing: 0)
-        var view = [pickButton, fillNameStackView, aboutStackView] + (addViewToScroll ?? [])
+        let view = [pickButton, fillNameStackView, aboutStackView] + (addViewToScroll ?? [])
         stackView = UIStackView(arrangedSubviews: view, axis: .vertical, spacing: 30)
         container.contentView.addSubview(stackView)
         stackView.edgesToSuperview(insets: .top(10) + .bottom(10) + .left(20) + .right(20))

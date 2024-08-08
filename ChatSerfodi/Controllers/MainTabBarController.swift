@@ -48,7 +48,6 @@ class MainTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configuration()
-        
     }
     
 }
@@ -66,13 +65,6 @@ private extension MainTabBarController {
     }
     
     func asyncConfiguration(user: User) {
-        let mocVC = UIViewController()
-        self.view.isUserInteractionEnabled = false
-        viewControllers = [
-            generateNavigationViewController(mocVC, title: "People", image: images[0]),
-            generateNavigationViewController(mocVC, title: "Chats", image: images[1]),
-            generateNavigationViewController(mocVC, title: "Profile", image: images[2])
-        ]
         Task(priority: .userInitiated) {
             do {
                 configurationLoad()

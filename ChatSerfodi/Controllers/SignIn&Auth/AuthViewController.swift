@@ -98,10 +98,10 @@ private extension AuthViewController {
         birdView.leftToSuperview()
         birdView.rightToSuperview()
         
-        let stackView = UIStackView(arrangedSubviews: [welcomeLabel, loginButton, googleButton], axis: .vertical, spacing: 25)
+        let stackView = UIStackView(arrangedSubviews: [welcomeLabel, googleButton], axis: .vertical, spacing: 25)
         view.addSubview(stackView)
         googleButton.height(54)
-        loginButton.height(54)
+//        loginButton.height(54)
         
         stackView.topToBottom(of: birdView, offset: -25)
         stackView.leftToSuperview(offset: 50)

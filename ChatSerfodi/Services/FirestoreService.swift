@@ -76,6 +76,7 @@ extension FirestoreService {
         let url = try await StorageService.shared.upload(photo: avatarImage!)
         suser.avatarStringURL = url.absoluteString
         try await usersRef.document(suser.id).setData(suser.representation)
+        self.currentUser = suser
         return suser
     }
     

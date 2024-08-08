@@ -168,10 +168,10 @@ private extension SendProfileViewController {
         textView.topToSuperview(offset: 12)
         textView.leftToSuperview(offset: 12)
         textView.rightToLeft(of: button, offset: -4)
-        textView.bottomToSuperview(offset: -12)
-//        textView.bottom(to: view, view.keyboardLayoutGuide.topAnchor, offset: -12)
+//        textView.bottomToSuperview(offset: -12)
+        textView.bottom(to: view, view.keyboardLayoutGuide.topAnchor, offset: -12)
         
-        button.bottomToSuperview(offset: -12)
+        button.top(to: textView)
         button.rightToSuperview(offset: -12)
         
         button.size(CGSize(width: 37, height: 37))
@@ -184,9 +184,7 @@ private extension SendProfileViewController {
         view.addSubview(container)
         container.leftToSuperview()
         container.rightToSuperview()
-//        container.bottomToSuperview()
-        
-        container.bottom(to: view, view.keyboardLayoutGuide.topAnchor)
+        container.bottomToSuperview()
         
         profileViewController.view.topToSuperview()
         profileViewController.view.leftToSuperview()
