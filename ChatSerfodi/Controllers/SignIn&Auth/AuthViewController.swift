@@ -14,13 +14,13 @@ final class AuthViewController: UIViewController {
     private let gradientView = GradientView(from: .topTrailing, to: .bottomLeading , startColor: ColorAppearance.white.color(), endColor: ColorAppearance.blue.color())
     private let logoLabel = UILabel(text: "Щебетарь", fount: FontAppearance.logoTitle, color: ColorAppearance.black.color())
     private let welcomeLabel = UILabel(text: "Welcome", alignment: .center, fount: FontAppearance.firstTitle, color: ColorAppearance.black.color())
-    private let loginButton = UIButton(title: "Login", titleColor: ColorAppearance.white.color(), backgroundColor: ColorAppearance.black.color())
+//    private let loginButton = UIButton(title: "Login", titleColor: ColorAppearance.white.color(), backgroundColor: ColorAppearance.black.color())
     private let googleButton = UIButton(title: "Google", titleColor: ColorAppearance.white.color(), backgroundColor: ColorAppearance.black.color())
     private let birdView = BirdView()
     
     // MARK: ViewController
     
-    let loginVC = LoginViewController()
+//    let loginVC = LoginViewController()
     
     // MARK: Live Circle
     
@@ -37,7 +37,7 @@ final class AuthViewController: UIViewController {
     // MARK: Action
     
     @objc private func loginButtonTapped() {
-        present(loginVC, animated: true)
+//        present(loginVC, animated: true)
     }
     
     @objc func signWithGoogle() {
@@ -81,7 +81,7 @@ private extension AuthViewController {
     func configurationButton() {
         googleButton.customizeGoogleButton()
         googleButton.addTarget(self, action: #selector(signWithGoogle), for: .touchUpInside)
-        loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
+//        loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
     }
     
     func configurationConstraints() {

@@ -48,6 +48,7 @@ class SettingViewController: UIViewController {
                 do {
                     FirestoreService.shared.updateEntryTime()
                     await FirestoreService.shared.updateIsOnline(is: false)
+//                    FirestoreService.shared.currentUser = nil
                     try Auth.auth().signOut()
                 } catch {
                     print("Error signing out: \(error.localizedDescription)")

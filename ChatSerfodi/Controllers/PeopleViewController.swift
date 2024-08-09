@@ -203,9 +203,6 @@ private extension PeopleViewController {
     
     func createUserSection() -> NSCollectionLayoutSection {
         var itemCount = 2
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            itemCount = 3
-        }
         
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)

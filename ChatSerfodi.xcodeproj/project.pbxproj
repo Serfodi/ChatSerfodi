@@ -18,7 +18,6 @@
 		17731EBF2AED47BA006B1511 /* ButtonFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17731EBE2AED47BA006B1511 /* ButtonFormView.swift */; };
 		17731EC12AED4C02006B1511 /* StackView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17731EC02AED4C02006B1511 /* StackView + Extension.swift */; };
 		17B2FB862AFBB73200EECA01 /* OneLineText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B2FB852AFBB73200EECA01 /* OneLineText.swift */; };
-		17B2FB882AFBC33E00EECA01 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B2FB872AFBC33E00EECA01 /* LoginViewController.swift */; };
 		17B2FB8A2AFBCC6B00EECA01 /* SetupProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B2FB892AFBCC6B00EECA01 /* SetupProfileViewController.swift */; };
 		17B2FB8C2AFBD06C00EECA01 /* AddPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B2FB8B2AFBD06C00EECA01 /* AddPhotoView.swift */; };
 		17B2FB8E2AFBDB7A00EECA01 /* SegmentedControl + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B2FB8D2AFBDB7A00EECA01 /* SegmentedControl + Extension.swift */; };
@@ -599,7 +598,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				17B2FB882AFBC33E00EECA01 /* LoginViewController.swift in Sources */,
 				B06BA8FA2B1CB4AA00120FB5 /* FirestoreService.swift in Sources */,
 				17731EC12AED4C02006B1511 /* StackView + Extension.swift in Sources */,
 				B09F24AD2C4EE41800DB5E83 /* FullScreenPresentationController.swift in Sources */,
@@ -744,7 +742,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -799,7 +797,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -828,7 +826,7 @@
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -866,7 +864,7 @@
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
