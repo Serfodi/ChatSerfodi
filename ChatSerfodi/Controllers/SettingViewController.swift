@@ -17,6 +17,7 @@ class SettingViewController: UIViewController {
     private let birdView = BirdView()
     
     private let signOutButton = UIButton(title: "Exit", titleColor: .red, backgroundColor: .clear)
+    private let deleteProfileButton = UIButton(title: "Delete", titleColor: .red, backgroundColor: .clear)
     private let docsButton = UIButton(title: "Privacy", titleColor: ColorAppearance.white.color(), backgroundColor: ColorAppearance.black.color())
     private let hideUserButton = UIButton(title: "Hide", titleColor: ColorAppearance.white.color(), backgroundColor: ColorAppearance.black.color(), image: UIImage(systemName: "eye.slash.fill"))
     
@@ -52,6 +53,23 @@ class SettingViewController: UIViewController {
                     try Auth.auth().signOut()
                 } catch {
                     print("Error signing out: \(error.localizedDescription)")
+                }
+            }
+        }))
+        present(ac, animated: true)
+    }
+    
+    @objc private func deleteProfile() {
+        let ac = UIAlertController(title: nil, message: NSLocalizedString("DeleteProfile", comment: ""), preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel))
+        ac.addAction(UIAlertAction(title: NSLocalizedString("Delete", comment: ""), style: .destructive, handler: { _ in
+            Task {
+                do {
+                    ac.message = NSLocalizedString("Wait", comment: "")
+                    try await FirestoreService.shared.deleteProfile()
+                    UIApplication.shared.firstKeyWindow?.rootViewController = AuthViewController()
+                } catch {
+                    print("Error delete: \(error.localizedDescription)")
                 }
             }
         }))
@@ -111,6 +129,7 @@ private extension SettingViewController {
         signOutButton.addTarget(self, action: #selector(signOut), for: .touchUpInside)
         docsButton.addTarget(self, action: #selector(openDocs), for: .touchUpInside)
         hideUserButton.addTarget(self, action: #selector(hideUser), for: .touchUpInside)
+        deleteProfileButton.addTarget(self, action: #selector(deleteProfile), for: .touchUpInside)
         
         // Переделать)))
         Task(priority: .userInitiated) {
@@ -142,7 +161,10 @@ private extension SettingViewController {
         birdView.leftToSuperview()
         birdView.rightToSuperview()
         
-        let stack = UIStackView(arrangedSubviews: [labelCreate, bundleLabel, hideUserButton, docsButton, signOutButton], axis: .vertical, spacing: 15)
+        let horStack = UIStackView(arrangedSubviews: [deleteProfileButton, signOutButton], axis: .horizontal, spacing: 0)
+        horStack.alignment = .center
+        horStack.distribution = .fillEqually
+        let stack = UIStackView(arrangedSubviews: [labelCreate, bundleLabel, hideUserButton, docsButton, horStack], axis: .vertical, spacing: 15)
         view.addSubview(stack)
         
         hideUserButton.height(54)

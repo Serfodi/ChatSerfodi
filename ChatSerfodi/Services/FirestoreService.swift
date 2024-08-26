@@ -218,6 +218,25 @@ extension FirestoreService {
         try await currentSUser.updateData([SUser.repreIsHide: hide])
     }
     
+    /* Delete */
+    
+    private func deleteProfileInfo() async throws {
+        let user = usersRef.document(currentUser.id)
+        try await user.delete()
+    }
+    
+}
+
+// MARK: - General
+
+extension FirestoreService {
+    
+    public func deleteProfile() async throws {
+        try await deleteWaitingChat(from: currentUser.id)
+        try await deleteAllActiveChat()
+        try await deleteProfileInfo()
+    }
+ 
 }
 
 
@@ -326,7 +345,7 @@ extension FirestoreService {
         })
     }
     
-    /// Удаляет активный чат у текущего пользователя и у друга.
+    /// Удаляет активный чат у текущего пользователя и у друга. Для функция отказа от общения и только.
     public func deleteActiveChat(friendId: String) async throws {
         async let deleteMeChat: Void = try activeChatsRef(id: currentUser.id).document(friendId).delete()
         async let deleteFriendChat: Void = try activeChatsRef(id: friendId).document(currentUser.id).delete()
@@ -342,6 +361,21 @@ extension FirestoreService {
         let _ = try await [deleteMePhoto, deleteFriendPhoto, deleteMeMessages, deleteFriendMessages]
     }
     
+    private func deleteAllActiveChat() async throws {
+        let activeChats = try await activeChatsRef.getDocuments()
+        await withTaskGroup(of: Void.self, body: { taskGroup in
+            activeChats.documents.forEach { queryDocumentSnapshot in
+                taskGroup.addTask {
+                    do {
+                        try await self.clearActiveChat(friendId: queryDocumentSnapshot.documentID)
+                        try await queryDocumentSnapshot.reference.delete()
+                    } catch {
+                        print(#function + error.localizedDescription)
+                    }
+                }
+            }
+        })
+    }
     
     public func asyncUpdateChatTyping(for chat: SChat, typing: TypingType) {
         let friendActiveChatRef = activeChatsRef(id: chat.friendId).document(currentUser.id)

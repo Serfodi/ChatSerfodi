@@ -111,6 +111,9 @@
 
 "Privacy" = "Privacy";
 "Hide" = "Hide";
+//"Delete" = "Delete"
+"DeleteProfile" = "Delete a profile?";
+"Wait" = "Wait…";
 
 "AccountHidden" = "Your account is hidden.";
 "AccountShow" = "Your account is show.";
