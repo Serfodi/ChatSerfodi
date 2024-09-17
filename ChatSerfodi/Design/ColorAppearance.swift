@@ -10,6 +10,8 @@ import UIKit
 enum ColorAppearance {
     
     static let clearWhite = SchemeColor(light: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
+    static let clearBlack = SchemeColor(light: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1))
+    
     static let white = SchemeColor(light: #colorLiteral(red: 0.9882352941, green: 0.9803921569, blue: 0.9490196078, alpha: 1))
     
     static let blue = SchemeColor(light: #colorLiteral(red: 0.6588235294, green: 0.8196078431, blue: 0.9058823529, alpha: 1))

@@ -9,6 +9,8 @@ import UIKit
 
 enum FontAppearance {
         
+    static let loginFont = UIFont.preferredFont(forTextStyle: .headline)
+    
     static let logoTitle = Font.att(size: 50, design: .logo, weight: .none)
     static let secondLogo = Font.att(size: 24, design: .logo, weight: .none)
     

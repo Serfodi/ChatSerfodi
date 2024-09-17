@@ -8,21 +8,21 @@
 import UIKit
 import TinyConstraints
 import GoogleSignIn
+import AuthenticationServices
 
 final class AuthViewController: UIViewController {
         
     private let gradientView = GradientView(from: .topTrailing, to: .bottomLeading , startColor: ColorAppearance.white.color(), endColor: ColorAppearance.blue.color())
     private let logoLabel = UILabel(text: "Щебетарь", fount: FontAppearance.logoTitle, color: ColorAppearance.black.color())
     private let welcomeLabel = UILabel(text: "Welcome", alignment: .center, fount: FontAppearance.firstTitle, color: ColorAppearance.black.color())
-//    private let loginButton = UIButton(title: "Login", titleColor: ColorAppearance.white.color(), backgroundColor: ColorAppearance.black.color())
-    private let googleButton = UIButton(title: "Google", titleColor: ColorAppearance.white.color(), backgroundColor: ColorAppearance.black.color())
+    private let appleButton = ASAuthorizationAppleIDButton.init(authorizationButtonType: .default, authorizationButtonStyle: .white)
+    private let googleButton = UIButton(title: " " + "Sign in with Google",
+                                        titleColor: ColorAppearance.clearBlack.color(),
+                                        backgroundColor: ColorAppearance.clearWhite.color(), 
+                                        fount: FontAppearance.loginFont,
+                                        cornerRadius: 10, image: UIImage(named: "google"))
     private let birdView = BirdView()
     
-    // MARK: ViewController
-    
-//    let loginVC = LoginViewController()
-    
-    // MARK: Live Circle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,11 +34,6 @@ final class AuthViewController: UIViewController {
         birdView.play()
     }
     
-    // MARK: Action
-    
-    @objc private func loginButtonTapped() {
-//        present(loginVC, animated: true)
-    }
     
     @objc func signWithGoogle() {
         GIDSignIn.sharedInstance.signIn(withPresenting: self) { [unowned self] result, error in
@@ -65,24 +60,25 @@ final class AuthViewController: UIViewController {
             }
         }
     }
-    
 }
-
-
-// MARK: - Configuration
 
 private extension AuthViewController {
     
     func configuration() {
         configurationButton()
+        configurationView()
         configurationConstraints()
     }
     
     func configurationButton() {
-        googleButton.customizeGoogleButton()
         googleButton.addTarget(self, action: #selector(signWithGoogle), for: .touchUpInside)
-//        loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
+
     }
+    
+    func configurationView() {
+        appleButton.cornerRadius = 10
+    }
+    
     
     func configurationConstraints() {
         view.addSubview(gradientView)
@@ -98,10 +94,10 @@ private extension AuthViewController {
         birdView.leftToSuperview()
         birdView.rightToSuperview()
         
-        let stackView = UIStackView(arrangedSubviews: [welcomeLabel, googleButton], axis: .vertical, spacing: 25)
+        let stackView = UIStackView(arrangedSubviews: [welcomeLabel, appleButton, googleButton], axis: .vertical, spacing: 25)
         view.addSubview(stackView)
         googleButton.height(54)
-//        loginButton.height(54)
+        appleButton.height(54)
         
         stackView.topToBottom(of: birdView, offset: -25)
         stackView.leftToSuperview(offset: 50)

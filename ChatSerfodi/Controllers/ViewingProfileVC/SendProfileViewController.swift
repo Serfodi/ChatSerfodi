@@ -70,11 +70,6 @@ final class SendProfileViewController: UIViewController {
         super.viewDidLoad()
         configuration()
     }
-     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        acceptButton?.addShine()
-    }
     
     // MARK: Action
     
