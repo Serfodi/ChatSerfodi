@@ -67,6 +67,7 @@
 		B09186512B2A641900965DC1 /* WaitingChatsNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09186502B2A641900965DC1 /* WaitingChatsNavigation.swift */; };
 		B09186562B2B3FC100965DC1 /* ChatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09186552B2B3FC100965DC1 /* ChatsViewController.swift */; };
 		B09186582B2B7D6C00965DC1 /* UIScrolIView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09186572B2B7D6C00965DC1 /* UIScrolIView + Extension.swift */; };
+		B09CFEED2C99D63600C207A4 /* AppleSignInManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09CFEEC2C99D63600C207A4 /* AppleSignInManager.swift */; };
 		B09F24AB2C4EDACA00DB5E83 /* FullScreenImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09F24AA2C4EDACA00DB5E83 /* FullScreenImageViewController.swift */; };
 		B09F24AD2C4EE41800DB5E83 /* FullScreenPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09F24AC2C4EE41800DB5E83 /* FullScreenPresentationController.swift */; };
 		B09F24B42C4EEC1C00DB5E83 /* FullScreenTransitionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09F24B32C4EEC1C00DB5E83 /* FullScreenTransitionManager.swift */; };
@@ -155,6 +156,8 @@
 		B09186502B2A641900965DC1 /* WaitingChatsNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingChatsNavigation.swift; sourceTree = "<group>"; };
 		B09186552B2B3FC100965DC1 /* ChatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsViewController.swift; sourceTree = "<group>"; };
 		B09186572B2B7D6C00965DC1 /* UIScrolIView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrolIView + Extension.swift"; sourceTree = "<group>"; };
+		B09CFEEB2C99D40100C207A4 /* ChatSerfodi.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ChatSerfodi.entitlements; sourceTree = "<group>"; };
+		B09CFEEC2C99D63600C207A4 /* AppleSignInManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInManager.swift; sourceTree = "<group>"; };
 		B09F24AA2C4EDACA00DB5E83 /* FullScreenImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenImageViewController.swift; sourceTree = "<group>"; };
 		B09F24AC2C4EE41800DB5E83 /* FullScreenPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenPresentationController.swift; sourceTree = "<group>"; };
 		B09F24B32C4EEC1C00DB5E83 /* FullScreenTransitionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenTransitionManager.swift; sourceTree = "<group>"; };
@@ -205,6 +208,7 @@
 		17731E9F2AE3E406006B1511 /* ChatSerfodi */ = {
 			isa = PBXGroup;
 			children = (
+				B09CFEEB2C99D40100C207A4 /* ChatSerfodi.entitlements */,
 				17731EA02AE3E406006B1511 /* AppDelegate.swift */,
 				17731EA22AE3E406006B1511 /* SceneDelegate.swift */,
 				B06BA8EF2B1C96AC00120FB5 /* Services */,
@@ -389,6 +393,7 @@
 			children = (
 				B01975202B0E15B1005D4321 /* Model */,
 				B06BA8F02B1C96D400120FB5 /* AuthService.swift */,
+				B09CFEEC2C99D63600C207A4 /* AppleSignInManager.swift */,
 				B06BA8F92B1CB4AA00120FB5 /* FirestoreService.swift */,
 				B09186462B29173600965DC1 /* StorageService.swift */,
 				B091864A2B29B05200965DC1 /* ListenerService.swift */,
@@ -626,6 +631,7 @@
 				17731EBB2AE3FC8C006B1511 /* Label + Extension.swift in Sources */,
 				B09F24B42C4EEC1C00DB5E83 /* FullScreenTransitionManager.swift in Sources */,
 				B032EEC52C53BEAD00A2E3FB /* RequestViewController.swift in Sources */,
+				B09CFEED2C99D63600C207A4 /* AppleSignInManager.swift in Sources */,
 				B019752A2B0E9F96005D4321 /* UIView + Extension.swift in Sources */,
 				B01C91912C356C3A001D6ECD /* FontAppearance.swift in Sources */,
 				B01C91922C356C3A001D6ECD /* Font.swift in Sources */,
@@ -813,9 +819,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ChatSerfodi/ChatSerfodi.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = VJ7AN5PN54;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ChatSerfodi/Info.plist;
@@ -831,7 +838,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = Serfodi.ChatSerfodi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -851,9 +858,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ChatSerfodi/ChatSerfodi.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = VJ7AN5PN54;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ChatSerfodi/Info.plist;
@@ -869,7 +877,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = Serfodi.ChatSerfodi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

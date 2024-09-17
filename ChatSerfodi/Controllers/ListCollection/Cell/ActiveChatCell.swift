@@ -145,7 +145,7 @@ final class MenuButton: UIButton {
         
     let generator = UIImpactFeedbackGenerator(style: .medium)
     
-    init(menuActions: [UIAction]) {
+    init(menuActions: [UIMenuElement]) {
         super.init(frame: .zero)
         setup(action: menuActions)
         generator.prepare()
@@ -160,12 +160,10 @@ final class MenuButton: UIButton {
         return true
     }
 
-    private func setup(action: [UIAction]) {
+    private func setup(action: [UIMenuElement]) {
         let moreImage = UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(pointSize: 20))
         menu = UIMenu(title: "", image: moreImage, identifier: nil, options: .destructive, children: action)
-        if #available(iOS 16.0, *) {
-            menu?.preferredElementSize = .large
-        }
+        menu?.preferredElementSize = .large
         setImage(moreImage, for: .normal)
         tintColor = ColorAppearance.black.color()
         showsMenuAsPrimaryAction = true

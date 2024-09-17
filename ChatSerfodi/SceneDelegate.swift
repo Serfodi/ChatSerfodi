@@ -18,6 +18,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
                 
+        AppleSignInManager.shared.verifySignInWithAppleID()
+        
         if let user = Auth.auth().currentUser {
             let mainTabBar = MainTabBarController(user: user)
             mainTabBar.modalPresentationStyle = .fullScreen

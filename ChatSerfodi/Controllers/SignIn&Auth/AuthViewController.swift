@@ -60,6 +60,53 @@ final class AuthViewController: UIViewController {
             }
         }
     }
+    
+    @objc func signWithAppleId() {
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+        let request = appleIDProvider.createRequest()
+        AppleSignInManager.shared.requestAppleAuthorization(request)
+        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+        authorizationController.delegate = self
+        authorizationController.performRequests()
+    }
+    
+}
+
+extension AuthViewController: ASAuthorizationControllerDelegate {
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: any Error) {
+        self.showAlert(with: "Error", and: error.localizedDescription)
+    }
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        guard let appleIDCredentials = authorization.credential as? ASAuthorizationAppleIDCredential else {
+            print("AppleAuthorization failed: AppleID credential not available")
+            return
+        }
+        Task {
+            do {
+                let user = try await AuthService.shared.appleAuth(appleIDCredentials, nonce: AppleSignInManager.nonce)
+                
+                do {
+                    let suser = try await FirestoreService.shared.getUserData(user: user)
+                    self.showAlert(with: "Successfully", and: "YouAreLoggedIn") {
+                        let mainTabBar = MainTabBarController(sUser: suser)
+                        mainTabBar.modalPresentationStyle = .fullScreen
+                        self.present(mainTabBar, animated: true)
+                    }
+                } catch {
+                    self.showAlert(with: "Successfully", and: "YouAreRegistered") {
+                        self.present(SetupProfileViewController(currentUser: user), animated: true)
+                    }
+                }
+                
+            } catch {
+                print("AppleAuthorization failed: \(error)")
+                self.showAlert(with: "Error", and: error.localizedDescription)
+            }
+        }
+    }
+    
 }
 
 private extension AuthViewController {
@@ -72,7 +119,7 @@ private extension AuthViewController {
     
     func configurationButton() {
         googleButton.addTarget(self, action: #selector(signWithGoogle), for: .touchUpInside)
-
+        appleButton.addTarget(self, action: #selector(signWithAppleId), for: .touchUpInside)
     }
     
     func configurationView() {

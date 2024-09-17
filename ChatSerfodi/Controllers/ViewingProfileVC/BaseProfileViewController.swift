@@ -112,6 +112,7 @@ private extension BaseProfileViewController {
     }
     
     func configurationMenuButon() {
+        
         let action = UIAction(title: NSLocalizedString("Blocking", comment: ""), image: .init(systemName: "nosign"), attributes: .destructive) { action in
             Task(priority: .userInitiated) {
                 await FirestoreService.shared.blockedUser(user: self.user)
@@ -121,7 +122,29 @@ private extension BaseProfileViewController {
             }
             FirestoreService.shared.asyncBlockedClear(user: self.user)
         }
-        menuButton = MenuButton(menuActions: [action])
+        
+        let actionUnwantedReport = UIAction(title: "Unwanted content", image: .init(systemName: "eye.trianglebadge.exclamationmark"), attributes: .destructive) { action in
+            
+        }
+        
+        let actionPornoReport = UIAction(title: "Pornography", image: .init(systemName: "x.square"), attributes: .destructive) { action in
+            
+        }
+        
+        let actionViolenceReport = UIAction(title: "Violence", image: .init(systemName: "figure.fall.circle"), attributes: .destructive) { action in
+            
+        }
+        
+        let actionOtherReport = UIAction(title: "Other", image: .init(systemName: "exclamationmark.circle"), attributes: .destructive) { action in
+            
+        }
+        
+        let menuReport = UIMenu(title: "Report", image: .init(systemName: "exclamationmark.circle"), children: [
+            actionUnwantedReport, actionPornoReport, actionViolenceReport, actionOtherReport
+        ])
+        
+        
+        menuButton = MenuButton(menuActions: [action, menuReport])
     }
     
     func configurationConstraints() {

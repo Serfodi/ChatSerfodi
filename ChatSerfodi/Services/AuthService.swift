@@ -9,6 +9,7 @@ import UIKit
 import FirebaseCore
 import GoogleSignIn
 import FirebaseAuth
+import AuthenticationServices
 
 class AuthService {
     
@@ -54,6 +55,36 @@ class AuthService {
         return result.user
     }
     
+        
+    func appleAuth(_ appleIDCredential: ASAuthorizationAppleIDCredential, nonce: String?) async throws -> User {
+        guard let nonce = nonce else {
+            fatalError("Invalid state: A login callback was received, but no login request was sent.")
+        }
+        
+        guard let appleIDToken = appleIDCredential.identityToken else {
+            print("Unable to fetch identity token")
+            throw AuthError.notFilled
+        }
+        
+        guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
+            print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
+            throw AuthError.notFilled
+        }
+        
+        let credential = OAuthProvider.appleCredential(withIDToken: idTokenString, rawNonce: nonce, fullName: appleIDCredential.fullName)
+        
+        do {
+            let result = try await auth.signIn(with: credential)
+            
+            return result.user
+            
+            
+            
+        } catch {
+            print("FirebaseAuthError: appleAuth(appleIDCredential:nonce:) failed. \(error)")
+            throw error
+        }
+    }
     
     func register(email: String?, password: String?, confirmPassword: String?, completion: @escaping (Result<User, Error>) -> Void) {
         // Создания нового акаунта.
