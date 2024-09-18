@@ -30,6 +30,10 @@ class FirestoreService {
         activeChatsRef(id: currentUser.id)
     }
     
+    var reportRef: CollectionReference {
+        db.collection("report")
+    }
+    
     func activeChatsRef(id: String) -> CollectionReference {
         db.collection(["users", id, "activeChats"].joined(separator: "/"))
     }
@@ -45,6 +49,7 @@ class FirestoreService {
     func waitingChatMessagesRef(to id: String, from friendId: String) -> CollectionReference {
         db.collection(["users", id, "waitingChats", friendId, "messages"].joined(separator: "/"))
     }
+        
 }
 
 
@@ -504,6 +509,11 @@ extension FirestoreService {
                 print(#function + error.localizedDescription)
             }
         }
+    }
+    
+    
+    public func report(user: SUser, report: String) async throws {
+        try await reportRef.addDocument(data: ["id":user.id,"report":report])
     }
     
 }

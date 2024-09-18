@@ -113,39 +113,53 @@ private extension BaseProfileViewController {
     
     func configurationMenuButon() {
         
-        let action = UIAction(title: NSLocalizedString("Blocking", comment: ""), image: .init(systemName: "nosign"), attributes: .destructive) { action in
-            Task(priority: .userInitiated) {
-                await FirestoreService.shared.blockedUser(user: self.user)
-                self.dismiss(animated: true) {
-                    NotificationCenter.default.post(name: Notification.Name("DeleteUser"), object: nil, userInfo: ["User" : self.user])
-                }
-            }
-            FirestoreService.shared.asyncBlockedClear(user: self.user)
+        let action = UIAction(title: NSLocalizedString("Blocking", comment: ""), image: .init(systemName: "nosign")) { _ in
+            self.asyncReport()
         }
         
-        let actionUnwantedReport = UIAction(title: "Unwanted content", image: .init(systemName: "eye.trianglebadge.exclamationmark"), attributes: .destructive) { action in
-            
+        let actionUnwantedReport = UIAction(title: "Unwanted content", image: .init(systemName: "eye.trianglebadge.exclamationmark")) { action in
+            self.asyncReport("Unwanted content")
         }
         
-        let actionPornoReport = UIAction(title: "Pornography", image: .init(systemName: "x.square"), attributes: .destructive) { action in
-            
+        let actionPornoReport = UIAction(title: "Pornography", image: .init(systemName: "x.square")) { action in
+            self.asyncReport("Pornography")
         }
         
-        let actionViolenceReport = UIAction(title: "Violence", image: .init(systemName: "figure.fall.circle"), attributes: .destructive) { action in
-            
+        let actionViolenceReport = UIAction(title: "Violence", image: .init(systemName: "figure.fall.circle")) { action in
+            self.asyncReport("Violence")
         }
         
-        let actionOtherReport = UIAction(title: "Other", image: .init(systemName: "exclamationmark.circle"), attributes: .destructive) { action in
-            
+        let actionOtherReport = UIAction(title: "Other", image: .init(systemName: "exclamationmark.circle")) { action in
+            self.asyncReport("Other")
         }
         
         let menuReport = UIMenu(title: "Report", image: .init(systemName: "exclamationmark.circle"), children: [
             actionUnwantedReport, actionPornoReport, actionViolenceReport, actionOtherReport
         ])
         
-        
         menuButton = MenuButton(menuActions: [action, menuReport])
     }
+    
+    
+    func asyncReport(_ report: String? = nil) {
+        Task(priority: .userInitiated) {
+            await FirestoreService.shared.blockedUser(user: self.user)
+            self.dismiss(animated: true) {
+                NotificationCenter.default.post(name: Notification.Name("DeleteUser"), object: nil, userInfo: ["User" : self.user])
+            }
+        }
+        FirestoreService.shared.asyncBlockedClear(user: self.user)
+        guard let report = report else { return }
+        Task {
+            do {
+                try await FirestoreService.shared.report(user: self.user, report: report)
+            } catch {
+                self.showAlert(with: "Error", and: error.localizedDescription)
+            }
+        }
+    }
+    
+    
     
     func configurationConstraints() {
         view.addSubview(scrollView)
