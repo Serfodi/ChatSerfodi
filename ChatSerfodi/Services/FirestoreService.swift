@@ -222,6 +222,11 @@ extension FirestoreService {
         try await currentSUser.updateData([SUser.repreIsHide: hide])
     }
     
+    private func updateIsHide(for id: String, isHide: Bool) async throws {
+        let sUser = usersRef.document(id)
+        try await sUser.updateData([SUser.repreIsHide: isHide])
+    }
+    
     /* Delete */
     
     private func deleteProfileInfo() async throws {
@@ -522,6 +527,16 @@ extension FirestoreService {
     
     public func report(user: SUser, report: String) async throws {
         try await reportRef.addDocument(data: ["id":user.id,"report":report])
+        try await updateIsHide(for: user.id, isHide: true)
+    }
+    
+    public func report(chat: SChat, message: String) async {
+        do {
+            try await reportRef.addDocument(data: ["id":self.currentUser.id, "friendId" : chat.friendId, "messageId": message])
+            try await updateIsHide(for: chat.friendId, isHide: true)
+        } catch {
+            print(error.localizedDescription)
+        }
     }
     
 }

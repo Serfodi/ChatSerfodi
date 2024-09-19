@@ -58,7 +58,7 @@
 		B06BA8F82B1CAF7100120FB5 /* AuthNavigatingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06BA8F72B1CAF7100120FB5 /* AuthNavigatingDelegate.swift */; };
 		B06BA8FA2B1CB4AA00120FB5 /* FirestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06BA8F92B1CB4AA00120FB5 /* FirestoreService.swift */; };
 		B06BA8FC2B1CB9F000120FB5 /* UserError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06BA8FB2B1CB9F000120FB5 /* UserError.swift */; };
-		B07BBB382C622B8900ECF626 /* PrivacyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07BBB372C622B8900ECF626 /* PrivacyViewController.swift */; };
+		B07BBB382C622B8900ECF626 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07BBB372C622B8900ECF626 /* WebViewController.swift */; };
 		B09186452B29088800965DC1 /* UIApplication + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09186442B29088800965DC1 /* UIApplication + Extension.swift */; };
 		B09186472B29173600965DC1 /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09186462B29173600965DC1 /* StorageService.swift */; };
 		B09186492B291A9100965DC1 /* UIImage + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09186482B291A9100965DC1 /* UIImage + Extension.swift */; };
@@ -68,6 +68,7 @@
 		B09186562B2B3FC100965DC1 /* ChatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09186552B2B3FC100965DC1 /* ChatsViewController.swift */; };
 		B09186582B2B7D6C00965DC1 /* UIScrolIView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09186572B2B7D6C00965DC1 /* UIScrolIView + Extension.swift */; };
 		B09CFEED2C99D63600C207A4 /* AppleSignInManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09CFEEC2C99D63600C207A4 /* AppleSignInManager.swift */; };
+		B09CFEEF2C9B2A3400C207A4 /* String + localized.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09CFEEE2C9B2A3300C207A4 /* String + localized.swift */; };
 		B09F24AB2C4EDACA00DB5E83 /* FullScreenImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09F24AA2C4EDACA00DB5E83 /* FullScreenImageViewController.swift */; };
 		B09F24AD2C4EE41800DB5E83 /* FullScreenPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09F24AC2C4EE41800DB5E83 /* FullScreenPresentationController.swift */; };
 		B09F24B42C4EEC1C00DB5E83 /* FullScreenTransitionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09F24B32C4EEC1C00DB5E83 /* FullScreenTransitionManager.swift */; };
@@ -147,7 +148,7 @@
 		B06BA8F72B1CAF7100120FB5 /* AuthNavigatingDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthNavigatingDelegate.swift; sourceTree = "<group>"; };
 		B06BA8F92B1CB4AA00120FB5 /* FirestoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreService.swift; sourceTree = "<group>"; };
 		B06BA8FB2B1CB9F000120FB5 /* UserError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserError.swift; sourceTree = "<group>"; };
-		B07BBB372C622B8900ECF626 /* PrivacyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyViewController.swift; sourceTree = "<group>"; };
+		B07BBB372C622B8900ECF626 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		B09186442B29088800965DC1 /* UIApplication + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication + Extension.swift"; sourceTree = "<group>"; };
 		B09186462B29173600965DC1 /* StorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageService.swift; sourceTree = "<group>"; };
 		B09186482B291A9100965DC1 /* UIImage + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage + Extension.swift"; sourceTree = "<group>"; };
@@ -158,6 +159,7 @@
 		B09186572B2B7D6C00965DC1 /* UIScrolIView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrolIView + Extension.swift"; sourceTree = "<group>"; };
 		B09CFEEB2C99D40100C207A4 /* ChatSerfodi.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ChatSerfodi.entitlements; sourceTree = "<group>"; };
 		B09CFEEC2C99D63600C207A4 /* AppleSignInManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInManager.swift; sourceTree = "<group>"; };
+		B09CFEEE2C9B2A3300C207A4 /* String + localized.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String + localized.swift"; sourceTree = "<group>"; };
 		B09F24AA2C4EDACA00DB5E83 /* FullScreenImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenImageViewController.swift; sourceTree = "<group>"; };
 		B09F24AC2C4EE41800DB5E83 /* FullScreenPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenPresentationController.swift; sourceTree = "<group>"; };
 		B09F24B32C4EEC1C00DB5E83 /* FullScreenTransitionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenTransitionManager.swift; sourceTree = "<group>"; };
@@ -256,6 +258,7 @@
 				B01C91AE2C35CEB1001D6ECD /* AnimationBirdView */,
 				B0CFB0DA2C480A2F009595F8 /* Date + Extension.swift */,
 				17731EBC2AED46EA006B1511 /*  UIkit */,
+				B09CFEEE2C9B2A3300C207A4 /* String + localized.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -282,7 +285,7 @@
 				B026295B2C544FBB00D8302A /* SettingProfileVC */,
 				B05F54752C597DA100EF1B9D /* SettingViewController.swift */,
 				B09F24B62C4EEC4800DB5E83 /* FullScreenImage */,
-				B07BBB372C622B8900ECF626 /* PrivacyViewController.swift */,
+				B07BBB372C622B8900ECF626 /* WebViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -605,6 +608,7 @@
 			files = (
 				B06BA8FA2B1CB4AA00120FB5 /* FirestoreService.swift in Sources */,
 				17731EC12AED4C02006B1511 /* StackView + Extension.swift in Sources */,
+				B09CFEEF2C9B2A3400C207A4 /* String + localized.swift in Sources */,
 				B09F24AD2C4EE41800DB5E83 /* FullScreenPresentationController.swift in Sources */,
 				B06BA8FC2B1CB9F000120FB5 /* UserError.swift in Sources */,
 				B091864B2B29B05200965DC1 /* ListenerService.swift in Sources */,
@@ -613,7 +617,7 @@
 				B01C91B02C35D42D001D6ECD /* CGSize + Extension.swift in Sources */,
 				B09186562B2B3FC100965DC1 /* ChatsViewController.swift in Sources */,
 				B0E207442C38010D007346FE /* UINavigationBar + Extension.swift in Sources */,
-				B07BBB382C622B8900ECF626 /* PrivacyViewController.swift in Sources */,
+				B07BBB382C622B8900ECF626 /* WebViewController.swift in Sources */,
 				17731EA52AE3E406006B1511 /* AuthViewController.swift in Sources */,
 				B09F24AB2C4EDACA00DB5E83 /* FullScreenImageViewController.swift in Sources */,
 				B0F8E58E2B07A51900C2B00D /* ActiveChatCell.swift in Sources */,

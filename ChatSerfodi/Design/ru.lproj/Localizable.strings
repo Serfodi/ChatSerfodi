@@ -11,7 +11,7 @@
 "Welcome" = "Добро пожаловать!";
 "Registration" = "Регистрация";
 "Login" = "Вход";
-"Sign in with Google" = "Войти с Google";
+"Sign in with Google" = "Вход с Google";
 
 "Usage Agreement" = "Соглашение об использовании";
 "EULO" = "Пользовательское соглашение";
@@ -21,7 +21,7 @@
 
 // MARK: SignUpViewController
 
-"GoodToSeeYou" = "Рад Вас видеть!";
+"GoodToSeeYou" = "Рады Вас видеть!";
 "Password" = "Пароль";
 "PasswordConfirmation" = "Подтверждение пароля";
 "AlreadyRegistered" = "Уже зарегистрированы?";

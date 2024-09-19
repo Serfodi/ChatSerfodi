@@ -58,11 +58,9 @@ class SetupProfileViewController: UIViewController {
                     description: settingProfileViewController.aboutMeText,
                     sex: sexSegmentedController.selectedSegmentIndex
                 )
-                self.showAlert(with: "Successfully", and: "YouAreLoggedIn") {
-                    let mainTabBar = MainTabBarController(sUser: user)
-                    mainTabBar.modalPresentationStyle = .fullScreen
-                    self.present(mainTabBar, animated: true)
-                }
+                let mainTabBar = MainTabBarController(sUser: user)
+                mainTabBar.modalPresentationStyle = .fullScreen
+                self.present(mainTabBar, animated: true)
             } catch {
                 self.showAlert(with: "Error", and: error.localizedDescription)
             }

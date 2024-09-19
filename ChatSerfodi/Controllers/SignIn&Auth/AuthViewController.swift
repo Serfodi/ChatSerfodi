@@ -21,7 +21,7 @@ final class AuthViewController: UIViewController {
     private let logoLabel = UILabel(text: "Щебетарь", fount: FontAppearance.logoTitle, color: ColorAppearance.black.color())
     private let welcomeLabel = UILabel(text: "Welcome", alignment: .center, fount: FontAppearance.firstTitle, color: ColorAppearance.black.color())
     private let appleButton = ASAuthorizationAppleIDButton.init(authorizationButtonType: .default, authorizationButtonStyle: .white)
-    private let googleButton = UIButton(title: " " + "Sign in with Google",
+    private let googleButton = UIButton(title: " " + "Sign in with Google".localized(),
                                         titleColor: ColorAppearance.clearBlack.color(),
                                         backgroundColor: ColorAppearance.clearWhite.color(), 
                                         fount: FontAppearance.loginFont,
@@ -87,7 +87,7 @@ final class AuthViewController: UIViewController {
     }
     
     func showAlertAgree(completion: @escaping () -> Void = {} ) {
-        let alertController = UIAlertController(title: "Usage Agreement".localized(), message: "Please review", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "Usage Agreement".localized(), message: "Please review".localized(), preferredStyle: .alert)
         let privacyPolicy = UIAlertAction(title: "Privacy".localized(), style: .default) { (_) in
             self.present(self.privateVC, animated: true)
         }
