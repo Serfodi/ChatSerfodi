@@ -230,10 +230,6 @@ class ChatsViewController: MessagesViewController {
 
 extension ChatsViewController: MessageCellDelegate {
     
-    func didTapMessage(in cell: MessageCollectionViewCell) {
-        
-    }
-    
     func didTapImage(in cell: MessageCollectionViewCell) {
         guard let indexPath = messagesCollectionView.indexPath(for: cell) else { return }
         guard let message = self.messagesCollectionView.messagesDataSource?.messageForItem(at: indexPath, in: self.messagesCollectionView) else { return }

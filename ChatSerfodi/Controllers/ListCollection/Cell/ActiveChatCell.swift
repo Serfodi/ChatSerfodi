@@ -84,10 +84,22 @@ class ActiveChatCell: UICollectionViewCell, SelfConfiguringCell {
 private extension ActiveChatCell {
     
     func setupConfiguration() {
-        let action = UIAction(title: NSLocalizedString("Delete", comment: ""), image: .init(systemName: "trash.fill"), attributes: .destructive) { action in
+        let actionDelete = UIAction(title: NSLocalizedString("Delete", comment: ""), image: .init(systemName: "trash.fill"), attributes: .destructive) { action in
             NotificationCenter.default.post(name: Notification.Name("DeleteChat"), object: nil, userInfo: ["Chat" : self.chat!])
         }
-        menuButton = MenuButton(menuActions: [action])
+        let report = UIAction(title: "Report".localized(), image: .init(systemName: "exclamationmark.circle")) { action in
+            Task {
+                await FirestoreService.shared.report(chat: self.chat, message: "report")
+            }
+            NotificationCenter.default.post(name: Notification.Name("DeleteChat"), object: nil, userInfo: ["Chat" : self.chat!])
+        }
+        let actionBlocking = UIAction(title: "Blocking".localized(), image: .init(systemName: "nosign")) { _ in
+            Task {
+                await FirestoreService.shared.blockedUser(userId: self.chat.friendId)
+            }
+            NotificationCenter.default.post(name: Notification.Name("DeleteChat"), object: nil, userInfo: ["Chat" : self.chat!])
+        }
+        menuButton = MenuButton(menuActions: [report, actionBlocking, actionDelete])
     }
     
     func setupConstraints() {

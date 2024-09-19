@@ -505,6 +505,16 @@ extension FirestoreService {
     
     /// Блокирует и удаляет всю связную информацию из текущего юзера
     ///  - Parameter: user Пользователь которого нужно заблокировать
+    public func blockedUser(userId: String) async {
+        do {
+            try await updateBlockedUser(friendId: userId)
+        } catch {
+            print(#function + error.localizedDescription)
+        }
+    }
+    
+    /// Блокирует и удаляет всю связную информацию из текущего юзера
+    ///  - Parameter: user Пользователь которого нужно заблокировать
     public func asyncBlockedClear(user: SUser) {
         Task(priority: .userInitiated) {
             do {
