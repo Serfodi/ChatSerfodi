@@ -11,6 +11,13 @@
 "Welcome" = "Добро пожаловать!";
 "Registration" = "Регистрация";
 "Login" = "Вход";
+"Sign in with Google" = "Войти с Google";
+
+"Usage Agreement" = "Соглашение об использовании";
+"EULO" = "Пользовательское соглашение";
+"Terms" = "Правила использования";
+"Yes, agree" = "Да, согласен";
+"Please review" = "Пожалуйста ознакомьтесь";
 
 // MARK: SignUpViewController
 
@@ -126,3 +133,9 @@
 
 "was" = "был";
 "wasW" = "была";
+
+// MARK: HTML
+
+"privacyHTML" = "privacy";
+"termsHTML" = "terms";
+"licenseHTML" = "license";

@@ -217,7 +217,6 @@ extension FirestoreService {
         try await usersRef.document(currentUser.id).updateData([SUser.repreBlocked : blocked])
     }
     
-    /// Обновляет дату входа текущего пользователя
     public func updateIsHide(hide: Bool) async throws {
         let currentSUser = usersRef.document(currentUser.id)
         try await currentSUser.updateData([SUser.repreIsHide: hide])
@@ -228,8 +227,17 @@ extension FirestoreService {
     private func deleteProfileInfo() async throws {
         let user = usersRef.document(currentUser.id)
         try await user.delete()
+        await deleteUser()
     }
     
+    public func deleteUser() async {
+        let user = Auth.auth().currentUser
+        do {
+            try await user?.delete()
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
 }
 
 // MARK: - General

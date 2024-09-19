@@ -9,9 +9,14 @@ import UIKit
 import TinyConstraints
 import GoogleSignIn
 import AuthenticationServices
+import FirebaseAuth
 
 final class AuthViewController: UIViewController {
         
+    private lazy var privateVC = WebViewController(page: .privacyHTML)
+    private lazy var termVC = WebViewController(page: .termsHTML)
+    private lazy var licenseVC = WebViewController(page: .licenseHTML)
+    
     private let gradientView = GradientView(from: .topTrailing, to: .bottomLeading , startColor: ColorAppearance.white.color(), endColor: ColorAppearance.blue.color())
     private let logoLabel = UILabel(text: "Щебетарь", fount: FontAppearance.logoTitle, color: ColorAppearance.black.color())
     private let welcomeLabel = UILabel(text: "Welcome", alignment: .center, fount: FontAppearance.firstTitle, color: ColorAppearance.black.color())
@@ -23,39 +28,33 @@ final class AuthViewController: UIViewController {
                                         cornerRadius: 10, image: UIImage(named: "google"))
     private let birdView = BirdView()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         configuration()
+        NotificationCenter.default.addObserver(self, selector: #selector(handleModalClosed), name: NSNotification.Name("PrivacyViewControllerModalClosed"), object: nil)
     }
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         birdView.play()
     }
     
+    @objc func handleModalClosed() {
+        showAlertAgree()
+    }
     
     @objc func signWithGoogle() {
         GIDSignIn.sharedInstance.signIn(withPresenting: self) { [unowned self] result, error in
             AuthService.shared.googleLogin(user: result?.user, error: error) { result in
                 switch result {
                 case .success(let user):
-                    Task(priority: .userInitiated) {
-                        do {
-                            let suser = try await FirestoreService.shared.getUserData(user: user)
-                            self.showAlert(with: "Successfully", and: "YouAreLoggedIn") {
-                                let mainTabBar = MainTabBarController(sUser: suser)
-                                mainTabBar.modalPresentationStyle = .fullScreen
-                                self.present(mainTabBar, animated: true)
-                            }
-                        } catch {
-                            self.showAlert(with: "Successfully", and: "YouAreRegistered") {
-                                self.present(SetupProfileViewController(currentUser: user), animated: true)
-                            }
-                        }
-                    }
+                    self.asyncLoginUser(user)
                 case .failure(let error):
-                    self.showAlert(with: "Error", and: error.localizedDescription)
+                    self.showAlert(with: "Error".localized(), and: error.localizedDescription)
                 }
             }
         }
@@ -68,6 +67,50 @@ final class AuthViewController: UIViewController {
         let authorizationController = ASAuthorizationController(authorizationRequests: [request])
         authorizationController.delegate = self
         authorizationController.performRequests()
+    }
+    
+    func asyncLoginUser(_ user: User) {
+        Task {
+            do {
+                let sUser = try await FirestoreService.shared.getUserData(user: user)
+                self.showAlertAgree {
+                    let mainTabBar = MainTabBarController(sUser: sUser)
+                    mainTabBar.modalPresentationStyle = .fullScreen
+                    self.present(mainTabBar, animated: true)
+                }
+            } catch {
+                self.showAlertAgree {
+                    self.present(SetupProfileViewController(currentUser: user), animated: true)
+                }
+            }
+        }
+    }
+    
+    func showAlertAgree(completion: @escaping () -> Void = {} ) {
+        let alertController = UIAlertController(title: "Usage Agreement".localized(), message: "Please review", preferredStyle: .alert)
+        let privacyPolicy = UIAlertAction(title: "Privacy".localized(), style: .default) { (_) in
+            self.present(self.privateVC, animated: true)
+        }
+        let EULOAction = UIAlertAction(title: "EULO".localized(), style: .default) { (_) in
+            self.present(self.licenseVC, animated: true)
+        }
+        let tersmAction = UIAlertAction(title: "Terms".localized(), style: .default) { (_) in
+            self.present(self.termVC, animated: true)
+        }
+        let cancelAction = UIAlertAction(title: "Cancel".localized(), style: .destructive) { (_) in
+            Task {
+                await FirestoreService.shared.deleteUser()
+            }
+        }
+        let okAction = UIAlertAction(title: "Yes, agree".localized(), style: .default) { (_) in
+            completion()
+        }
+        alertController.addAction(privacyPolicy)
+        alertController.addAction(EULOAction)
+        alertController.addAction(tersmAction)
+        alertController.addAction(cancelAction)
+        alertController.addAction(okAction)
+        present(alertController, animated: true)
     }
     
 }
@@ -86,27 +129,12 @@ extension AuthViewController: ASAuthorizationControllerDelegate {
         Task {
             do {
                 let user = try await AuthService.shared.appleAuth(appleIDCredentials, nonce: AppleSignInManager.nonce)
-                
-                do {
-                    let suser = try await FirestoreService.shared.getUserData(user: user)
-                    self.showAlert(with: "Successfully", and: "YouAreLoggedIn") {
-                        let mainTabBar = MainTabBarController(sUser: suser)
-                        mainTabBar.modalPresentationStyle = .fullScreen
-                        self.present(mainTabBar, animated: true)
-                    }
-                } catch {
-                    self.showAlert(with: "Successfully", and: "YouAreRegistered") {
-                        self.present(SetupProfileViewController(currentUser: user), animated: true)
-                    }
-                }
-                
+                self.asyncLoginUser(user)
             } catch {
-                print("AppleAuthorization failed: \(error)")
                 self.showAlert(with: "Error", and: error.localizedDescription)
             }
         }
     }
-    
 }
 
 private extension AuthViewController {

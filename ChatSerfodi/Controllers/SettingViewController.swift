@@ -77,7 +77,7 @@ class SettingViewController: UIViewController {
     }
     
     @objc private func openDocs() {
-        let privacyVC = PrivacyViewController()
+        let privacyVC = WebViewController(page: .privacyHTML)
         present(privacyVC, animated: true)
     }
     

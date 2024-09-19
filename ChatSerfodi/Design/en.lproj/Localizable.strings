@@ -13,6 +13,14 @@
 "Registration" = "Registration";
 "Login" = "Login";
 
+"Sign in with Google" = "Sign in with Google";
+
+"Usage Agreement" = "Usage Agreement";
+"EULO" = "User agreement";
+"Terms" = "Terms of use";
+"Yes, agree" = "Yes, agree";
+"Please review" = "Please review";
+
 // MARK: SignUpViewController
 
 "GoodToSeeYou" = "Good to see you!";
@@ -127,3 +135,10 @@
 
 "was" = "was";
 "wasW" = "wasW";
+
+
+// MARK: HTML
+
+"privacyHTML" = "privacyEng";
+"termsHTML" = "termsEng";
+"licenseHTML" = "licenseEng";
