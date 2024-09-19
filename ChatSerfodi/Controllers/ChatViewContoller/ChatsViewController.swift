@@ -61,6 +61,7 @@ class ChatsViewController: MessagesViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        messagesCollectionView.delegate = self
         messageInputBar.delegate = self
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
@@ -71,6 +72,9 @@ class ChatsViewController: MessagesViewController {
         setupMessageListener()
         setupChatListener()
         setupUserListener()
+        
+        let customMenuItem = UIMenuItem(title: "Report".localized(), action: #selector(MessageCollectionViewCell.report(_:)))
+        UIMenuController.shared.menuItems = [customMenuItem]
         
         NotificationCenter.default.addObserver(self, selector: #selector(blockedUser(_:)), name: Notification.Name("DeleteUser"), object: nil)
     }
@@ -128,7 +132,6 @@ class ChatsViewController: MessagesViewController {
         })
     }
     
-    
     // MARK: Message
     
     /// Делает вставку нового сообщения
@@ -178,6 +181,7 @@ class ChatsViewController: MessagesViewController {
     }
     
     // MARK: Action
+
     
     @objc func cameraIconTap() {
         let picker = UIImagePickerController()
@@ -224,16 +228,75 @@ class ChatsViewController: MessagesViewController {
         let lastIndexPath = IndexPath(item: messages.count - 1, section: 0)
         return messagesCollectionView.indexPathsForVisibleItems.contains(lastIndexPath)
     }
+
+    
+    
+    
+    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
+        
+        if action == NSSelectorFromString("report:") {
+            return true
+        } else {
+            return super.collectionView(collectionView, canPerformAction: action, forItemAt: indexPath, withSender: sender)
+        }
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
+        
+        if action == NSSelectorFromString("report:") {
+            
+            Task(priority: .userInitiated) {
+                await FirestoreService.shared.report(chat: self.chat, message: messages[indexPath.row].messageId)
+            }
+            
+        } else {
+            super.collectionView(collectionView, performAction: action, forItemAt: indexPath, withSender: sender)
+        }
+    }
+    
+
 }
+
+extension MessageCollectionViewCell {
+
+//    override open func delete(_ sender: Any?) {
+//        
+//        // Get the collectionView
+//        if let collectionView = self.superview as? UICollectionView {
+//            // Get indexPath
+//            if let indexPath = collectionView.indexPath(for: self) {
+//                // Trigger action
+//                collectionView.delegate?.collectionView?(collectionView, performAction: NSSelectorFromString("delete:"), forItemAt: indexPath, withSender: sender)
+//            }
+//        }
+//    }
+    
+    @objc func report(_ sender: Any?) {
+            
+            // Get the collectionView
+            if let collectionView = self.superview as? UICollectionView {
+                // Get indexPath
+                if let indexPath = collectionView.indexPath(for: self) {
+                    // Trigger action
+                    collectionView.delegate?.collectionView?(collectionView, performAction: #selector(MessageCollectionViewCell.report(_:)), forItemAt: indexPath, withSender: sender)
+                }
+            }
+        }
+    
+}
+
+
+
+
+
+
+
+
 
 // MARK: - MessageCellDelegate
 
 extension ChatsViewController: MessageCellDelegate {
-    
-    func didTapMessage(in cell: MessageCollectionViewCell) {
-        
-    }
-    
+            
     func didTapImage(in cell: MessageCollectionViewCell) {
         guard let indexPath = messagesCollectionView.indexPath(for: cell) else { return }
         guard let message = self.messagesCollectionView.messagesDataSource?.messageForItem(at: indexPath, in: self.messagesCollectionView) else { return }
@@ -340,7 +403,7 @@ struct Sender: SenderType {
 }
 
 extension ChatsViewController: MessagesDataSource {
-    
+                
     func currentSender() -> MessageKit.SenderType {
         Sender(senderId: currentUser.id, displayName: currentUser.username)
     }
