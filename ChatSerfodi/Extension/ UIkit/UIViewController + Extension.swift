@@ -21,7 +21,7 @@ extension UIViewController {
     
     /// Показывать обычное уведомление
     func showAlert(with title: String, and message: String, completion: @escaping () -> Void = {} ) {
-        let alertController = UIAlertController(title: NSLocalizedString(title, comment: ""), message: NSLocalizedString(message, comment: ""), preferredStyle: .alert)
+        let alertController = UIAlertController(title: title.localized(), message: message.localized(), preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default) { (_) in
             completion()
         }

@@ -88,7 +88,8 @@ final class ListViewController: UIViewController {
                 self.waitingChat = chats
                 self.reloadData()
             case .failure(let error):
-                self.showAlert(with: "Error", and: error.localizedDescription)
+                print(error.localizedDescription)
+//                self.showAlert(with: "Error", and: error.localizedDescription)
             }
         })
     }
@@ -100,7 +101,8 @@ final class ListViewController: UIViewController {
                 self.activeChat = chats
                 self.reloadData()
             case .failure(let error):
-                self.showAlert(with: "Error", and: error.localizedDescription)
+                print(error.localizedDescription)
+//                self.showAlert(with: "Error", and: error.localizedDescription)
             }
         })
     }
@@ -139,7 +141,7 @@ final class ListViewController: UIViewController {
                 chatRequestVC.delegate = self
                 self.present(chatRequestVC, animated: true)
             } catch {
-                self.showAlert(with: "Error", and: error.localizedDescription)
+                self.showAlert(with: "Error", and: "Profile upload error")
             }
         }
     }
@@ -175,7 +177,8 @@ extension ListViewController: WaitingChatsNavigation {
             do {
                 try await FirestoreService.shared.clearActiveChat(friendId: chat.friendId)
             } catch {
-                self.showAlert(with: "Error", and: #function + error.localizedDescription)
+                print(error.localizedDescription)
+//                self.showAlert(with: "Error", and: #function + error.localizedDescription)
             }
         }
     }
@@ -184,9 +187,10 @@ extension ListViewController: WaitingChatsNavigation {
         Task(priority: .userInitiated) {
             do {
                 try await FirestoreService.shared.changeToActive(chat: chat)
-                self.showAlert(with: "Successfully", and: "Сonversation")
+//                self.showAlert(with: "Successfully", and: "Сonversation")
             } catch {
-                self.showAlert(with: "Error", and: #function + error.localizedDescription)
+                print(error.localizedDescription)
+//                self.showAlert(with: "Error", and: #function + error.localizedDescription)
             }
         }
     }

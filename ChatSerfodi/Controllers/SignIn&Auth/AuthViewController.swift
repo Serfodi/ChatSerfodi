@@ -54,7 +54,7 @@ final class AuthViewController: UIViewController {
                 case .success(let user):
                     self.asyncLoginUser(user)
                 case .failure(let error):
-                    self.showAlert(with: "Error".localized(), and: error.localizedDescription)
+                    print(#function + error.localizedDescription)
                 }
             }
         }
@@ -118,7 +118,7 @@ final class AuthViewController: UIViewController {
 extension AuthViewController: ASAuthorizationControllerDelegate {
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: any Error) {
-        self.showAlert(with: "Error", and: error.localizedDescription)
+        self.showAlert(with: "Error", and: "Authorization error")
     }
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
@@ -131,7 +131,8 @@ extension AuthViewController: ASAuthorizationControllerDelegate {
                 let user = try await AuthService.shared.appleAuth(appleIDCredentials, nonce: AppleSignInManager.nonce)
                 self.asyncLoginUser(user)
             } catch {
-                self.showAlert(with: "Error", and: error.localizedDescription)
+                print(error.localizedDescription)
+//                self.showAlert(with: "Error", and: error.localizedDescription)
             }
         }
     }

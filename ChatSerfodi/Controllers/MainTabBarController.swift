@@ -79,9 +79,10 @@ private extension MainTabBarController {
                 loader.isHidden = true
                 self.view.isUserInteractionEnabled = true
             } catch {
-                self.showAlert(with: "Error", and: #function + error.localizedDescription) {
-                    UIApplication.shared.firstKeyWindow?.rootViewController = AuthViewController()
-                }
+                print(error.localizedDescription)
+                UIApplication.shared.firstKeyWindow?.rootViewController = AuthViewController()
+//                self.showAlert(with: "Error", and: #function + error.localizedDescription) {
+//                }
             }
         }
     }

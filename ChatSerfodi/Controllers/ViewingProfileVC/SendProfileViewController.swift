@@ -81,7 +81,7 @@ final class SendProfileViewController: UIViewController {
                 try FirestoreService.shared.asyncCreateWaitingChat(receiver: self.user, message: message)
                 UIApplication.shared.getTopVC.showAlert(with: "Successfully", and: "SentMessage")
             } catch {
-                UIApplication.shared.getTopVC.showAlert(with: "Error", and: error.localizedDescription)
+                UIApplication.shared.getTopVC.showAlert(with: "Error", and: "NotSent")
             }
         }
     }
@@ -119,11 +119,9 @@ private extension SendProfileViewController {
             case .success(let state):
                 self.addLabelResponse(state: state)
             case .failure(let error):
-                self.showAlert(with: "Error", and: error.localizedDescription)
+                print(error.localizedDescription)
             }
         }
-        
-        //        configurationSendTextField()
     }
     
     func configurationView() {

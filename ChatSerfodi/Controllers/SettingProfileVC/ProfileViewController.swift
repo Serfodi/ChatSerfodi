@@ -48,7 +48,7 @@ final class ProfileViewController: UIViewController {
                     self.configurationBarButton(change: false)
                 }
             } catch {
-                self.showAlert(with: "Error", and: error.localizedDescription) {
+                self.showAlert(with: "Error", and: "Saving error") {
                     self.configurationBarButton(change: false)
                 }
             }

@@ -21,7 +21,8 @@ class SettingViewController: UIViewController {
     private let docsButton = UIButton(title: "Privacy", titleColor: ColorAppearance.white.color(), backgroundColor: ColorAppearance.black.color())
     private let hideUserButton = UIButton(title: "Hide", titleColor: ColorAppearance.white.color(), backgroundColor: ColorAppearance.black.color(), image: UIImage(systemName: "eye.slash.fill"))
     
-    private let labelCreate = UILabel(text: "Sergei Nasybullin", alignment: .center, fount: FontAppearance.buttonText, color: ColorAppearance.black.color())
+//    private let labelCreate = UILabel(text: "Sergei Nasybullin", alignment: .center, fount: FontAppearance.buttonText, color: ColorAppearance.black.color())
+    private let idLabel = UILabel(text: "", alignment: .center, fount: FontAppearance.small, color: ColorAppearance.black.color())
     private let bundleLabel = UILabel(text: "", alignment: .center, fount: FontAppearance.small, color: ColorAppearance.black.color())
     
     
@@ -96,7 +97,7 @@ class SettingViewController: UIViewController {
                     self.hideUserButton.setImage(UIImage(systemName: "eye.fill"), for: .normal)
                 }
             } catch {
-                self.showAlert(with: "Error", and: #function + error.localizedDescription)
+                self.showAlert(with: "Error", and: "Execution error")
             }
         }
     }
@@ -118,6 +119,8 @@ private extension SettingViewController {
     }
     
     func configurationLabel() {
+//        idLabel.text = "uid:" + FirestoreService.shared.currentUser.id
+        
         let bundle = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "0"
         let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0"
         let systemVersion = UIDevice.current.systemVersion
@@ -141,7 +144,7 @@ private extension SettingViewController {
                     self.hideUserButton.setImage(UIImage(systemName: "eye.fill"), for: .normal)
                 }
             } catch {
-                self.showAlert(with: "Error", and: #function + error.localizedDescription)
+                self.showAlert(with: "Error", and: "Execution error")
             }
         }
     }
@@ -151,20 +154,19 @@ private extension SettingViewController {
         gradientView.edgesToSuperview()
         view.addSubview(logoLabel)
         
-        logoLabel.topToSuperview(offset: 10, relation: .equalOrGreater, usingSafeArea: true)
-        logoLabel.topToSuperview(offset: 40, relation: .equalOrLess, usingSafeArea: true)
+        logoLabel.topToSuperview(offset: 20, relation: .equalOrGreater, usingSafeArea: true)
         logoLabel.leftToSuperview()
         logoLabel.rightToSuperview()
         
         view.addSubview(birdView)
-        birdView.topToBottom(of: logoLabel, offset: -60)
+        birdView.topToBottom(of: logoLabel, offset: -40)
         birdView.leftToSuperview()
         birdView.rightToSuperview()
         
         let horStack = UIStackView(arrangedSubviews: [deleteProfileButton, signOutButton], axis: .horizontal, spacing: 0)
         horStack.alignment = .center
         horStack.distribution = .fillEqually
-        let stack = UIStackView(arrangedSubviews: [labelCreate, bundleLabel, hideUserButton, docsButton, horStack], axis: .vertical, spacing: 15)
+        let stack = UIStackView(arrangedSubviews: [bundleLabel, hideUserButton, docsButton, horStack], axis: .vertical, spacing: 15)
         view.addSubview(stack)
         
         hideUserButton.height(54)

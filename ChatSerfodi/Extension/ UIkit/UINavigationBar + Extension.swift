@@ -20,6 +20,7 @@ extension UINavigationBar {
         appearance.titleTextAttributes = [.font: FontAppearance.buttonText, .foregroundColor: ColorAppearance.black.color()]
         standardAppearance = appearance
         scrollEdgeAppearance = appearance
+        self.tintColor = .clear
     }
     
 }

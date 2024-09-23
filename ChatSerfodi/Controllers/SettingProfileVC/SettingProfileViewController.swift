@@ -17,6 +17,7 @@ class SettingProfileViewController: UIViewController {
     private let fullNameTextField = OneLineTextField(font: FontAppearance.defaultText)
     private let aboutMeTextView = OneLineTextView(font: FontAppearance.defaultText)
     private let pickButton = UIButton(title: "ChooseAnotherPhoto", titleColor: ColorAppearance.black.color(), fount: FontAppearance.defaultBoldText)
+    private let imagePickerController = UIImagePickerController()
     
     public var stackView: UIStackView!
     
@@ -50,7 +51,12 @@ class SettingProfileViewController: UIViewController {
     }
     
     public var fullNameText: String {
-        fullNameTextField.text ?? ""
+        set {
+            self.fullNameLabel.text = newValue
+        }
+        get {
+            fullNameTextField.text ?? ""
+        }
     }
     
     public var aboutMeText: String {
@@ -93,7 +99,6 @@ class SettingProfileViewController: UIViewController {
     @objc private func chengePhoto() {
         delegate?.changeBegin()
         view.endEditing(true)
-        let imagePickerController = UIImagePickerController()
         imagePickerController.delegate = self
         imagePickerController.sourceType = .photoLibrary
         present(imagePickerController, animated: true)

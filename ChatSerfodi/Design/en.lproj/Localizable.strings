@@ -58,6 +58,7 @@
 "Man" = "Man";
 "Wom" = "Wom";
 "GoChats" = "Go to chats!";
+"Fill in all the fields" = "Fill in all the fields";
 
 // MARK: MainTabBarController
 
@@ -112,7 +113,7 @@
 
 // MARK: SendProfileViewController
 
-"waiting" = "The message has been sent. Expect a response.";
+"waiting" = "The message has been sent.";
 "accept" = "Accept the request!";
 
 // MARK: SettingViewController
@@ -142,3 +143,16 @@
 "privacyHTML" = "privacyEng";
 "termsHTML" = "termsEng";
 "licenseHTML" = "licenseEng";
+
+// MARK: Error
+
+"Failed to get document because the client is offline." = "There is no internet connection.";
+"Execution error" = "Execution error";
+"Saving error" = "Saving error";
+"Photo upload error" = "Photo upload error";
+"Download error" = "Download error";
+"Profile upload error" = "Profile upload error";
+"Error sending the report" = "Error sending the report";
+"Blocking error" = "Blocking error";
+"Registration error" = "Registration error";
+"Please add a photo" = "Please add a photo";

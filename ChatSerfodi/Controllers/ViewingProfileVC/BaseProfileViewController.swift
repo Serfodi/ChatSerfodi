@@ -143,9 +143,13 @@ private extension BaseProfileViewController {
     
     func asyncReport(_ report: String? = nil) {
         Task(priority: .userInitiated) {
-            await FirestoreService.shared.blockedUser(user: self.user)
-            self.dismiss(animated: true) {
-                NotificationCenter.default.post(name: Notification.Name("DeleteUser"), object: nil, userInfo: ["User" : self.user])
+            do {
+                 try await FirestoreService.shared.blockedUser(user: self.user)
+                self.dismiss(animated: true) {
+                    NotificationCenter.default.post(name: Notification.Name("DeleteUser"), object: nil, userInfo: ["User" : self.user])
+                }
+            } catch {
+                self.showAlert(with: "Error", and: "Blocking error")
             }
         }
         FirestoreService.shared.asyncBlockedClear(user: self.user)
@@ -154,7 +158,8 @@ private extension BaseProfileViewController {
             do {
                 try await FirestoreService.shared.report(user: self.user, report: report)
             } catch {
-                self.showAlert(with: "Error", and: error.localizedDescription)
+                self.showAlert(with: "Error", and: "Error sending the report")
+                print(error.localizedDescription)
             }
         }
     }

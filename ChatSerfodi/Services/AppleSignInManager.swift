@@ -36,10 +36,11 @@ class AppleSignInManager {
                 let credentialState = try await appleIDProvider.credentialState(forUserID: appleProviderData.uid)
                 switch credentialState {
                 case .authorized:
-                    break // The Apple ID credential is valid.
+                    break
                 case .revoked, .notFound:
-                    // The Apple ID credential is either revoked or was not found, so show the sign-in UI.
                     do {
+                        FirestoreService.shared.currentUser = SUser.mocUser(id: Auth.auth().currentUser?.uid ?? "")
+                        try await FirestoreService.shared.deleteProfile()
                         try Auth.auth().signOut()
                     }
                     catch {

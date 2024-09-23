@@ -98,7 +98,8 @@ class ChatsViewController: MessagesViewController {
                 self.insertNewMessage(message: message, animated: false)
                 self.chat.lastMessage = message.descriptor
             case .failure(let error):
-                self.showAlert(with: "Error", and: error.localizedDescription)
+                print(error.localizedDescription)
+//                self.showAlert(with: "Error", and: error.localizedDescription)
             }
         }
     }
@@ -111,7 +112,8 @@ class ChatsViewController: MessagesViewController {
                     self.subtitleLabel.text = chat.getStatus(usingLastMessage: false)
                 }
             case .failure(let error):
-                self.showAlert(with: "Error", and: error.localizedDescription)
+                print(error.localizedDescription)
+//                self.showAlert(with: "Error", and: error.localizedDescription)
             }
         })
     }
@@ -127,7 +129,8 @@ class ChatsViewController: MessagesViewController {
                     self.navigationController?.popViewController(animated: true)
                 }
             case .failure(let error):
-                self.showAlert(with: "Error", and: error.localizedDescription)
+                print(error.localizedDescription)
+//                self.showAlert(with: "Error", and: error.localizedDescription)
             }
         })
     }
@@ -158,7 +161,7 @@ class ChatsViewController: MessagesViewController {
                 imageMessage.downloadURL = url
                 try FirestoreService.shared.asyncSendMessage(from: self.chat, message: imageMessage)
             }  catch {
-                self.showAlert(with: "Error", and: error.localizedDescription)
+                self.showAlert(with: "Error", and: "NotSent")
             }
         }
     }
@@ -196,7 +199,7 @@ class ChatsViewController: MessagesViewController {
                 let vc = BaseProfileViewController(user: sUser)
                 self.present(vc, animated: true)
             } catch {
-                self.showAlert(with: "Error", and: error.localizedDescription)
+                self.showAlert(with: "Error", and: "Download error")
             }
         }
     }
@@ -317,7 +320,7 @@ extension ChatsViewController: MessageCellDelegate {
                     self.fullScreenTransitionManager = fullScreenTransitionManager
                     
                 case .failure(let error):
-                    self.showAlert(with: "Error", and: error.localizedDescription)
+                    self.showAlert(with: "Error", and: "Photo upload error")
                 }
             }
         }
@@ -363,7 +366,8 @@ extension ChatsViewController: MessagesDisplayDelegate {
                 case .success(let image):
                     imageView.image = image
                 case .failure(let error):
-                    self.showAlert(with: "Error", and: error.localizedDescription)
+                    print(error.localizedDescription)
+//                    self.showAlert(with: "Error", and: error.localizedDescription)
                 }
             }
         }

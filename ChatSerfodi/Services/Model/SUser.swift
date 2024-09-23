@@ -178,8 +178,8 @@ extension SUser {
         return sex.representationData() + " " + exitTime.representationDate(sex: sex)
     }
     
-    static func mocUser() -> SUser {
-        SUser(username: "", email: "", avatarStringURL: "", description: "", sex: 0, id: "", entryTime: Date(), isOnline: false)
+    static func mocUser(witch name: String = "", id: String = "") -> SUser {
+        SUser(username: name, email: "", avatarStringURL: "", description: "", sex: 0, id: id, entryTime: Date(), isOnline: false)
     }
     
 }

@@ -23,7 +23,7 @@ class SetupProfileViewController: UIViewController {
     init(currentUser: User) {
         self.currentUser = currentUser
         super.init(nibName: nil, bundle: nil)
-        let moc = SUser.mocUser()
+        let moc = SUser.mocUser(witch: currentUser.displayName ?? "")
         let stack = UIStackView(arrangedSubviews: [sexLabel, sexSegmentedController], axis: .vertical, spacing: 5)
         let view = [stack, goToChatButton]
         settingProfileViewController = SettingProfileViewController(user: moc, addViewToScroll: view)
@@ -38,9 +38,7 @@ class SetupProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         configuration()
-        
         goToChatButton.addTarget(self, action: #selector(goToChatsButtonTapped), for: .touchUpInside)
     }
     
@@ -61,8 +59,15 @@ class SetupProfileViewController: UIViewController {
                 let mainTabBar = MainTabBarController(sUser: user)
                 mainTabBar.modalPresentationStyle = .fullScreen
                 self.present(mainTabBar, animated: true)
+            } catch AuthError.notFilled {
+                self.showAlert(with: "Error".localized(), and: "Fill in all the fields")
+            } catch UserError.photoNotExist {
+                self.showAlert(with: "Error".localized(), and: "Please add a photo")
+            } catch UserError.notFilled {
+                self.showAlert(with: "Error".localized(), and: "Fill in all the fields")
             } catch {
-                self.showAlert(with: "Error", and: error.localizedDescription)
+                self.showAlert(with: "Error".localized(), and: "Registration error")
+//                print(#function +  error.localizedDescription)
             }
         }
     }

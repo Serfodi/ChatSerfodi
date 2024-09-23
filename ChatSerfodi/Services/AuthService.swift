@@ -75,11 +75,9 @@ class AuthService {
         
         do {
             let result = try await auth.signIn(with: credential)
-            
-            return result.user
-            
-            
-            
+            let user = result.user
+            user.displayName = appleIDCredential.fullName?.givenName
+            return user
         } catch {
             print("FirebaseAuthError: appleAuth(appleIDCredential:nonce:) failed. \(error)")
             throw error

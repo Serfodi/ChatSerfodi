@@ -70,7 +70,8 @@ final class PeopleViewController: UIViewController {
                 
                 self.reloadData()
             case .failure(let error):
-                self.showAlert(with: "Error", and: #function + error.localizedDescription)
+                print(error.localizedDescription)
+//                self.showAlert(with: "Error", and: #function + error.localizedDescription)
             }
         })
     }
@@ -82,7 +83,8 @@ final class PeopleViewController: UIViewController {
                 self.currentUser = user
                 self.showHideMessages(isHide: user.isHide)
             case .failure(let error):
-                self.showAlert(with: "Error", and: error.localizedDescription)
+                print(error.localizedDescription)
+//                self.showAlert(with: "Error", and: error.localizedDescription)
             }
         })
     }
